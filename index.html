@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Tập KTPL 12 - Bài 1: Tăng Trưởng & Phát Triển Kinh Tế (Bản Nâng Cấp)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- html2canvas for downloading result certificate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body { font-family: 'Lexend', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-indigo-700 text-white py-4 shadow-md sticky top-0 z-30">
+    <div class="max-w-2xl mx-auto px-4 flex items-center justify-between">
+      <div>
+        <span class="text-xs font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-1 rounded-full text-indigo-200">KTPL 12 • Kết nối tri thức</span>
+        <h1 class="text-lg md:text-xl font-bold mt-1">Bài 1: Tăng trưởng và phát triển kinh tế</h1>
+      </div>
+      <div class="text-right">
+        <span class="text-2xl">📚</span>
+        <div id="header-timer" class="text-xs font-mono font-semibold text-indigo-200 hidden">⏱️ 00:00</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-2xl mx-auto w-full p-4 flex-grow flex items-center justify-center">
+
+    <!-- 1. MÀN HÌNH BẮT ĐẦU -->
+    <div id="start-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 text-center">
+      <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-4">🎯</div>
+      <h2 class="text-2xl font-bold text-slate-800">Luyện Tập Trắc Nghiệm Phản Xạ</h2>
+      <p class="text-slate-500 text-sm mt-2 mb-6">20 câu trắc nghiệm bám sát nội dung SGK KTPL 12 Kết nối tri thức. Sau khi hoàn thành, hệ thống sẽ chấm điểm và cho phép xuất phiếu kết quả.</p>
+      
+      <div class="space-y-4 max-w-sm mx-auto text-left">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Họ và tên học sinh *</label>
+          <input type="text" id="student-name" placeholder="Ví dụ: Nguyễn Văn An" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Lớp *</label>
+          <input type="text" id="student-class" placeholder="Ví dụ: 12A1" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
+        </div>
+        <div class="flex items-center gap-2 pt-1 text-xs text-slate-600">
+          <input type="checkbox" id="shuffle-options-check" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+          <label for="shuffle-options-check">Trộn ngẫu nhiên cả thứ tự các đáp án A, B, C, D</label>
+        </div>
+      </div>
+
+      <button onclick="startQuiz()" class="mt-6 w-full max-w-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-95">
+        Bắt đầu làm bài 🚀
+      </button>
+    </div>
+
+    <!-- 2. MÀN HÌNH LÀM BÀI -->
+    <div id="quiz-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 hidden">
+      <!-- Progress & Timer -->
+      <div class="mb-5">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-1.5">
+          <span id="question-number">Câu hỏi 1/20</span>
+          <span id="quiz-timer" class="font-mono bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200">⏱️ 00:00</span>
+          <span id="score-counter" class="text-emerald-700 font-bold">Điểm: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-300" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="mb-6">
+        <h3 id="question-text" class="text-base md:text-lg font-semibold text-slate-800 leading-snug">Nội dung câu hỏi...</h3>
+      </div>
+
+      <!-- Options -->
+      <div id="options-container" class="space-y-3">
+        <!-- Nút đáp án render bằng JS -->
+      </div>
+
+      <!-- Feedback / Explanation Box -->
+      <div id="feedback-box" class="mt-5 p-4 rounded-xl border hidden text-sm">
+        <div id="feedback-status" class="font-bold flex items-center gap-1.5 mb-1"></div>
+        <div id="feedback-explanation" class="text-slate-600 leading-relaxed"></div>
+      </div>
+
+      <!-- Next Button -->
+      <button id="next-btn" onclick="nextQuestion()" class="mt-6 w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 px-6 rounded-xl shadow transition-all hidden">
+        Câu tiếp theo ➔
+      </button>
+    </div>
+
+    <!-- 3. MÀN HÌNH TỔNG KẾT KẾT QUẢ -->
+    <div id="result-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 text-center hidden">
+      <div id="cert-badge" class="text-5xl mb-2">🏆</div>
+      <h2 class="text-2xl font-bold text-slate-800">Kết Quả Đánh Giá</h2>
+      
+      <!-- Phiếu nộp bài dạng thẻ -->
+      <div id="certificate" class="mt-5 p-5 bg-indigo-50 border-2 border-indigo-200 rounded-2xl text-left shadow-sm">
+        <div class="flex justify-between items-center border-b border-indigo-200 pb-3 mb-3">
+          <div>
+            <div class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Học sinh</div>
+            <div id="res-name" class="font-bold text-slate-800 text-lg">Nguyễn Văn A</div>
+            <div id="res-class" class="text-xs text-slate-500">Lớp: 12A1</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Điểm số</div>
+            <div id="res-score" class="text-3xl font-extrabold text-indigo-600">10 / 10</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-600 mb-3 bg-white p-2.5 rounded-xl border border-indigo-100 text-center">
+          <div>
+            <div class="text-slate-400">Số câu đúng</div>
+            <b id="res-correct" class="text-emerald-600 text-sm font-bold">20/20</b>
+          </div>
+          <div>
+            <div class="text-slate-400">Tỉ lệ chính xác</div>
+            <b id="res-percent" class="text-indigo-600 text-sm font-bold">100%</b>
+          </div>
+          <div>
+            <div class="text-slate-400">Thời gian làm</div>
+            <b id="res-time" class="text-slate-700 text-sm font-bold">03:45</b>
+          </div>
+        </div>
+
+        <div class="p-3 bg-white rounded-xl border border-indigo-100">
+          <div class="text-xs font-semibold text-slate-500 uppercase mb-1">Nhận xét của giáo viên:</div>
+          <p id="res-comment" class="text-xs md:text-sm font-medium text-slate-700">Xuất sắc! Em đã nắm rất vững bản chất bài học.</p>
+        </div>
+
+        <div class="mt-3 text-[11px] text-slate-400 flex justify-between items-center border-t border-indigo-100 pt-2">
+          <span>Hệ thống ôn tập KTPL 12</span>
+          <span id="res-timestamp">14/09/2026 20:45</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-5 space-y-2.5 max-w-sm mx-auto">
+        <button onclick="downloadCertificate()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+          <span>📥</span> Tải ảnh phiếu điểm nộp thầy cô (.PNG)
+        </button>
+        <button onclick="toggleReviewSection()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 px-4 rounded-xl border border-slate-300 transition text-sm">
+          📋 Xem lại toàn bộ câu hỏi & lời giải
+        </button>
+        <button onclick="restartQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition text-sm">
+          Làm lại bài mới 🔄
+        </button>
+      </div>
+
+      <!-- Review Section -->
+      <div id="review-section" class="mt-6 text-left hidden border-t border-slate-200 pt-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-slate-800 text-base">Chi tiết bài làm (20 câu)</h3>
+          <div class="flex gap-1 text-xs">
+            <button onclick="filterReview('all')" class="px-2.5 py-1 rounded-lg bg-slate-200 font-medium review-tab" id="tab-all">Tất cả</button>
+            <button onclick="filterReview('wrong')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-medium review-tab" id="tab-wrong">Câu sai</button>
+          </div>
+        </div>
+        <div id="review-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+          <!-- Render review cards -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-3 text-center text-xs text-slate-400">
+    Hệ thống ôn tập Giáo dục Kinh tế và Pháp luật 12 • Bản quyền giáo dục
+  </footer>
+
+  <script>
+    // DỮ LIỆU 20 CÂU HỎI CHUẨN SGK KTPL 12 (BÀI 1)
+    const questionsBank = [
+      {
+        q: "Sự gia tăng về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định được gọi là gì?",
+        options: ["Tăng trưởng kinh tế", "Phát triển kinh tế", "Lạm phát kinh tế", "Khủng hoảng kinh tế"],
+        answer: 0,
+        exp: "Theo SGK trang 7: Tăng trưởng kinh tế là sự tăng lên về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định."
+      },
+      {
+        q: "Chỉ tiêu đo lường giá trị bằng tiền của tất cả hàng hoá, dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định là gì?",
+        options: ["GNI", "GDP", "HDI", "Hệ số Gini"],
+        answer: 1,
+        exp: "Theo SGK trang 7: Tổng sản phẩm quốc nội (GDP) là giá trị bằng tiền của tất cả hàng hoá và dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định."
+      },
+      {
+        q: "Chỉ tiêu đo lường tổng thu nhập từ hàng hoá, dịch vụ cuối cùng do công dân của quốc gia tạo ra (cả ở trong và ngoài lãnh thổ) là gì?",
+        options: ["GDP", "GNI", "FDI", "ODA"],
+        answer: 1,
+        exp: "Theo SGK trang 8: Tổng thu nhập quốc dân (GNI) là thước đo thu nhập do công dân quốc gia tạo ra cả ở trong và ngoài lãnh thổ."
+      },
+      {
+        q: "Để so sánh mức sống và mức thu nhập thực tế giữa người dân các quốc gia với nhau, người ta dùng chỉ tiêu nào?",
+        options: ["Tổng GDP", "GNI bình quân đầu người", "Tỉ lệ thất nghiệp", "Quy mô vốn đầu tư"],
+        answer: 1,
+        exp: "Theo SGK trang 9: GNI/người được dùng làm thước đo so sánh kết quả tăng trưởng, mức thu nhập và mức sống của người dân giữa các quốc gia."
+      },
+      {
+        q: "Doanh thu của doanh nghiệp 100% vốn đầu tư nước ngoài (FDI) sản xuất trên lãnh thổ Việt Nam được tính vào chỉ tiêu nào của nước ta?",
+        options: ["Chỉ tính vào GNI", "Tính vào GDP của Việt Nam", "Không tính vào GDP", "Tính vào kiều hối"],
+        answer: 1,
+        exp: "GDP tính toàn bộ sản phẩm cuối cùng làm ra trên lãnh thổ Việt Nam, bất kể người tạo ra là công dân trong nước hay doanh nghiệp nước ngoài."
+      },
+      {
+        q: "Khoản kiều hối do công dân Việt Nam đi lao động ở nước ngoài gửi về nước được tính vào chỉ tiêu nào của Việt Nam?",
+        options: ["GNI", "GDP", "CPI", "FDI"],
+        answer: 0,
+        exp: "GNI tính tổng thu nhập do công dân quốc gia tạo ra (bao gồm cả thu nhập chuyển từ ngoài lãnh thổ về nước)."
+      },
+      {
+        q: "Khi so sánh tốc độ tăng trưởng kinh tế giữa các năm, người ta phải tính theo giá năm gốc nhằm loại trừ yếu tố nào?",
+        options: ["Lạm phát (biến động giá cả)", "Tỉ lệ tăng dân số", "Thuế xuất nhập khẩu", "Diện tích đất đai"],
+        answer: 0,
+        exp: "Theo SGK trang 7: Do có sự biến động của giá cả (lạm phát) nên khi so sánh cần tính GDP của năm hiện tại theo giá của năm gốc."
+      },
+      {
+        q: "Trong mối quan hệ với phát triển kinh tế, tăng trưởng kinh tế đóng vai trò là",
+        options: ["mục tiêu cao nhất", "điều kiện tiền đề cần thiết", "kết quả sau cùng", "yếu tố duy nhất quyết định"],
+        answer: 1,
+        exp: "Theo SGK trang 13: Tăng trưởng kinh tế là sự thay đổi về lượng, là điều kiện tiền đề cho phát triển kinh tế."
+      },
+      {
+        q: "Sự tăng trưởng kinh tế gắn liền với chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội được gọi là",
+        options: ["tăng trưởng kinh tế", "phát triển kinh tế", "mở rộng thị trường", "hội nhập quốc tế"],
+        answer: 1,
+        exp: "Theo SGK trang 13: Phát triển kinh tế là sự tăng trưởng kinh tế gắn liền với sự chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội."
+      },
+      {
+        q: "Trong ba loại cơ cấu kinh tế (ngành, vùng, thành phần kinh tế), cơ cấu nào giữ vai trò quan trọng nhất?",
+        options: ["Cơ cấu vùng kinh tế", "Cơ cấu ngành kinh tế", "Cơ cấu thành phần kinh tế", "Cơ cấu vốn đầu tư"],
+        answer: 1,
+        exp: "Theo SGK trang 11: Trong cơ cấu kinh tế, cơ cấu ngành kinh tế (công nghiệp - nông nghiệp - dịch vụ) giữ vai trò quan trọng nhất."
+      },
+      {
+        q: "Sự chuyển dịch cơ cấu ngành kinh tế theo hướng tích cực thể hiện ở chỉ tiêu nào sau đây?",
+        options: ["Tỉ trọng công nghiệp, dịch vụ tăng; tỉ trọng nông nghiệp giảm", "Tỉ trọng nông nghiệp tăng vọt", "Tỉ trọng tất cả các ngành đều giảm", "Chỉ phát triển nông nghiệp thuần túy"],
+        answer: 0,
+        exp: "Theo SGK trang 11, 13: Chuyển dịch tích cực thể hiện ở tỉ trọng công nghiệp, dịch vụ tăng lên, tỉ trọng nông nghiệp giảm đi nhưng giá trị tuyệt đối các ngành đều tăng."
+      },
+      {
+        q: "Chỉ số phát triển con người (HDI) là thước đo tổng hợp phản ánh sự tiến bộ con người qua 3 tiêu chí nào?",
+        options: ["Tuổi thọ, giáo dục và thu nhập", "Dân số, việc làm và tiền tệ", "Xuất khẩu, nhập khẩu và tỉ giá", "Đô thị hóa, rừng tự nhiên và điện sinh hoạt"],
+        answer: 0,
+        exp: "Theo SGK trang 11-12: HDI đo lường qua Tuổi thọ trung bình, Chỉ số giáo dục và Chỉ số thu nhập (GDP/người, GNI/người)."
+      },
+      {
+        q: "Chỉ tiêu đo lường tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản trong cuộc sống gọi là",
+        options: ["tỉ lệ thất nghiệp", "tỉ lệ hộ nghèo đa chiều", "chỉ số giá tiêu dùng", "hệ số bất bình đẳng"],
+        answer: 1,
+        exp: "Theo SGK trang 12: Tỉ lệ hộ nghèo đa chiều tính bằng tỉ lệ hộ nghèo trong tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản."
+      },
+      {
+        q: "Hệ số bất bình đẳng trong phân phối thu nhập (hệ số Gini) nhận giá trị trong khoảng nào?",
+        options: ["Từ -1 đến 1", "Từ 0 đến 1", "Từ 1 đến 10", "Từ 0% đến 100%"],
+        answer: 1,
+        exp: "Theo SGK trang 12: Hệ số Gini nhận giá trị từ 0 đến 1, trong đó 0 là bình đẳng tuyệt đối, 1 là bất bình đẳng tuyệt đối."
+      },
+      {
+        q: "Khi hệ số Gini có xu hướng giảm dần, điều đó chứng tỏ điều gì trong xã hội?",
+        options: ["Bất bình đẳng thu nhập gia tăng", "Khoảng cách giàu nghèo có xu hướng thu hẹp lại", "Nền kinh tế suy thoái", "Dân số tăng nhanh"],
+        answer: 1,
+        exp: "Hệ số Gini càng thấp (càng gần 0) thì sự phân phối thu nhập càng bình đẳng, khoảng cách giàu nghèo càng thu hẹp."
+      },
+      {
+        q: "Quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: kinh tế, xã hội và bảo vệ môi trường được gọi là",
+        options: ["kinh tế thị trường", "phát triển bền vững", "tăng trưởng nhanh", "hội nhập toàn cầu"],
+        answer: 1,
+        exp: "Theo SGK trang 15: Phát triển bền vững là quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: phát triển kinh tế, phát triển xã hội và bảo vệ môi trường."
+      },
+      {
+        q: "Đảng và Nhà nước ta luôn khẳng định quan điểm nhất quán nào về bảo vệ môi trường trong phát triển kinh tế?",
+        options: ["Ưu tiên tăng trưởng, xử lý môi trường sau", "Không đánh đổi môi trường lấy tăng trưởng kinh tế bằng mọi giá", "Đóng cửa tất cả các nhà máy", "Chỉ bảo vệ môi trường tại các thành phố lớn"],
+        answer: 1,
+        exp: "Theo SGK trang 15: Đảng và Nhà nước ta luôn chủ trương duy trì tăng trưởng bền vững, không đánh đổi tăng trưởng kinh tế bằng mọi giá."
+      },
+      {
+        q: "Yếu tố nào sau đây phản ánh mặt chất lượng của sự phát triển kinh tế?",
+        options: ["Sự gia tăng đơn thuần quy mô GDP", "Sự tiến bộ xã hội và phân phối công bằng", "Mức tăng kim ngạch xuất khẩu thô", "Tốc độ in thêm tiền mặt"],
+        answer: 1,
+        exp: "Tăng trưởng chỉ phản ánh mặt lượng; sự tiến bộ xã hội, công bằng và bảo vệ môi trường phản ánh mặt chất của phát triển kinh tế."
+      },
+      {
+        q: "Nếu một nền kinh tế có GDP tăng trưởng rất cao nhưng môi trường bị hủy hoại và khoảng cách giàu nghèo ngày càng sâu sắc, thì đó là",
+        options: ["phát triển bền vững", "tăng trưởng kinh tế không hợp lí", "kinh tế tri thức hiện đại", "tiến bộ xã hội"],
+        answer: 1,
+        exp: "Theo SGK trang 15: Tăng trưởng không hợp lí là tăng trưởng không gắn với phát triển xã hội và bảo vệ môi trường, tạo ra sự bất ổn xã hội."
+      },
+      {
+        q: "Điều kiện tiên quyết để một quốc gia đang phát triển như Việt Nam khắc phục tình trạng tụt hậu là gì?",
+        options: ["Tăng cường nhập khẩu hàng tiêu dùng", "Đẩy mạnh tăng trưởng và phát triển kinh tế", "Cắt giảm ngân sách giáo dục", "Hạn chế mở rộng doanh nghiệp"],
+        answer: 1,
+        exp: "Theo SGK trang 10, 14: Tăng trưởng và phát triển kinh tế là điều kiện tiên quyết để khắc phục tình trạng tụt hậu đối với quốc gia đang phát triển như Việt Nam."
+      }
+    ];
+
+    let currentQuiz = [];
+    let currentIndex = 0;
+    let score = 0;
+    let studentInfo = { name: '', class: '' };
+    let timerInterval = null;
+    let secondsElapsed = 0;
+    let userAnswersLog = []; // Lưu lại toàn bộ lịch sử trả lời
+
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60).toString().padStart(2, '0');
+      const s = (secs % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function startTimer() {
+      secondsElapsed = 0;
+      clearInterval(timerInterval);
+      document.getElementById('header-timer').classList.remove('hidden');
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const timeStr = formatTime(secondsElapsed);
+        document.getElementById('quiz-timer').innerText = `⏱️ ${timeStr}`;
+        document.getElementById('header-timer').innerText = `⏱️ ${timeStr}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function startQuiz() {
+      const name = document.getElementById('student-name').value.trim();
+      const sClass = document.getElementById('student-class').value.trim();
+      const shuffleOptions = document.getElementById('shuffle-options-check').checked;
+
+      if (!name || !sClass) {
+        alert("Vui lòng nhập đầy đủ Họ tên và Lớp để bắt đầu!");
+        return;
+      }
+
+      studentInfo.name = name;
+      studentInfo.class = sClass;
+
+      // Xử lý bộ câu hỏi (đảo câu và đảo đáp án nếu chọn)
+      const rawBank = [...questionsBank].sort(() => Math.random() - 0.5);
+      
+      currentQuiz = rawBank.map(item => {
+        if (!shuffleOptions) {
+          return {
+            ...item,
+            renderOptions: [...item.options],
+            correctIndex: item.answer
+          };
+        }
+        
+        // Trộn đáp án
+        const mappedOptions = item.options.map((text, idx) => ({
+          text,
+          isCorrect: idx === item.answer
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          ...item,
+          renderOptions: mappedOptions.map(o => o.text),
+          correctIndex: mappedOptions.findIndex(o => o.isCorrect)
+        };
+      });
+
+      currentIndex = 0;
+      score = 0;
+      userAnswersLog = [];
+
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+
+      startTimer();
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const qData = currentQuiz[currentIndex];
+      
+      // Update info & progress
+      document.getElementById('question-number').innerText = `Câu hỏi ${currentIndex + 1}/${currentQuiz.length}`;
+      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+      const progressPercent = ((currentIndex + 1) / currentQuiz.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+      // Set text
+      document.getElementById('question-text').innerText = qData.q;
+
+      // Hide feedback & next btn
+      document.getElementById('feedback-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+
+      // Render options
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      qData.renderOptions.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 transition flex items-center justify-between text-sm active:scale-[0.99]";
+        btn.innerHTML = `<span><b class="mr-2 text-slate-400">${String.fromCharCode(65 + idx)}.</b> ${opt}</span>`;
+        btn.onclick = () => selectOption(idx, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedIdx, btnElement) {
+      const qData = currentQuiz[currentIndex];
+      const buttons = document.getElementById('options-container').getElementsByTagName('button');
+      
+      for (let btn of buttons) {
+        btn.disabled = true;
+      }
+
+      const feedbackBox = document.getElementById('feedback-box');
+      const feedbackStatus = document.getElementById('feedback-status');
+      const feedbackExplanation = document.getElementById('feedback-explanation');
+      const isCorrect = (selectedIdx === qData.correctIndex);
+
+      userAnswersLog.push({
+        question: qData.q,
+        options: qData.renderOptions,
+        selectedIdx: selectedIdx,
+        correctIdx: qData.correctIndex,
+        isCorrect: isCorrect,
+        explanation: qData.exp
+      });
+
+      if (isCorrect) {
+        score++;
+        btnElement.classList.remove('border-slate-300', 'bg-white');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+        
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
+        feedbackStatus.innerHTML = "✓ Chính xác!";
+      } else {
+        btnElement.classList.remove('border-slate-300', 'bg-white');
+        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
+
+        // Highlight correct answer
+        buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white');
+        buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
+        feedbackStatus.innerHTML = "✕ Chưa chính xác!";
+      }
+
+      feedbackExplanation.innerText = qData.exp;
+      feedbackBox.classList.remove('hidden');
+      document.getElementById('next-btn').classList.remove('hidden');
+      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < currentQuiz.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      stopTimer();
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const finalScore10 = ((score / currentQuiz.length) * 10).toFixed(1);
+      const percent = Math.round((score / currentQuiz.length) * 100);
+
+      document.getElementById('res-name').innerText = studentInfo.name;
+      document.getElementById('res-class').innerText = `Lớp: ${studentInfo.class}`;
+      document.getElementById('res-score').innerText = `${finalScore10} / 10`;
+      document.getElementById('res-correct').innerText = `${score}/${currentQuiz.length}`;
+      document.getElementById('res-percent').innerText = `${percent}%`;
+      document.getElementById('res-time').innerText = formatTime(secondsElapsed);
+
+      const now = new Date();
+      document.getElementById('res-timestamp').innerText = `${now.toLocaleDateString('vi-VN')} ${now.toLocaleTimeString('vi-VN')}`;
+
+      let comment = "";
+      let badge = "🎖️";
+
+      if (score >= 18) {
+        badge = "🏆";
+        comment = "Xuất sắc! Em đã nắm rất vững toàn bộ khái niệm, chỉ tiêu và bản chất phát triển bền vững.";
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+      } else if (score >= 14) {
+        badge = "🌟";
+        comment = "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kĩ hơn giữa cơ cấu ngành và các chỉ số tiến bộ xã hội.";
+      } else {
+        badge = "📖";
+        comment = "Em cần đọc lại SGK Bài 1, chú ý kỹ phần phân biệt GDP/GNI và các chỉ tiêu phát triển kinh tế nhé!";
+      }
+
+      document.getElementById('cert-badge').innerText = badge;
+      document.getElementById('res-comment').innerText = comment;
+
+      renderReviewList('all');
+    }
+
+    function restartQuiz() {
+      stopTimer();
+      document.getElementById('header-timer').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('start-screen').classList.remove('hidden');
+      document.getElementById('review-section').classList.add('hidden');
+    }
+
+    // Tải ảnh phiếu điểm bằng html2canvas
+    function downloadCertificate() {
+      const card = document.getElementById('certificate');
+      html2canvas(card, { scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        const cleanName = studentInfo.name.replace(/[^a-zA-Z0-9]/g, '_');
+        link.download = `PhieuDiem_KTPL12_${cleanName}_${studentInfo.class}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    function toggleReviewSection() {
+      const rev = document.getElementById('review-section');
+      rev.classList.toggle('hidden');
+      if (!rev.classList.contains('hidden')) {
+        rev.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function filterReview(mode) {
+      document.getElementById('tab-all').className = mode === 'all' 
+        ? "px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium review-tab" 
+        : "px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-medium review-tab";
+      document.getElementById('tab-wrong').className = mode === 'wrong' 
+        ? "px-2.5 py-1 rounded-lg bg-rose-600 text-white font-medium review-tab" 
+        : "px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-medium review-tab";
+
+      renderReviewList(mode);
+    }
+
+    function renderReviewList(filter) {
+      const container = document.getElementById('review-list');
+      container.innerHTML = '';
+
+      const items = userAnswersLog.filter(item => {
+        if (filter === 'wrong') return !item.isCorrect;
+        return true;
+      });
+
+      if (items.length === 0) {
+        container.innerHTML = `<div class="p-4 bg-slate-50 text-slate-500 rounded-xl text-center text-xs">Không có câu hỏi nào trong mục này!</div>`;
+        return;
+      }
+
+      items.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = `p-3.5 rounded-xl border text-xs ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'}`;
+        
+        div.innerHTML = `
+          <div class="font-semibold text-slate-800 mb-1 flex items-center justify-between">
+            <span>Câu: ${item.question}</span>
+            <span class="${item.isCorrect ? 'text-emerald-600' : 'text-rose-600'} font-bold">
+              ${item.isCorrect ? '✓ Đúng' : '✕ Sai'}
+            </span>
+          </div>
+          <div class="text-slate-600 mt-1">
+            <div>Bạn chọn: <b>${item.options[item.selectedIdx]}</b></div>
+            ${!item.isCorrect ? `<div class="text-emerald-700 font-medium">Đáp án đúng: <b>${item.options[item.correctIdx]}</b></div>` : ''}
+          </div>
+          <div class="mt-2 text-[11px] text-slate-500 bg-white/80 p-2 rounded border border-slate-200">
+            💡 <b>Giải thích:</b> ${item.explanation}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
