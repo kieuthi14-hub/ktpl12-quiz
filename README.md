@@ -11,8 +11,8 @@ Trang web trắc nghiệm phản xạ trực tuyến môn **Giáo dục Kinh t�
 - **Xem lại bài làm**: Lọc và hiển thị lại các câu làm đúng / làm sai kèm lời giải chi tiết.
 
 ## 🚀 Đường dẫn truy cập trực tuyến
-- **Dành cho Học sinh làm bài**:
-  👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/bai1.html** (hoặc `index.html`)
+- **Dành cho Học sinh làm bài (Link trực tiếp chống lưu cache)**:
+  👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/ktpl.html** (hoặc `bai1.html` / `index.html`)
 - **Dành cho Giáo viên xem & xuất điểm**:
   👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/giaovien.html** *(Mã PIN mặc định: `123456`)*
 
