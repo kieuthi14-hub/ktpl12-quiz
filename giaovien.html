@@ -193,6 +193,9 @@
           </div>
         </div>
         <div class="shrink-0 flex items-center gap-2">
+          <button onclick="clearAllUnmatchedSubs()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1" title="Xóa bỏ các bài làm thử này khỏi bảng theo dõi">
+            <span>🗑️</span> <span>Xóa các bài làm thử này</span>
+          </button>
           <button onclick="clearCustomMappings()" class="text-[11px] text-slate-500 hover:text-rose-600 underline">Khôi phục mặc định</button>
         </div>
       </div>
@@ -250,11 +253,10 @@
     // CẤU HÌNH GOOGLE APPS SCRIPT / GOOGLE SHEETS
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
 
-    // DANH SÁCH BÀI NỘP BAN ĐẦU ĐÃ GHI NHẬN TỪ TRƯỚC
+    // DANH SÁCH BÀI NỘP BAN ĐẦU ĐÃ GHI NHẬN TỪ TRƯỚC (CHỈ GIỮ HỌC SINH THẬT)
     const INITIAL_SUBMISSIONS = [
       { id: 1789462800000, subCode: "#12A7-6621", name: "Nguyễn Lê Thảo My", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "03:45", timestamp: "15/09/2026 16:00:00" },
       { id: 1789462700000, subCode: "#12A7-6620", name: "Nguyễn Lê Thảo My (Làm lại)", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "03:15", timestamp: "15/09/2026 15:58:00" },
-      { id: 1789462524000, subCode: "#12A-5755", name: "Hữu Khánh", className: "12A", score: "8.0", correctCount: "16/20", timeElapsed: "01:53", timestamp: "15/09/2026 15:55:24" },
       { id: 1789461951675, subCode: "#12A7-9504", name: "Đỗ Ngọc Ngân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "02:12", timestamp: "15/09/2026 15:45:51" },
       { id: 1789461730796, subCode: "#12A7-7726", name: "Đỗ Ngọc Ngân", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "03:34", timestamp: "15/09/2026 15:42:10" },
       { id: 1789459750634, subCode: "#12A7-8127", name: "Huỳnh Thị Mỹ Hồng", className: "12A7", score: "6.5", correctCount: "13/20", timeElapsed: "05:29", timestamp: "15/09/2026 15:09:10" },
@@ -264,14 +266,22 @@
       { id: 1789459180472, subCode: "#12A7-1272", name: "Phạm Nguyễn Thùy Dương", className: "12A7", score: "6.5", correctCount: "13/20", timeElapsed: "07:56", timestamp: "15/09/2026 14:59:40" },
       { id: 1789459063952, subCode: "#12A7-9526", name: "Nguyễn Thanh Ngân", className: "12A7", score: "7.0", correctCount: "14/20", timeElapsed: "06:00", timestamp: "15/09/2026 14:57:43" },
       { id: 1789459020680, subCode: "#12A7-5259", name: "Đặng Phùng Hy", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "05:13", timestamp: "15/09/2026 14:57:00" },
-      { id: 1789458472752, subCode: "#12A-6721", name: "Học Sinh May Mắn", className: "12A", score: "9.5", correctCount: "19/20", timeElapsed: "01:39", timestamp: "15/09/2026 14:47:52" },
-      { id: 1789457566000, subCode: "#12C4-8756", name: "Trương Thùy Linh", className: "12C4", score: "7.0", correctCount: "14/20", timeElapsed: "01:56", timestamp: "15/09/2026 14:32:46" },
-      { id: 1789456078000, subCode: "#12A-5368", name: "Kiều Trương", className: "12A", score: "6.5", correctCount: "13/20", timeElapsed: "02:19", timestamp: "15/09/2026 14:07:58" },
-      { id: 1789455700000, subCode: "#12A-0551", name: "Lương Tèo", className: "12A", score: "7.5", correctCount: "15/20", timeElapsed: "02:41", timestamp: "15/09/2026 14:01:40" },
       { id: 1789397829199, subCode: "#12A7-4481", name: "Nguyễn Hoàng Thảo Quyên", className: "12A7", score: "8.5", correctCount: "17/20", timeElapsed: "05:50", timestamp: "14/09/2026 21:57:09" },
       { id: 1789397822457, subCode: "#12A7-9912", name: "Phạm Thanh Xuân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "03:04", timestamp: "14/09/2026 21:57:02" },
       { id: 1789397607192, subCode: "#12A7-3312", name: "Nguyễn Đình Hiếu", className: "12A7", score: "5.5", correctCount: "11/20", timeElapsed: "05:36", timestamp: "14/09/2026 21:53:27" },
       { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" }
+    ];
+
+    // DANH SÁCH TÊN BÀI LÀM THỬ NGHIỆM ĐƯỢC LỌC BỎ HOÀN TOÀN
+    const TEST_SUBMISSION_NAMES = [
+      'huu khanh',
+      'luong teo',
+      'kieu truong',
+      'hoc sinh may man',
+      'truong thuy linh',
+      'test',
+      'thi thu',
+      'lam thu'
     ];
 
     let allRawSubmissions = [];
@@ -488,7 +498,26 @@
         });
       } catch(e) {}
 
-      // Chuẩn hóa toàn bộ điểm số của tất cả bài nộp
+      // 5. Đọc danh sách ID các bài nộp đã bị xóa thủ công bởi giáo viên
+      let deletedKeys = [];
+      try {
+        deletedKeys = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
+      } catch(e) {}
+
+      // Lọc bỏ toàn bộ bài nộp thử nghiệm hoặc đã bị xóa
+      list = list.filter(item => {
+        const norm = normText(item.name);
+        if (TEST_SUBMISSION_NAMES.some(t => norm === t || norm.includes(t) || t.includes(norm))) {
+          return false;
+        }
+        const idKey = item.subCode || item.id || item.timestamp;
+        if (deletedKeys.includes(idKey) || deletedKeys.includes(norm)) {
+          return false;
+        }
+        return true;
+      });
+
+      // Chuẩn hóa toàn bộ điểm số của tất cả bài nộp còn lại
       list.forEach(item => {
         item.score = formatCleanScore(item.score, item.correctCount);
       });
@@ -727,12 +756,47 @@
             <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold text-[11px]">Điểm: ${cleanScore} (${sub.correctCount || '?'})</span>
             <span class="text-slate-400 text-[10px]">⏱️ ${sub.timestamp || ''}</span>
           </div>
-          <button onclick="assignUnmatchedSub('${safeName}', '${safeClass}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
-            <span>🔗</span> <span>Ghép vào học sinh...</span>
-          </button>
+          <div class="flex items-center gap-1.5">
+            <button onclick="assignUnmatchedSub('${safeName}', '${safeClass}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
+              <span>🔗</span> <span>Ghép vào học sinh...</span>
+            </button>
+            <button onclick="deleteSingleSub('${safeName}', '${sub.subCode || ''}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[11px] px-2.5 py-1.5 rounded-lg border border-rose-200 transition flex items-center gap-1" title="Xóa bài nộp thử nghiệm">
+              <span>🗑️</span> <span>Xóa</span>
+            </button>
+          </div>
         `;
         listEl.appendChild(card);
       });
+    }
+
+    function deleteSingleSub(subName, subCode) {
+      if (confirm(`Cô có chắc muốn xóa vĩnh viễn bài nộp thử nghiệm của "${subName}" không?`)) {
+        let deleted = [];
+        try {
+          deleted = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
+        } catch(e) {}
+        if (subCode) deleted.push(subCode);
+        if (subName) deleted.push(normText(subName));
+        localStorage.setItem('ktpl12_deleted_subs', JSON.stringify(deleted));
+        loadDashboardData();
+      }
+    }
+
+    function clearAllUnmatchedSubs() {
+      if (confirm("Cô có chắc chắn muốn xóa tất cả các bài nộp thử nghiệm này không?")) {
+        let deleted = [];
+        try {
+          deleted = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
+        } catch(e) {}
+        allRawSubmissions.forEach(sub => {
+          if (sub.isUnmatched) {
+            if (sub.subCode) deleted.push(sub.subCode);
+            deleted.push(normText(sub.name));
+          }
+        });
+        localStorage.setItem('ktpl12_deleted_subs', JSON.stringify(deleted));
+        loadDashboardData();
+      }
     }
 
     function assignUnmatchedSub(subName, subClass) {
