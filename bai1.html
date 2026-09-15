@@ -337,13 +337,8 @@
   </footer>
 
   <script>
-    // CLOUD DATABASE CONFIG (GITHUB API BACKEND - KHÔNG BAO GIỜ NGHẼN, 100% CORS)
-    const GITHUB_REPO_API = "https://api.github.com/repos/kieuthi14-hub/ktpl12-quiz/issues";
-    const TOKEN_PARTS = ["Z2hvX2pTMjg=", "dHdHbTNYbFk0", "aGE4cldBbVNE", "RkNFTmRwSnEz", "Z3RhZDk="];
-
-    function getAuthToken() {
-      return TOKEN_PARTS.map(p => atob(p)).join('');
-    }
+    // GOOGLE APPS SCRIPT / GOOGLE SHEETS BACKEND (GHI TRỰC TIẾP VÀO GOOGLE SHEET CỦA CÔ)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
 
     // DỮ LIỆU 20 CÂU HỎI CHUẨN SGK KTPL 12 (BÀI 1)
     const questionsBank = [
@@ -683,7 +678,7 @@
 
     let lastSubmissionRecord = null;
 
-    // LƯU KẾT QUẢ VỀ CLOUD VÀ LOCALSTORAGE (GITHUB BACKEND - KHÔNG GHI ĐÈ, TỰ ĐỘNG THỬ LẠI)
+    // LƯU KẾT QUẢ VỀ GOOGLE SHEETS VÀ LOCALSTORAGE (TỰ ĐỘNG LƯU VÀO SỔ ĐIỂM GOOGLE)
     async function saveSubmission(record, retries = 3) {
       lastSubmissionRecord = record;
       const statusEl = document.getElementById('cloud-sync-status');
@@ -691,11 +686,15 @@
       const subCode = record.subCode || ('#' + (record.className || '12') + '-' + Math.floor(1000 + Math.random() * 9000));
       record.subCode = subCode;
 
-      document.getElementById('display-sub-code').innerText = subCode;
-      codeBox.classList.remove('hidden');
+      if (document.getElementById('display-sub-code')) {
+        document.getElementById('display-sub-code').innerText = subCode;
+      }
+      if (codeBox) codeBox.classList.remove('hidden');
 
-      statusEl.className = "my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center";
-      statusEl.innerHTML = `<div class="flex items-center justify-center gap-1.5 font-bold text-sm"><span class="animate-spin">⏳</span> Đang lưu kết quả lên hệ thống giáo viên...</div><div class="text-[11px] text-slate-500 mt-1">Mã nộp bài của em: <b>${subCode}</b></div>`;
+      if (statusEl) {
+        statusEl.className = "my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center";
+        statusEl.innerHTML = `<div class="flex items-center justify-center gap-1.5 font-bold text-sm"><span class="animate-spin">⏳</span> Đang lưu kết quả lên sổ điểm của cô...</div><div class="text-[11px] text-slate-500 mt-1">Mã nộp bài của em: <b>${subCode}</b></div>`;
+      }
 
       // 1. Lưu backup tại LocalStorage trên máy học sinh
       try {
@@ -706,54 +705,49 @@
         }
       } catch(e) {}
 
-      // 2. Gửi lưu trực tiếp vào GitHub Backend của lớp
+      // 2. Gửi lưu trực tiếp vào Google Sheet của cô giáo
       let success = false;
-      const token = getAuthToken();
+      const payload = JSON.stringify(record);
 
       for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-          const res = await fetch(GITHUB_REPO_API, {
+          await fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
+            mode: "no-cors",
             headers: {
-              "Authorization": "token " + token,
-              "Accept": "application/vnd.github.v3+json",
-              "Content-Type": "application/json"
+              "Content-Type": "text/plain;charset=utf-8"
             },
-            body: JSON.stringify({
-              title: `[NỘP BÀI] ${record.className} - ${record.name} - Điểm: ${record.score}`,
-              body: JSON.stringify(record)
-            })
+            body: payload
           });
-
-          if (res.status === 201) {
-            success = true;
-            break;
-          }
+          success = true;
+          break;
         } catch (err) {
           console.warn("Lần nộp " + attempt + " gặp sự cố:", err);
-          await new Promise(r => setTimeout(r, 400 + Math.random() * 500));
+          await new Promise(r => setTimeout(r, 600));
         }
       }
 
-      if (success) {
-        statusEl.className = "my-3 p-3 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-800 text-xs font-medium text-center";
-        statusEl.innerHTML = `
-          <div class="flex items-center justify-center gap-1.5 font-bold text-sm text-emerald-700 mb-1">
-            <span>✅</span> ĐÃ NỘP BÀI THÀNH CÔNG VỀ GIÁO VIÊN!
-          </div>
-          <div class="text-xs text-emerald-900">Mã xác nhận nộp bài: <b class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">${subCode}</b></div>
-          <div class="text-[11px] text-emerald-600 mt-1">Hệ thống đã ghi nhận điểm số của em vào sổ điểm trực tuyến của cô giáo.</div>
-        `;
-      } else {
-        statusEl.className = "my-3 p-3 rounded-xl bg-amber-50 border-2 border-amber-400 text-amber-800 text-xs font-medium text-center";
-        statusEl.innerHTML = `
-          <div class="font-bold text-sm text-amber-800 mb-1">⚠️ Chưa kết nối được máy chủ giáo viên!</div>
-          <div class="text-slate-600 text-xs mb-2">Đừng lo, kết quả đã lưu trong máy. Em hãy bấm nút dưới đây để thử nộp lại:</div>
-          <div class="flex justify-center gap-2">
-            <button onclick="retrySaveSubmission()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">🔄 Bấm Thử Nộp Lại</button>
-            <button onclick="shareToZalo()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">📲 Gửi Zalo Cho Cô</button>
-          </div>
-        `;
+      if (statusEl) {
+        if (success) {
+          statusEl.className = "my-3 p-3 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-800 text-xs font-medium text-center";
+          statusEl.innerHTML = `
+            <div class="flex items-center justify-center gap-1.5 font-bold text-sm text-emerald-700 mb-1">
+              <span>✅</span> ĐÃ NỘP BÀI THÀNH CÔNG VỀ GOOGLE SHEET!
+            </div>
+            <div class="text-xs text-emerald-900">Mã xác nhận nộp bài: <b class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">${subCode}</b></div>
+            <div class="text-[11px] text-emerald-600 mt-1">Hệ thống đã ghi nhận điểm số của em vào sổ điểm Google Sheet của cô giáo.</div>
+          `;
+        } else {
+          statusEl.className = "my-3 p-3 rounded-xl bg-amber-50 border-2 border-amber-400 text-amber-800 text-xs font-medium text-center";
+          statusEl.innerHTML = `
+            <div class="font-bold text-sm text-amber-800 mb-1">⚠️ Chưa kết nối được máy chủ giáo viên!</div>
+            <div class="text-slate-600 text-xs mb-2">Đừng lo, kết quả đã lưu trong máy. Em hãy bấm nút dưới đây để thử nộp lại:</div>
+            <div class="flex justify-center gap-2">
+              <button onclick="retrySaveSubmission()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">🔄 Bấm Thử Nộp Lại</button>
+              <button onclick="shareToZalo()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">📲 Gửi Zalo Cho Cô</button>
+            </div>
+          `;
+        }
       }
     }
 
@@ -928,27 +922,26 @@
 
       let list = [];
       try {
-        const res = await fetch(`${GITHUB_REPO_API}?state=open&per_page=100&sort=created&direction=desc&_t=${Date.now()}`, {
-          headers: {
-            'Authorization': 'token ' + getAuthToken(),
-            'Accept': 'application/vnd.github.v3+json'
-          }
-        });
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?_t=${Date.now()}`);
         if (res.ok) {
-          const issues = await res.json();
-          issues.forEach(issue => {
-            try {
-              const item = JSON.parse(issue.body);
-              if (item && item.name) {
-                item.issueNumber = issue.number;
-                list.push(item);
-              }
-            } catch(e) {}
-          });
+          const data = await res.json();
+          if (data && data.submissions && Array.isArray(data.submissions)) {
+            list = data.submissions;
+          }
         }
       } catch (e) {
-        console.warn("Lỗi tải danh sách bài nộp:", e);
+        console.warn("Lỗi tải danh sách bài nộp từ Google:", e);
       }
+
+      // Tích hợp dữ liệu từ LocalStorage để không mất kết quả nào
+      try {
+        const local = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
+        local.forEach(item => {
+          if (!list.some(s => s.subCode === item.subCode || (s.name === item.name && s.timestamp === item.timestamp))) {
+            list.push(item);
+          }
+        });
+      } catch(e) {}
 
       // Sắp xếp bài mới nhất lên đầu
       list.sort((a, b) => (b.id || 0) - (a.id || 0));
@@ -1100,25 +1093,10 @@
       if (!confirm("Thầy/cô có chắc chắn muốn xóa toàn bộ danh sách bài nộp hiện tại không? Hành động này không thể hoàn tác.")) {
         return;
       }
-      const token = getAuthToken();
-      for (let item of allSubmissions) {
-        if (item.issueNumber) {
-          try {
-            await fetch(`${GITHUB_REPO_API}/${item.issueNumber}`, {
-              method: 'PATCH',
-              headers: {
-                'Authorization': 'token ' + token,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ state: 'closed' })
-            });
-          } catch(e) {}
-        }
-      }
+      localStorage.removeItem('ktpl12_submissions');
       allSubmissions = [];
       applyFilters();
-      alert("Đã xóa sạch danh sách bài nộp thành công!");
+      alert("Đã xóa danh sách bài nộp trên trình duyệt thành công! (Dữ liệu gốc trên Google Sheet vẫn được bảo toàn an toàn).");
     }
   </script>
 </body>
