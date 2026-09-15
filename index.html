@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Luyện Tập KTPL 12 - Bài 1: Tăng Trưởng & Phát Triển Kinh Tế</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -119,17 +122,29 @@
       <h2 class="text-2xl font-bold text-slate-800">Kết Quả Đánh Giá</h2>
       
       <!-- Thông báo đồng bộ lên hệ thống giáo viên -->
-      <div id="cloud-sync-status" class="my-3 py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium flex items-center justify-center gap-1.5">
-        <span class="animate-spin">⏳</span> Đang lưu kết quả lên hệ thống giáo viên...
+      <div id="cloud-sync-status" class="my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center">
+        <div class="flex items-center justify-center gap-1.5 font-bold text-sm">
+          <span class="animate-spin">⏳</span> Đang lưu kết quả lên hệ thống giáo viên...
+        </div>
+      </div>
+
+      <!-- Mã nộp bài xác nhận -->
+      <div id="submission-code-box" class="mb-3 py-2 px-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center justify-between font-mono font-bold hidden">
+        <span>MÃ NỘP BÀI: <b id="display-sub-code" class="text-amber-900 text-sm">#KT12-12A7-8492</b></span>
+        <button onclick="copySubmissionCode()" class="text-xs bg-amber-200 hover:bg-amber-300 text-amber-900 px-2 py-0.5 rounded font-sans font-normal">Sao chép</button>
       </div>
 
       <!-- Phiếu nộp bài dạng thẻ -->
-      <div id="certificate" class="mt-4 p-5 bg-indigo-50 border-2 border-indigo-200 rounded-2xl text-left shadow-sm">
+      <div id="certificate" class="mt-2 p-5 bg-indigo-50 border-2 border-indigo-200 rounded-2xl text-left shadow-sm">
         <div class="flex justify-between items-center border-b border-indigo-200 pb-3 mb-3">
           <div>
             <div class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Học sinh</div>
             <div id="res-name" class="font-bold text-slate-800 text-lg">Nguyễn Văn A</div>
-            <div id="res-class" class="text-xs text-slate-500">Lớp: 12A1</div>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span id="res-class" class="text-xs text-slate-500 font-medium">Lớp: 12A1</span>
+              <span class="text-slate-300">•</span>
+              <span class="text-xs text-indigo-600 font-mono font-semibold">Mã: <b id="res-sub-code">-</b></span>
+            </div>
           </div>
           <div class="text-right">
             <div class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Điểm số</div>
@@ -159,14 +174,17 @@
 
         <div class="mt-3 text-[11px] text-slate-400 flex justify-between items-center border-t border-indigo-100 pt-2">
           <span>Hệ thống ôn tập KTPL 12</span>
-          <span id="res-timestamp">14/09/2026 21:00</span>
+          <span id="res-timestamp">15/09/2026 14:00</span>
         </div>
       </div>
 
-      <p class="text-xs text-slate-400 mt-2.5 italic">👉 Học sinh có thể tải ảnh phiếu điểm bên dưới hoặc chụp màn hình để lưu lại.</p>
+      <p class="text-xs text-slate-400 mt-2.5 italic">👉 Học sinh hãy bấm nút tải ảnh phiếu điểm hoặc gửi Zalo bên dưới để lưu bằng chứng nộp bài.</p>
 
       <!-- Action Buttons -->
       <div class="mt-4 space-y-2.5 max-w-sm mx-auto">
+        <button onclick="shareToZalo()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+          <span>📲</span> Gửi xác nhận điểm vào Zalo nhóm lớp
+        </button>
         <button onclick="downloadCertificate()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
           <span>📥</span> Tải ảnh phiếu điểm nộp thầy cô (.PNG)
         </button>
@@ -276,13 +294,14 @@
             <table class="w-full text-left text-xs text-slate-600">
               <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
                 <tr>
-                  <th class="py-3 px-3.5 text-center w-12">STT</th>
-                  <th class="py-3 px-3.5">Họ và tên</th>
-                  <th class="py-3 px-3.5">Lớp</th>
-                  <th class="py-3 px-3.5 text-center">Điểm số</th>
-                  <th class="py-3 px-3.5 text-center">Số câu đúng</th>
-                  <th class="py-3 px-3.5 text-center">Thời gian</th>
-                  <th class="py-3 px-3.5 text-right">Ngày giờ nộp</th>
+                  <th class="py-3 px-3 text-center w-10">STT</th>
+                  <th class="py-3 px-3">Họ và tên</th>
+                  <th class="py-3 px-2 text-center">Lớp</th>
+                  <th class="py-3 px-2 text-center">Mã nộp</th>
+                  <th class="py-3 px-2 text-center">Điểm số</th>
+                  <th class="py-3 px-2 text-center">Số câu đúng</th>
+                  <th class="py-3 px-2 text-center">Thời gian</th>
+                  <th class="py-3 px-3 text-right">Ngày giờ nộp</th>
                 </tr>
               </thead>
               <tbody id="dashboard-table-body" class="divide-y divide-slate-100">
@@ -634,9 +653,16 @@
 
       renderReviewList('all');
 
+      // TẠO MÃ NỘP BÀI ĐỘC NHẤT
+      const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
+      const randomPart = Math.floor(1000 + Math.random() * 9000);
+      const subCode = `#${cleanClass}-${randomPart}`;
+      document.getElementById('res-sub-code').innerText = subCode;
+
       // TỰ ĐỘNG LƯU BÀI NỘP LÊN HỆ THỐNG ĐÁM MÂY CỦA GIÁO VIÊN
       saveSubmission({
         id: Date.now(),
+        subCode: subCode,
         name: studentInfo.name,
         className: studentInfo.class,
         score: finalScore10,
@@ -646,48 +672,124 @@
       });
     }
 
-    // LƯU KẾT QUẢ VỀ CLOUD VÀ LOCALSTORAGE
-    async function saveSubmission(record) {
+    let lastSubmissionRecord = null;
+
+    // LƯU KẾT QUẢ VỀ CLOUD VÀ LOCALSTORAGE (CÓ CHỐNG GHI ĐÈ VÀ TỰ ĐỘNG THỬ LẠI)
+    async function saveSubmission(record, retries = 3) {
+      lastSubmissionRecord = record;
       const statusEl = document.getElementById('cloud-sync-status');
-      statusEl.className = "my-3 py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium flex items-center justify-center gap-1.5";
-      statusEl.innerHTML = `<span class="animate-spin">⏳</span> Đang lưu kết quả lên hệ thống giáo viên...`;
+      const codeBox = document.getElementById('submission-code-box');
+      const subCode = record.subCode || ('#' + (record.className || '12') + '-' + Math.floor(1000 + Math.random() * 9000));
+      record.subCode = subCode;
+
+      document.getElementById('display-sub-code').innerText = subCode;
+      codeBox.classList.remove('hidden');
+
+      statusEl.className = "my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center";
+      statusEl.innerHTML = `<div class="flex items-center justify-center gap-1.5 font-bold text-sm"><span class="animate-spin">⏳</span> Đang lưu kết quả lên hệ thống giáo viên...</div><div class="text-[11px] text-slate-500 mt-1">Mã nộp bài của em: <b>${subCode}</b></div>`;
 
       // 1. Lưu backup tại LocalStorage
       let localList = [];
       try {
         localList = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
       } catch(e) {}
-      localList.push(record);
-      localStorage.setItem('ktpl12_submissions', JSON.stringify(localList));
+      if (!localList.some(item => item.id === record.id)) {
+        localList.push(record);
+        localStorage.setItem('ktpl12_submissions', JSON.stringify(localList));
+      }
 
-      // 2. Đồng bộ lên Cloud API
-      try {
-        const getRes = await fetch(CLOUD_ENDPOINT);
-        let cloudList = [];
-        if (getRes.ok) {
-          const getJson = await getRes.json();
-          cloudList = (getJson.data && getJson.data.submissions) ? getJson.data.submissions : [];
+      // 2. Đồng bộ lên Cloud API có cơ chế retry và merge chống mất bài
+      let success = false;
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          const getRes = await fetch(CLOUD_ENDPOINT + '?_t=' + Date.now());
+          let cloudList = [];
+          if (getRes.ok) {
+            const getJson = await getRes.json();
+            cloudList = (getJson.data && getJson.data.submissions) ? getJson.data.submissions : [];
+          }
+
+          // Merge theo ID hoặc tên + giờ để không bị ghi đè
+          const existingMap = new Map();
+          cloudList.forEach(item => {
+            const key = item.id || (item.name + '_' + item.timestamp);
+            existingMap.set(key, item);
+          });
+          existingMap.set(record.id, record);
+          const mergedList = Array.from(existingMap.values());
+
+          const putRes = await fetch(CLOUD_ENDPOINT, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: "KTPL12_BAI1_DATABASE",
+              data: { submissions: mergedList }
+            })
+          });
+
+          if (putRes.ok) {
+            success = true;
+            break;
+          }
+        } catch (err) {
+          console.warn("Attempt " + attempt + " failed:", err);
+          await new Promise(r => setTimeout(r, 400 + Math.random() * 600));
         }
-        cloudList.push(record);
+      }
 
-        const putRes = await fetch(CLOUD_ENDPOINT, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: "KTPL12_BAI1_DATABASE",
-            data: { submissions: cloudList }
-          })
+      if (success) {
+        statusEl.className = "my-3 p-3 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-800 text-xs font-medium text-center";
+        statusEl.innerHTML = `
+          <div class="flex items-center justify-center gap-1.5 font-bold text-sm text-emerald-700 mb-1">
+            <span>✅</span> ĐÃ NỘP BÀI THÀNH CÔNG VỀ GIÁO VIÊN!
+          </div>
+          <div class="text-xs text-emerald-900">Mã xác nhận nộp bài: <b class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">${subCode}</b></div>
+          <div class="text-[11px] text-emerald-600 mt-1">Giáo viên đã nhận được điểm số và thời gian làm bài của em.</div>
+        `;
+      } else {
+        statusEl.className = "my-3 p-3 rounded-xl bg-amber-50 border-2 border-amber-400 text-amber-800 text-xs font-medium text-center";
+        statusEl.innerHTML = `
+          <div class="font-bold text-sm text-amber-800 mb-1">⚠️ Mạng chậm, chưa đồng bộ được về máy chủ giáo viên!</div>
+          <div class="text-slate-600 text-xs mb-2">Đừng lo, kết quả đã lưu trong máy. Em hãy bấm nút dưới đây để thử nộp lại:</div>
+          <div class="flex justify-center gap-2">
+            <button onclick="retrySaveSubmission()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">🔄 Bấm Thử Nộp Lại</button>
+            <button onclick="shareToZalo()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">📲 Gửi Zalo Cho Cô</button>
+          </div>
+        `;
+      }
+    }
+
+    function retrySaveSubmission() {
+      if (lastSubmissionRecord) {
+        saveSubmission(lastSubmissionRecord, 3);
+      }
+    }
+
+    function copySubmissionCode() {
+      const code = document.getElementById('display-sub-code').innerText;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(() => {
+          alert("Đã sao chép Mã nộp bài: " + code);
+        }).catch(() => {
+          prompt("Mã nộp bài của em là:", code);
         });
+      } else {
+        prompt("Mã nộp bài của em là:", code);
+      }
+    }
 
-        if (putRes.ok) {
-          statusEl.className = "my-3 py-2 px-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium flex items-center justify-center gap-1.5";
-          statusEl.innerHTML = `<span>✅</span> Đã lưu kết quả thành công vào bảng điểm giáo viên!`;
-        } else {
-          throw new Error('Put failed');
-        }
-      } catch (err) {
-        statusEl.className = "my-3 py-2 px-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium flex items-center justify-center gap-1.5";
-        statusEl.innerHTML = `<span>💾</span> Đã lưu kết quả vào máy. Em hãy tải ảnh phiếu điểm để gửi giáo viên nhé!`;
+    function shareToZalo() {
+      if (!lastSubmissionRecord) return;
+      const text = `Em [${lastSubmissionRecord.name}] - Lớp [${lastSubmissionRecord.className}] đã hoàn thành bài luyện tập KTPL 12 (Bài 1).\nĐiểm: ${lastSubmissionRecord.score}/10 (${lastSubmissionRecord.correctCount} câu).\nThời gian làm: ${lastSubmissionRecord.timeElapsed}.\nMã nộp bài: ${lastSubmissionRecord.subCode}`;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Đã sao chép nội dung báo điểm! Hãy mở Zalo và dán vào nhóm lớp gửi cô nhé:\n\n" + text);
+        }).catch(() => {
+          prompt("Hãy sao chép nội dung này gửi vào Zalo lớp:", text);
+        });
+      } else {
+        prompt("Hãy sao chép nội dung này gửi vào Zalo lớp:", text);
       }
     }
 
@@ -825,7 +927,7 @@
 
       let list = [];
       try {
-        const res = await fetch(CLOUD_ENDPOINT);
+        const res = await fetch(CLOUD_ENDPOINT + '?_t=' + Date.now());
         if (res.ok) {
           const json = await res.json();
           if (json.data && json.data.submissions) {
@@ -933,16 +1035,19 @@
         if (numScore < 5.0) scoreBadgeClass = "bg-rose-100 text-rose-800";
         else if (numScore < 8.0) scoreBadgeClass = "bg-blue-100 text-blue-800";
 
+        const subCodeDisplay = item.subCode || ('#' + (item.id ? item.id.toString().slice(-6) : '-'));
+
         tr.innerHTML = `
-          <td class="py-3 px-3.5 text-center text-slate-400 font-mono">${index + 1}</td>
-          <td class="py-3 px-3.5 font-semibold text-slate-800">${item.name}</td>
-          <td class="py-3 px-3.5"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${item.className}</span></td>
-          <td class="py-3 px-3.5 text-center">
+          <td class="py-3 px-3 text-center text-slate-400 font-mono">${index + 1}</td>
+          <td class="py-3 px-3 font-semibold text-slate-800">${item.name}</td>
+          <td class="py-3 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${item.className}</span></td>
+          <td class="py-3 px-2 text-center font-mono text-[11px] text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded font-bold">${subCodeDisplay}</td>
+          <td class="py-3 px-2 text-center">
             <span class="px-2.5 py-0.5 rounded-full font-bold text-xs ${scoreBadgeClass}">${item.score}</span>
           </td>
-          <td class="py-3 px-3.5 text-center font-medium">${item.correctCount || '-'}</td>
-          <td class="py-3 px-3.5 text-center font-mono text-slate-500">${item.timeElapsed || '-'}</td>
-          <td class="py-3 px-3.5 text-right text-slate-400 text-[11px]">${item.timestamp || '-'}</td>
+          <td class="py-3 px-2 text-center font-medium">${item.correctCount || '-'}</td>
+          <td class="py-3 px-2 text-center font-mono text-slate-500">${item.timeElapsed || '-'}</td>
+          <td class="py-3 px-3 text-right text-slate-400 text-[11px]">${item.timestamp || '-'}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -955,11 +1060,12 @@
         return;
       }
 
-      const headers = ["STT", "Họ và tên", "Lớp", "Điểm số (/10)", "Số câu đúng", "Thời gian làm", "Ngày giờ nộp"];
+      const headers = ["STT", "Họ và tên", "Lớp", "Mã nộp bài", "Điểm số (/10)", "Số câu đúng", "Thời gian làm", "Ngày giờ nộp"];
       const rows = allSubmissions.map((item, idx) => [
         idx + 1,
         `"${(item.name || '').replace(/"/g, '""')}"`,
         `"${item.className || ''}"`,
+        `"${item.subCode || ('#' + (item.id ? item.id.toString().slice(-6) : ''))}"`,
         item.score,
         `"${item.correctCount || ''}"`,
         `"${item.timeElapsed || ''}"`,
