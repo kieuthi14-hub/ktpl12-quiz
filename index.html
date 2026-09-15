@@ -338,7 +338,8 @@
 
   <script>
     // CLOUD DATABASE CONFIG (Tự động đồng bộ bài nộp của học sinh về đám mây)
-    const CLOUD_ENDPOINT = "https://api.restful-api.dev/objects/ff808181a09d98f701a0a05778160529";
+    const CLOUD_ENDPOINT_PRIMARY = "https://extendsclass.com/api/json-storage/bin/cdbfbff";
+    const CLOUD_ENDPOINT_BACKUP  = "https://extendsclass.com/api/json-storage/bin/aefeaeb";
 
     // DỮ LIỆU 20 CÂU HỎI CHUẨN SGK KTPL 12 (BÀI 1)
     const questionsBank = [
@@ -678,7 +679,7 @@
 
     let lastSubmissionRecord = null;
 
-    // LƯU KẾT QUẢ VỀ CLOUD VÀ LOCALSTORAGE (CÓ CHỐNG GHI ĐÈ VÀ TỰ ĐỘNG THỬ LẠI)
+    // LƯU KẾT QUẢ VỀ CLOUD VÀ LOCALSTORAGE (ATOMIC PATCH - KHÔNG GHI ĐÈ, TỰ ĐỘNG THỬ LẠI)
     async function saveSubmission(record, retries = 3) {
       lastSubmissionRecord = record;
       const statusEl = document.getElementById('cloud-sync-status');
@@ -702,41 +703,52 @@
         localStorage.setItem('ktpl12_submissions', JSON.stringify(localList));
       }
 
-      // 2. Đồng bộ lên Cloud API có cơ chế retry và merge chống mất bài
+      // 2. Đồng bộ lên Cloud API bằng JSON Merge Patch (Atomic Merge - Tuyệt đối không mất/đè bài)
+      const patchPayload = JSON.stringify({
+        ['sub_' + record.id]: record
+      });
+
       let success = false;
       for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-          const getRes = await fetch(CLOUD_ENDPOINT + '?_t=' + Date.now());
-          let cloudList = [];
-          if (getRes.ok) {
-            const getJson = await getRes.json();
-            cloudList = (getJson.data && getJson.data.submissions) ? getJson.data.submissions : [];
-          }
-
-          // Merge theo ID hoặc tên + giờ để không bị ghi đè
-          const existingMap = new Map();
-          cloudList.forEach(item => {
-            const key = item.id || (item.name + '_' + item.timestamp);
-            existingMap.set(key, item);
+          const res = await fetch(CLOUD_ENDPOINT_PRIMARY, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/merge-patch+json' },
+            body: patchPayload
           });
-          existingMap.set(record.id, record);
-          const mergedList = Array.from(existingMap.values());
-
-          const putRes = await fetch(CLOUD_ENDPOINT, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name: "KTPL12_BAI1_DATABASE",
-              data: { submissions: mergedList }
-            })
-          });
-
-          if (putRes.ok) {
+          if (res.ok) {
             success = true;
+            // Gửi ngầm thêm sang backup
+            fetch(CLOUD_ENDPOINT_BACKUP, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/merge-patch+json' },
+              body: patchPayload
+            }).catch(() => {});
             break;
+          } else {
+            const backupRes = await fetch(CLOUD_ENDPOINT_BACKUP, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/merge-patch+json' },
+              body: patchPayload
+            });
+            if (backupRes.ok) {
+              success = true;
+              break;
+            }
           }
         } catch (err) {
           console.warn("Attempt " + attempt + " failed:", err);
+          try {
+            const backupRes = await fetch(CLOUD_ENDPOINT_BACKUP, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/merge-patch+json' },
+              body: patchPayload
+            });
+            if (backupRes.ok) {
+              success = true;
+              break;
+            }
+          } catch(e2) {}
           await new Promise(r => setTimeout(r, 400 + Math.random() * 600));
         }
       }
@@ -748,12 +760,12 @@
             <span>✅</span> ĐÃ NỘP BÀI THÀNH CÔNG VỀ GIÁO VIÊN!
           </div>
           <div class="text-xs text-emerald-900">Mã xác nhận nộp bài: <b class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">${subCode}</b></div>
-          <div class="text-[11px] text-emerald-600 mt-1">Giáo viên đã nhận được điểm số và thời gian làm bài của em.</div>
+          <div class="text-[11px] text-emerald-600 mt-1">Hệ thống đã ghi nhận điểm số của em vào sổ điểm trực tuyến của cô giáo.</div>
         `;
       } else {
         statusEl.className = "my-3 p-3 rounded-xl bg-amber-50 border-2 border-amber-400 text-amber-800 text-xs font-medium text-center";
         statusEl.innerHTML = `
-          <div class="font-bold text-sm text-amber-800 mb-1">⚠️ Mạng chậm, chưa đồng bộ được về máy chủ giáo viên!</div>
+          <div class="font-bold text-sm text-amber-800 mb-1">⚠️ Chưa kết nối được máy chủ giáo viên!</div>
           <div class="text-slate-600 text-xs mb-2">Đừng lo, kết quả đã lưu trong máy. Em hãy bấm nút dưới đây để thử nộp lại:</div>
           <div class="flex justify-center gap-2">
             <button onclick="retrySaveSubmission()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">🔄 Bấm Thử Nộp Lại</button>
@@ -925,34 +937,41 @@
     }
 
     async function loadDashboardData() {
-      document.getElementById('table-loading').classList.remove('hidden');
-      document.getElementById('table-empty-msg').classList.add('hidden');
-      document.getElementById('dashboard-table-body').innerHTML = '';
+      const loading = document.getElementById('table-loading');
+      const emptyMsg = document.getElementById('table-empty-msg');
+      const tbody = document.getElementById('dashboard-table-body');
+      if (loading) loading.classList.remove('hidden');
+      if (emptyMsg) emptyMsg.classList.add('hidden');
+      if (tbody) tbody.innerHTML = '';
 
       let list = [];
       try {
-        const res = await fetch(CLOUD_ENDPOINT + '?_t=' + Date.now());
+        const res = await fetch(CLOUD_ENDPOINT_PRIMARY + '?_t=' + Date.now());
         if (res.ok) {
-          const json = await res.json();
-          if (json.data && json.data.submissions) {
-            list = json.data.submissions;
-          }
+          const data = await res.json();
+          list = Object.values(data).filter(item => item && typeof item === 'object' && item.name);
         }
       } catch (e) {
-        console.warn("Cloud fetch error, using local fallback", e);
+        console.warn("Primary fetch error, using backup fallback", e);
       }
 
-      // Nếu Cloud trống thì lấy thêm LocalStorage (nếu có)
       if (list.length === 0) {
         try {
-          list = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
+          const res = await fetch(CLOUD_ENDPOINT_BACKUP + '?_t=' + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            list = Object.values(data).filter(item => item && typeof item === 'object' && item.name);
+          }
         } catch(e) {}
       }
+
+      // Sắp xếp bài nộp mới nhất lên đầu
+      list.sort((a, b) => (b.id || 0) - (a.id || 0));
 
       allSubmissions = list;
       populateClassFilter();
       applyFilters();
-      document.getElementById('table-loading').classList.add('hidden');
+      if (loading) loading.classList.add('hidden');
     }
 
     function refreshDashboardData() {
@@ -1088,17 +1107,24 @@
 
     // XÓA TẤT CẢ BÀI NỘP
     async function clearAllData() {
+      const pin = prompt("Nhập mã PIN giáo viên để xác nhận xóa toàn bộ danh sách:");
+      if (pin !== getTeacherPin()) {
+        alert("Mã PIN không chính xác!");
+        return;
+      }
       if (!confirm("Thầy/cô có chắc chắn muốn xóa toàn bộ danh sách bài nộp hiện tại không? Hành động này không thể hoàn tác.")) {
         return;
       }
       try {
-        await fetch(CLOUD_ENDPOINT, {
+        await fetch(CLOUD_ENDPOINT_PRIMARY, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: "KTPL12_BAI1_DATABASE",
-            data: { submissions: [] }
-          })
+          body: JSON.stringify({})
+        });
+        await fetch(CLOUD_ENDPOINT_BACKUP, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
         });
       } catch(e) {}
       localStorage.removeItem('ktpl12_submissions');
