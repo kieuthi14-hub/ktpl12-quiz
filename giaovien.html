@@ -199,6 +199,23 @@
     // GOOGLE APPS SCRIPT / GOOGLE SHEETS BACKEND
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
 
+    // DANH SÁCH 13 BÀI NỘP CỦA HỌC SINH ĐÃ HOÀN THÀNH
+    const INITIAL_STUDENTS = [
+      { id: 1789461951675, subCode: "#12A7-9504", name: "Đỗ Ngọc Ngân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "02:12", timestamp: "15/09/2026 15:45:51" },
+      { id: 1789461730796, subCode: "#12A7-7726", name: "Đỗ Ngọc Ngân", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "03:34", timestamp: "15/09/2026 15:42:10" },
+      { id: 1789459750634, subCode: "#12A7-8127", name: "Huỳnh Thị Mỹ Hồng", className: "12A7", score: "6.5", correctCount: "13/20", timeElapsed: "05:29", timestamp: "15/09/2026 15:09:10" },
+      { id: 1789459478747, subCode: "#12A7-9729", name: "Nguyễn Thanh Ngân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "04:33", timestamp: "15/09/2026 15:04:38" },
+      { id: 1789459373842, subCode: "#12A7-5661", name: "Nguyễn Thảo My", className: "12A7", score: "7.0", correctCount: "14/20", timeElapsed: "07:27", timestamp: "15/09/2026 15:02:53" },
+      { id: 1789459253266, subCode: "#12A7-8270", name: "Ngô Bảo Khang", className: "12A7", score: "8.5", correctCount: "17/20", timeElapsed: "02:44", timestamp: "15/09/2026 15:00:53" },
+      { id: 1789459180472, subCode: "#12A7-1272", name: "Phạm Nguyễn Thùy Dương", className: "12A7", score: "6.5", correctCount: "13/20", timeElapsed: "07:56", timestamp: "15/09/2026 14:59:40" },
+      { id: 1789459063952, subCode: "#12A7-9526", name: "Nguyễn Thanh Ngân", className: "12A7", score: "7.0", correctCount: "14/20", timeElapsed: "06:00", timestamp: "15/09/2026 14:57:43" },
+      { id: 1789459020680, subCode: "#12A7-5259", name: "Đặng Phùng Hy", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "05:13", timestamp: "15/09/2026 14:57:00" },
+      { id: 1789397829199, subCode: "#12A7-4481", name: "Nguyễn Hoàng Thảo Quyên", className: "12A7", score: "8.5", correctCount: "17/20", timeElapsed: "05:50", timestamp: "14/09/2026 21:57:09" },
+      { id: 1789397822457, subCode: "#12A7-9912", name: "Phạm Thanh Xuân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "03:04", timestamp: "14/09/2026 21:57:02" },
+      { id: 1789397607192, subCode: "#12A7-3312", name: "Nguyễn Đình Hiếu", className: "12A7", score: "5.5", correctCount: "11/20", timeElapsed: "05:36", timestamp: "14/09/2026 21:53:27" },
+      { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" }
+    ];
+
     let allSubmissions = [];
     let autoRefreshTimer = null;
 
@@ -316,7 +333,14 @@
         }
       }
 
-      // 3. Tích hợp dữ liệu từ LocalStorage để không mất kết quả nào
+      // 3. Tích hợp danh sách 13 bài nộp đã làm để đảm bảo luôn đầy đủ 100%
+      INITIAL_STUDENTS.forEach(item => {
+        if (!list.some(s => s.subCode === item.subCode || (s.name === item.name && s.timestamp === item.timestamp))) {
+          list.push(item);
+        }
+      });
+
+      // 4. Tích hợp dữ liệu từ LocalStorage để không mất kết quả nào
       try {
         const local = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
         local.forEach(item => {
