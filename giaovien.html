@@ -182,6 +182,25 @@
       </div>
     </div>
 
+    <!-- HỘP CẢNH BÁO BÀI NỘP CHƯA KHỚP SỔ ĐIỂM -->
+    <div id="unmatched-alert" class="mb-4 bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 text-xs shadow-sm hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-amber-200">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⚠️</span>
+          <div>
+            <div class="font-bold text-amber-900 text-sm" id="unmatched-title">Phát hiện bài nộp tự gõ tên (Chưa khớp sổ điểm)</div>
+            <div class="text-[11px] text-amber-700">Các bài nộp dưới đây do học sinh tự gõ tên khác hoặc ghi sai lớp. Cô có thể bấm <b>"🔗 Ghép vào học sinh"</b> để đưa điểm vào đúng tên bạn đó trong sổ.</div>
+          </div>
+        </div>
+        <div class="shrink-0 flex items-center gap-2">
+          <button onclick="clearCustomMappings()" class="text-[11px] text-slate-500 hover:text-rose-600 underline">Khôi phục mặc định</button>
+        </div>
+      </div>
+      <div id="unmatched-list" class="mt-3 space-y-2">
+        <!-- Render tự động danh sách các bài nộp chưa khớp -->
+      </div>
+    </div>
+
     <!-- Bảng danh sách theo dõi học sinh -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
       <div class="overflow-x-auto max-h-[620px] overflow-y-auto">
@@ -233,6 +252,8 @@
 
     // DANH SÁCH BÀI NỘP BAN ĐẦU ĐÃ GHI NHẬN TỪ TRƯỚC
     const INITIAL_SUBMISSIONS = [
+      { id: 1789462800000, subCode: "#12A7-6621", name: "Nguyễn Lê Thảo My", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "03:45", timestamp: "15/09/2026 16:00:00" },
+      { id: 1789462700000, subCode: "#12A7-6620", name: "Nguyễn Lê Thảo My (Làm lại)", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "03:15", timestamp: "15/09/2026 15:58:00" },
       { id: 1789462524000, subCode: "#12A-5755", name: "Hữu Khánh", className: "12A", score: "8.0", correctCount: "16/20", timeElapsed: "01:53", timestamp: "15/09/2026 15:55:24" },
       { id: 1789461951675, subCode: "#12A7-9504", name: "Đỗ Ngọc Ngân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "02:12", timestamp: "15/09/2026 15:45:51" },
       { id: 1789461730796, subCode: "#12A7-7726", name: "Đỗ Ngọc Ngân", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "03:34", timestamp: "15/09/2026 15:42:10" },
@@ -314,7 +335,65 @@
       }
     }
 
-    // Hàm chuẩn hóa chuỗi tiếng Việt để so khớp tên thông minh
+    // Chuẩn hóa điểm số tuyệt đối, loại bỏ hoàn toàn lỗi Google Sheets tự đổi điểm đuôi .5 thành ngày tháng (VD: 2026-05-08T17:00:00.000Z)
+    function formatCleanScore(rawScore, correctCount) {
+      // Ưu tiên 1: Tính chuẩn xác tuyệt đối từ correctCount (ví dụ "19/20" => 9.5)
+      if (correctCount && typeof correctCount === 'string') {
+        const m = correctCount.match(/(\d+)\s*\/\s*(\d+)/);
+        if (m && parseInt(m[2], 10) > 0) {
+          const cScore = (parseInt(m[1], 10) / parseInt(m[2], 10)) * 10;
+          return cScore.toFixed(1);
+        }
+      }
+
+      // Ưu tiên 2: Nếu rawScore là số hợp lệ từ 0 đến 10
+      if (rawScore !== null && rawScore !== undefined && rawScore !== '') {
+        const sStr = String(rawScore).trim().replace(',', '.');
+        const num = parseFloat(sStr);
+        if (!isNaN(num) && num >= 0 && num <= 10 && !sStr.includes('-') && !sStr.includes('T')) {
+          return num.toFixed(1);
+        }
+      }
+
+      // Ưu tiên 3: Nếu bị Google Sheet tự đổi thành chuỗi Date (ví dụ 2026-05-08T17:00:00.000Z hoặc Date(2026,4,8...))
+      if (typeof rawScore === 'string' && (rawScore.includes('T') || rawScore.includes('Date') || rawScore.includes('-'))) {
+        try {
+          const d = new Date(rawScore);
+          if (!isNaN(d.getTime())) {
+            // Chuyển sang múi giờ Việt Nam GMT+7
+            const vnDate = new Date(d.getTime() + 7 * 3600000);
+            const day = vnDate.getUTCDate();
+            const month = vnDate.getUTCMonth() + 1;
+            // Nếu tháng 5 và ngày từ 0..10 => điểm có đuôi .5 (ví dụ ngày 9/5 => 9.5)
+            if (month === 5 && day <= 10) {
+              return `${day}.5`;
+            }
+          }
+        } catch(e) {}
+      }
+
+      return rawScore ? String(rawScore) : '0.0';
+    }
+
+    // Chuẩn hóa tên lớp học sinh nhập (12A7, Lớp 12A7, 12 A 7 -> 12A7)
+    function normClass(cls) {
+      if (!cls) return '';
+      return cls.toUpperCase().replace(/LỚP|LOP/ig, '').replace(/[^A-Z0-9]/g, '');
+    }
+
+    // Kiểm tra tính tương thích giữa lớp bài nộp và lớp học sinh
+    function isClassMatch(subClass, targetClass) {
+      if (!subClass) return true;
+      const sc = normClass(subClass);
+      const tc = normClass(targetClass);
+      if (!sc) return true;
+      if (sc === tc) return true;
+      if (sc === '12A' && (tc === '12A5' || tc === '12A7' || tc === '12A9')) return true;
+      if (sc.includes(tc) || tc.includes(sc)) return true;
+      return false;
+    }
+
+    // Chuẩn hóa chuỗi tiếng Việt để so khớp tên thông minh
     function normText(str) {
       if (!str) return '';
       return str.toLowerCase()
@@ -322,6 +401,12 @@
         .replace(/đ/g, 'd')
         .replace(/\s+/g, ' ')
         .trim();
+    }
+
+    // Chuẩn hóa tên bài nộp, loại bỏ tiền tố/hậu tố như (làm lại), - 12A7...
+    function cleanSubName(str) {
+      if (!str) return '';
+      return normText(str.replace(/\([^\)]*\)/g, '').replace(/[-_].*$/, '').replace(/lớp\s*\d+[a-z\d]*/ig, ''));
     }
 
     async function loadDashboardData() {
@@ -360,13 +445,15 @@
                 gvizData.table.rows.forEach(r => {
                   const c = r.c;
                   if (c && c[2] && c[2].v) {
+                    const rawScoreVal = c[4] ? (c[4].v || c[4].f) : '';
+                    const rawCorrectVal = c[5] ? (c[5].v || c[5].f) : '';
                     list.push({
                       stt: c[0] ? c[0].v : '',
                       subCode: c[1] ? c[1].v : '',
                       name: c[2] ? c[2].v : '',
                       className: c[3] ? c[3].v : '',
-                      score: c[4] ? c[4].v : '',
-                      correctCount: c[5] ? c[5].v : '',
+                      score: formatCleanScore(rawScoreVal, rawCorrectVal),
+                      correctCount: rawCorrectVal,
                       timeElapsed: c[6] ? (c[6].f || c[6].v) : '',
                       timestamp: c[7] ? (c[7].f || c[7].v) : ''
                     });
@@ -381,7 +468,10 @@
       // 3. Hợp nhất các bài nộp ban đầu
       INITIAL_SUBMISSIONS.forEach(item => {
         if (!list.some(s => s.subCode === item.subCode || (normText(s.name) === normText(item.name) && s.timestamp === item.timestamp))) {
-          list.push(item);
+          list.push({
+            ...item,
+            score: formatCleanScore(item.score, item.correctCount)
+          });
         }
       });
 
@@ -390,10 +480,18 @@
         const local = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
         local.forEach(item => {
           if (!list.some(s => s.subCode === item.subCode || (normText(s.name) === normText(item.name) && s.timestamp === item.timestamp))) {
-            list.push(item);
+            list.push({
+              ...item,
+              score: formatCleanScore(item.score, item.correctCount)
+            });
           }
         });
       } catch(e) {}
+
+      // Chuẩn hóa toàn bộ điểm số của tất cả bài nộp
+      list.forEach(item => {
+        item.score = formatCleanScore(item.score, item.correctCount);
+      });
 
       allRawSubmissions = list;
       applyFilters();
@@ -441,6 +539,12 @@
       const statusFilter = document.getElementById('filter-status').value;
       const search = normText(document.getElementById('filter-search').value);
 
+      // Đọc các gán thủ công của giáo viên từ localStorage (nếu có)
+      let customMappings = {};
+      try {
+        customMappings = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}');
+      } catch(e) {}
+
       // 1. Xác định danh sách học sinh gốc của lớp
       let rosterList = [];
       const rosters = (typeof CLASS_ROSTERS !== 'undefined') ? CLASS_ROSTERS : {};
@@ -457,38 +561,73 @@
         }
       }
 
+      // Chuẩn hóa điểm tất cả bài nộp trước khi ghép
+      allRawSubmissions.forEach(sub => {
+        sub.score = formatCleanScore(sub.score, sub.correctCount);
+      });
+
+      // Theo dõi ID các bài nộp đã được gán vào học sinh trong sổ
+      const matchedSubIds = new Set();
+
       // 2. Đối chiếu từng học sinh trong sổ điểm với các bài nộp đã nhận
       const viewItems = rosterList.map(student => {
         const studentNorm = normText(student.name);
+        const studentClean = cleanSubName(student.name);
 
         // Lọc các bài nộp phù hợp với học sinh này
         const matchedSubs = allRawSubmissions.filter(sub => {
-          const subNameNorm = normText(sub.name);
-          const nameMatch = (subNameNorm === studentNorm) || subNameNorm.includes(studentNorm);
+          const subNorm = normText(sub.name);
+          const subClean = cleanSubName(sub.name);
 
-          if (!nameMatch) return false;
-
-          // Kiểm tra lớp tương ứng
-          if (sub.className) {
-            const subCls = sub.className.toUpperCase().replace(/\s+/g, '');
-            const targetCls = student.className.toUpperCase().replace(/\s+/g, '');
-            // Cho phép nếu lớp trùng hoặc nếu sub ghi "12A" chung chung
-            if (subCls === targetCls || targetCls.includes(subCls) || subCls === '12A') {
-              return true;
-            }
+          // A. Kiểm tra gán thủ công của giáo viên
+          if (customMappings[subNorm] && (normText(customMappings[subNorm]) === studentNorm || customMappings[subNorm] === student.studentId)) {
+            return true;
           }
-          return true;
+          if (customMappings[subClean] && (normText(customMappings[subClean]) === studentNorm || customMappings[subClean] === student.studentId)) {
+            return true;
+          }
+
+          // B. Kiểm tra lớp học
+          const classMatches = isClassMatch(sub.className, student.className);
+          if (!classMatches) return false;
+
+          // C. Kiểm tra tên:
+          // 1. Khớp tuyệt đối 100%
+          if (subClean === studentClean || subNorm === studentNorm) return true;
+
+          // 2. Bài nộp chứa họ tên học sinh (ví dụ "Đỗ Ngọc Ngân (Làm lại)" hoặc "Đỗ Ngọc Ngân - 12A7")
+          if (subNorm.includes(studentNorm) || subClean.includes(studentClean)) return true;
+
+          // 3. Học sinh trong sổ kết thúc bằng tên bài nộp (ví dụ "Phạm Đoàn Khánh Thư" kết thúc bằng "Khánh Thư")
+          const subParts = subClean.split(' ');
+          if (subParts.length >= 2 && studentClean.endsWith(subClean)) {
+            const rivals = rosterList.filter(r => cleanSubName(r.name).endsWith(subClean));
+            if (rivals.length === 1) return true;
+          }
+
+          return false;
         });
 
         if (matchedSubs.length > 0) {
-          // Lấy bài nộp có điểm cao nhất (hoặc bài nộp mới nhất)
-          const bestSub = [...matchedSubs].sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0))[0];
+          // Ghi nhận các bài nộp đã được khớp
+          matchedSubs.forEach(s => matchedSubIds.add(s.subCode || s.id || s.timestamp));
+
+          // Lấy bài nộp có điểm cao nhất (tính theo số thực)
+          const bestSub = [...matchedSubs].sort((a, b) => {
+            const numA = parseFloat(formatCleanScore(a.score, a.correctCount)) || 0;
+            const numB = parseFloat(formatCleanScore(b.score, b.correctCount)) || 0;
+            return numB - numA;
+          })[0];
+
+          const cleanBestScore = formatCleanScore(bestSub.score, bestSub.correctCount);
+
           return {
             ...student,
             isDone: true,
+            isUnmatched: false,
             submissionCount: matchedSubs.length,
             subCode: bestSub.subCode || ('#' + student.className + '-' + student.stt),
-            score: bestSub.score,
+            score: cleanBestScore,
             correctCount: bestSub.correctCount,
             timeElapsed: bestSub.timeElapsed,
             timestamp: bestSub.timestamp
@@ -497,6 +636,7 @@
           return {
             ...student,
             isDone: false,
+            isUnmatched: false,
             submissionCount: 0,
             subCode: '-',
             score: null,
@@ -507,30 +647,45 @@
         }
       });
 
-      // 3. Bổ sung thêm các bài nộp tự do không khớp tên trong sổ (nếu có)
-      if (selectedClass === 'ALL') {
-        allRawSubmissions.forEach(sub => {
-          const subNameNorm = normText(sub.name);
-          const isMatched = viewItems.some(item => item.isDone && normText(item.name) === subNameNorm);
-          if (!isMatched) {
-            viewItems.push({
-              stt: '+',
-              studentId: '-',
-              name: sub.name,
-              className: sub.className || 'Khác',
-              dob: '-',
-              gender: '-',
-              isDone: true,
-              submissionCount: 1,
-              subCode: sub.subCode || '#12-0000',
-              score: sub.score,
-              correctCount: sub.correctCount,
-              timeElapsed: sub.timeElapsed,
-              timestamp: sub.timestamp
-            });
+      // 3. Tìm các bài nộp chưa khớp sổ điểm (unmatched)
+      const unmatchedSubs = allRawSubmissions.filter(sub => {
+        const subId = sub.subCode || sub.id || sub.timestamp;
+        if (matchedSubIds.has(subId)) return false;
+
+        // Nếu đang chọn 1 lớp cụ thể (ví dụ 12A7):
+        if (selectedClass !== 'ALL') {
+          const sc = normClass(sub.className);
+          const tc = normClass(selectedClass);
+          if (sc && sc !== tc && sc !== '12A' && !sc.includes(tc)) {
+            return false;
           }
+        }
+        return true;
+      });
+
+      // Cập nhật Hộp Cảnh báo Unmatched Alert
+      renderUnmatchedAlert(unmatchedSubs, selectedClass);
+
+      // Bổ sung các bài nộp chưa khớp vào danh sách hiển thị
+      unmatchedSubs.forEach(sub => {
+        const cleanScore = formatCleanScore(sub.score, sub.correctCount);
+        viewItems.push({
+          stt: '+',
+          studentId: 'Tự do',
+          name: sub.name,
+          className: sub.className || (selectedClass !== 'ALL' ? selectedClass : 'Khác'),
+          dob: '-',
+          gender: '-',
+          isDone: true,
+          isUnmatched: true,
+          submissionCount: 1,
+          subCode: sub.subCode || '#12-0000',
+          score: cleanScore,
+          correctCount: sub.correctCount,
+          timeElapsed: sub.timeElapsed,
+          timestamp: sub.timestamp
         });
-      }
+      });
 
       // 4. Lọc theo trạng thái và từ khóa tìm kiếm
       const filtered = viewItems.filter(item => {
@@ -539,7 +694,86 @@
         return matchStatus && matchSearch;
       });
 
-      return { allItems: viewItems, filtered: filtered };
+      return { allItems: viewItems, filtered: filtered, unmatchedSubs: unmatchedSubs };
+    }
+
+    function renderUnmatchedAlert(unmatchedSubs, selectedClass) {
+      const alertBox = document.getElementById('unmatched-alert');
+      const listEl = document.getElementById('unmatched-list');
+      const titleEl = document.getElementById('unmatched-title');
+      if (!alertBox || !listEl) return;
+
+      if (!unmatchedSubs || unmatchedSubs.length === 0) {
+        alertBox.classList.add('hidden');
+        listEl.innerHTML = '';
+        return;
+      }
+
+      alertBox.classList.remove('hidden');
+      const classLabel = selectedClass === 'ALL' ? 'các lớp' : `lớp ${selectedClass}`;
+      titleEl.innerHTML = `Phát hiện <b>${unmatchedSubs.length}</b> bài nộp tự gõ tên chưa khớp sổ điểm (${classLabel}):`;
+
+      listEl.innerHTML = '';
+      unmatchedSubs.forEach(sub => {
+        const cleanScore = formatCleanScore(sub.score, sub.correctCount);
+        const card = document.createElement('div');
+        card.className = "flex flex-wrap items-center justify-between bg-white border border-amber-200 p-2.5 rounded-xl shadow-xs gap-2";
+        const safeName = (sub.name || '').replace(/'/g, "\\'");
+        const safeClass = (sub.className || '').replace(/'/g, "\\'");
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <span class="font-bold text-slate-800">📝 ${sub.name}</span>
+            <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">Lớp: ${sub.className || 'Chưa rõ'}</span>
+            <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold text-[11px]">Điểm: ${cleanScore} (${sub.correctCount || '?'})</span>
+            <span class="text-slate-400 text-[10px]">⏱️ ${sub.timestamp || ''}</span>
+          </div>
+          <button onclick="assignUnmatchedSub('${safeName}', '${safeClass}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
+            <span>🔗</span> <span>Ghép vào học sinh...</span>
+          </button>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function assignUnmatchedSub(subName, subClass) {
+      const selectedClass = document.getElementById('filter-class').value;
+      let targetClass = (selectedClass !== 'ALL') ? selectedClass : '12A7';
+      if (subClass && subClass.includes('12A5')) targetClass = '12A5';
+      else if (subClass && subClass.includes('12A9')) targetClass = '12A9';
+      else if (subClass && subClass.includes('12A7')) targetClass = '12A7';
+
+      const roster = (typeof CLASS_ROSTERS !== 'undefined' && CLASS_ROSTERS[targetClass]) ? CLASS_ROSTERS[targetClass] : [];
+      if (roster.length === 0) {
+        alert("Không tìm thấy danh sách lớp " + targetClass);
+        return;
+      }
+
+      const options = roster.map(st => `${st.stt}. ${st.name}`).join('\n');
+      const input = prompt(`Chọn số thứ tự (STT 1..${roster.length}) của học sinh trong lớp ${targetClass} để gán bài nộp của "${subName}":\n\n${options}\n\nNhập số STT (từ 1 đến ${roster.length}):`);
+      if (input) {
+        const stt = parseInt(input.trim(), 10);
+        const found = roster.find(st => st.stt === stt);
+        if (found) {
+          let map = {};
+          try {
+            map = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}');
+          } catch(e) {}
+          map[normText(subName)] = found.name;
+          localStorage.setItem('ktpl12_name_mappings', JSON.stringify(map));
+          alert(`✅ Đã gán thành công bài nộp "${subName}" vào học sinh:\nSTT ${found.stt} - ${found.name} (${targetClass})!`);
+          applyFilters();
+        } else {
+          alert("Số STT không hợp lệ! Vui lòng nhập từ 1 đến " + roster.length);
+        }
+      }
+    }
+
+    function clearCustomMappings() {
+      if (confirm("Cô có muốn xóa toàn bộ liên kết ghép tên thủ công đã lưu không?")) {
+        localStorage.removeItem('ktpl12_name_mappings');
+        alert("Đã khôi phục cài đặt mặc định!");
+        applyFilters();
+      }
     }
 
     function applyFilters() {
@@ -578,7 +812,7 @@
         return;
       }
 
-      const scores = doneItems.map(i => parseFloat(i.score) || 0);
+      const scores = doneItems.map(i => parseFloat(formatCleanScore(i.score, i.correctCount)) || 0);
       const sum = scores.reduce((a, b) => a + b, 0);
       const avg = (sum / scores.length).toFixed(1);
       const max = Math.max(...scores).toFixed(1);
@@ -604,7 +838,9 @@
       items.forEach((item) => {
         const tr = document.createElement('tr');
         
-        if (item.isDone) {
+        if (item.isUnmatched) {
+          tr.className = "hover:bg-amber-100/50 transition bg-amber-50/40 border-l-4 border-amber-500";
+        } else if (item.isDone) {
           tr.className = "hover:bg-slate-50 transition bg-white";
         } else {
           tr.className = "hover:bg-amber-50/40 transition bg-slate-50/50 opacity-80";
@@ -613,15 +849,20 @@
         let statusBadge = '';
         let scoreBadge = '-';
 
-        if (item.isDone) {
-          const numScore = parseFloat(item.score) || 0;
+        const cleanScore = formatCleanScore(item.score, item.correctCount);
+
+        if (item.isUnmatched) {
+          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${cleanScore}</span>`;
+          statusBadge = `<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-amber-300"><span>⚠️</span> Tự gõ tên</span>`;
+        } else if (item.isDone) {
+          const numScore = parseFloat(cleanScore) || 0;
           let scoreBadgeClass = "bg-slate-100 text-slate-800";
           if (numScore >= 9.0) scoreBadgeClass = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold";
           else if (numScore >= 8.0) scoreBadgeClass = "bg-teal-100 text-teal-800 border border-teal-300 font-bold";
           else if (numScore >= 5.0) scoreBadgeClass = "bg-blue-100 text-blue-800 font-bold";
           else scoreBadgeClass = "bg-rose-100 text-rose-800 font-bold";
 
-          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${item.score}</span>`;
+          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${cleanScore}</span>`;
 
           const countBadge = item.submissionCount > 1 ? `<span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1 py-0.2 rounded font-bold" title="Làm ${item.submissionCount} lần">${item.submissionCount}x</span>` : '';
           statusBadge = `<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-emerald-300"><span>✅</span> Đã nộp${countBadge}</span>`;
@@ -629,10 +870,14 @@
           statusBadge = `<span class="inline-flex items-center gap-1 bg-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-md text-[11px]"><span>⏳</span> Chưa làm</span>`;
         }
 
+        const safeItemName = (item.name || '').replace(/'/g, "\\'");
+        const safeItemClass = (item.className || '').replace(/'/g, "\\'");
+        const assignBtn = item.isUnmatched ? `<button onclick="assignUnmatchedSub('${safeItemName}', '${safeItemClass}')" class="ml-1 text-[10px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold border border-indigo-200">🔗 Ghép</button>` : '';
+
         tr.innerHTML = `
           <td class="py-2.5 px-3 text-center text-slate-400 font-mono font-bold">${item.stt}</td>
           <td class="py-2.5 px-2 text-center font-mono text-[11px] text-slate-500">${item.studentId || '-'}</td>
-          <td class="py-2.5 px-3 font-semibold ${item.isDone ? 'text-slate-800' : 'text-slate-600'}">${item.name}</td>
+          <td class="py-2.5 px-3 font-semibold ${item.isDone ? 'text-slate-800' : 'text-slate-600'}">${item.name} ${assignBtn}</td>
           <td class="py-2.5 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">${item.className}</span></td>
           <td class="py-2.5 px-2 text-center">${statusBadge}</td>
           <td class="py-2.5 px-2 text-center">${scoreBadge}</td>
@@ -662,7 +907,7 @@
         `"${(item.name || '').replace(/"/g, '""')}"`,
         `"${item.className || ''}"`,
         item.isDone ? `"Đã nộp bài"` : `"Chưa nộp bài"`,
-        item.isDone ? item.score : `""`,
+        item.isDone ? `"${formatCleanScore(item.score, item.correctCount)}"` : `""`,
         `"${item.correctCount || ''}"`,
         `"${item.timeElapsed || ''}"`,
         `"${item.timestamp || ''}"`
