@@ -45,9 +45,9 @@
         <h1 class="text-base md:text-lg font-bold mt-0.5">Bài 1: Tăng trưởng và phát triển kinh tế</h1>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="openTeacherLogin()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1">
-          <span>🔐</span> <span class="hidden sm:inline">Dành cho</span> Giáo viên
-        </button>
+        <a href="giaovien.html" class="bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Mở Sổ Theo Dõi Điểm & Tiến Độ Học Sinh">
+          <span>📋</span> <span class="hidden sm:inline">Sổ Điểm & Quản Lý</span> Giáo Viên
+        </a>
         <div id="header-timer" class="text-xs font-mono font-semibold text-indigo-200 hidden bg-indigo-800/80 px-2 py-1 rounded">⏱️ 00:00</div>
       </div>
     </div>
@@ -922,23 +922,15 @@
     }
 
     function openTeacherLogin() {
-      document.getElementById('teacher-pin').value = '';
-      document.getElementById('login-error').classList.add('hidden');
-      document.getElementById('teacher-login-modal').classList.remove('hidden');
+      window.location.href = 'giaovien.html';
     }
 
     function closeTeacherLogin() {
-      document.getElementById('teacher-login-modal').classList.add('hidden');
+      document.getElementById('teacher-login-modal')?.classList.add('hidden');
     }
 
     function submitTeacherLogin() {
-      const pin = document.getElementById('teacher-pin').value.trim();
-      if (pin === getTeacherPin()) {
-        closeTeacherLogin();
-        openTeacherDashboard();
-      } else {
-        document.getElementById('login-error').classList.remove('hidden');
-      }
+      window.location.href = 'giaovien.html';
     }
 
     function openTeacherDashboard() {
