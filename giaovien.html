@@ -244,10 +244,60 @@
     <div class="text-center text-xs text-slate-400 pb-6 flex items-center justify-center gap-4">
       <button onclick="changePinPrompt()" class="text-indigo-600 hover:underline font-medium">🔑 Đổi mã PIN giáo viên</button>
       <span>•</span>
+      <button onclick="openSheetModal(true)" class="text-emerald-600 hover:underline font-medium">📊 Cài đặt link Google Sheet</button>
+      <span>•</span>
       <button onclick="logoutTeacher()" class="text-rose-600 hover:underline font-medium">🚪 Đăng xuất</button>
     </div>
 
   </main>
+
+  <!-- MODAL LIÊN KẾT GOOGLE SHEETS CỦA GIÁO VIÊN -->
+  <div id="sheet-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📊</span>
+          <h3 class="font-bold text-slate-800 text-base">Liên kết Google Sheets của Cô</h3>
+        </div>
+        <button onclick="closeSheetModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold p-1">✕</button>
+      </div>
+
+      <div class="mt-4 space-y-3.5 text-xs text-slate-600">
+        <p class="leading-relaxed">
+          Tính năng này giúp cô <b>mở trực tiếp bảng điểm Google Sheets gốc</b> chỉ với 1 cú click chuột mà không cần phải đi tìm file trong Google Drive.
+        </p>
+
+        <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5 space-y-2">
+          <div class="font-bold text-emerald-900 flex items-center gap-1.5 text-xs">
+            <span>💡</span> <span>Cách lấy link file Google Sheets của cô:</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-1.5 text-emerald-800 text-[11px] leading-relaxed">
+            <li>Bấm vào liên kết màu xanh bên dưới để mở trang Google Sheets của cô.</li>
+            <li>Bấm mở file trang tính chứa kết quả nộp bài của học sinh.</li>
+            <li>Sao chép (Copy) toàn bộ địa chỉ trên thanh trình duyệt web (dạng <code class="bg-white/80 px-1 py-0.5 rounded text-emerald-900 font-mono">https://docs.google.com/spreadsheets/d/...</code>) và dán vào ô bên dưới.</li>
+          </ol>
+          <div class="pt-1">
+            <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-bold underline text-xs">
+              <span>↗ Bấm vào đây để mở danh sách Google Sheets của cô</span>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Dán đường link Google Sheets vào đây:</label>
+          <input type="text" id="input-sheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+          <div id="sheet-modal-error" class="text-rose-500 text-[11px] mt-1.5 font-medium hidden">⚠️ Vui lòng dán đúng đường link Google Sheets (chứa google.com/spreadsheets).</div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+        <button onclick="closeSheetModal()" class="px-4 py-2 rounded-xl text-slate-600 font-bold text-xs hover:bg-slate-100 transition">Đóng</button>
+        <button onclick="saveAndOpenSheet()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+          <span>💾</span> <span>Lưu & Mở file ngay</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // CẤU HÌNH GOOGLE APPS SCRIPT / GOOGLE SHEETS
@@ -329,20 +379,49 @@
 
     function openGoogleSheetDirectly() {
       const savedUrl = localStorage.getItem('ktpl12_sheet_url');
-      if (savedUrl) {
+      if (savedUrl && savedUrl.includes('google.com/spreadsheets')) {
         window.open(savedUrl, '_blank');
       } else {
-        const input = prompt("Dán đường link file Google Sheets của cô vào đây (link trên thanh địa chỉ, dạng https://docs.google.com/spreadsheets/d/...):");
-        if (input && input.includes('google.com/spreadsheets')) {
-          localStorage.setItem('ktpl12_sheet_url', input.trim());
-          window.open(input.trim(), '_blank');
-          loadDashboardData();
-        } else if (input) {
-          alert("Đường link Google Sheet không hợp lệ!");
-        } else {
-          window.open('https://docs.google.com/spreadsheets/u/0/', '_blank');
-        }
+        openSheetModal(false);
       }
+    }
+
+    function openSheetModal(forceEdit = false) {
+      const modal = document.getElementById('sheet-modal');
+      const input = document.getElementById('input-sheet-url');
+      const err = document.getElementById('sheet-modal-error');
+      if (err) err.classList.add('hidden');
+      if (input) {
+        input.value = localStorage.getItem('ktpl12_sheet_url') || '';
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (input) setTimeout(() => input.focus(), 100);
+      }
+    }
+
+    function closeSheetModal() {
+      const modal = document.getElementById('sheet-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function saveAndOpenSheet() {
+      const input = document.getElementById('input-sheet-url');
+      const err = document.getElementById('sheet-modal-error');
+      const val = input ? input.value.trim() : '';
+
+      if (!val || !val.includes('google.com/spreadsheets')) {
+        if (err) {
+          err.classList.remove('hidden');
+          err.textContent = '⚠️ Vui lòng dán đúng đường link Google Sheets (chứa google.com/spreadsheets).';
+        }
+        return;
+      }
+
+      localStorage.setItem('ktpl12_sheet_url', val);
+      closeSheetModal();
+      window.open(val, '_blank');
+      loadDashboardData();
     }
 
     // Chuẩn hóa điểm số tuyệt đối, loại bỏ hoàn toàn lỗi Google Sheets tự đổi điểm đuôi .5 thành ngày tháng (VD: 2026-05-08T17:00:00.000Z)
