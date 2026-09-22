@@ -61,34 +61,58 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
+        <button id="header-change-pin-btn" onclick="openChangePinModal()" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-600 transition flex items-center gap-1.5 hidden" title="Đổi mật khẩu bảo vệ của giáo viên">
+          <span>🔑</span> <span class="hidden sm:inline">Đổi mật khẩu</span>
+        </button>
         <a href="index.html" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-400 transition flex items-center gap-1" title="Mở trang làm bài của học sinh">
           <span>📝</span> <span class="hidden sm:inline">Trang làm bài</span>
         </a>
-        <button id="header-lock-btn" onclick="logoutTeacher()" class="bg-indigo-800 hover:bg-rose-700 text-indigo-200 hover:text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 hidden" title="Khóa sổ điểm">
-          <span>🔒</span> <span class="hidden sm:inline">Khóa sổ</span>
+        <button id="header-lock-btn" onclick="logoutTeacher()" class="bg-rose-700 hover:bg-rose-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 hidden" title="Khóa sổ điểm và đăng xuất">
+          <span>🔒</span> <span>Khóa sổ (Đăng xuất)</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MÀN HÌNH XÁC THỰC MÃ PIN (CÓ ĐIỀN SẴN MẬT KHẨU) -->
+  <!-- MÀN HÌNH XÁC THỰC MẬT KHẨU GIÁO VIÊN (BẢO MẬT CHẶT CHẼ) -->
   <div id="pin-screen" class="max-w-md mx-auto w-full p-4 my-auto">
-    <div class="glass-card p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 text-center">
-      <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-4">🔑</div>
-      <h2 class="text-xl font-bold text-slate-800 mb-1">Xác thực Giáo viên</h2>
-      <p class="text-xs text-slate-500 mb-5">Mật khẩu đã được <b class="text-indigo-600">điền sẵn</b>. Cô chỉ cần bấm nút bên dưới để mở sổ điểm ngay ạ!</p>
+    <div class="glass-card p-6 md:p-8 rounded-2xl shadow-2xl border border-slate-200 text-center">
+      <div class="w-16 h-16 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-4 shadow-inner">🔒</div>
+      <h2 class="text-xl font-bold text-slate-800 mb-1.5">Xác Thực Quyền Giáo Viên</h2>
+      <p class="text-xs text-slate-500 mb-5 leading-relaxed">
+        Khu vực bảo mật dành riêng cho cô <b class="text-indigo-700">Trương Thùy Linh Kiều</b>.<br>
+        Vui lòng nhập mật khẩu để mở sổ quản lý điểm và xem bài làm của học sinh.
+      </p>
       
       <form onsubmit="event.preventDefault(); verifyPin();" class="space-y-4 text-left">
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Mã PIN Giáo viên (Đã điền sẵn):</label>
-          <input type="text" id="input-pin" value="123456" maxlength="12" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center text-lg tracking-widest font-mono font-bold bg-indigo-50/50 text-indigo-950">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Mật khẩu giáo viên:</label>
+          <div class="relative">
+            <input type="password" id="input-pin" value="" maxlength="20" autocomplete="current-password" placeholder="Nhập mật khẩu..." class="w-full pl-4 pr-11 py-3.5 rounded-xl border-2 border-slate-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 focus:outline-none text-center text-lg tracking-widest font-mono font-bold bg-white text-slate-900 transition">
+            <button type="button" onclick="togglePinVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 p-1.5 text-base transition" title="Hiện/Ẩn mật khẩu" id="toggle-pin-btn">
+              👁️
+            </button>
+          </div>
         </div>
-        <div id="pin-error" class="hidden text-xs text-rose-600 font-semibold text-center">⚠️ Mã PIN không chính xác! Vui lòng thử lại.</div>
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-base active:scale-98">
-          <span>🚀</span> <span>Vào Sổ Quản Lý Ngay (Mật khẩu: 123456) ➔</span>
+
+        <div id="pin-error" class="hidden text-xs text-rose-600 font-bold text-center bg-rose-50 p-2.5 rounded-xl border border-rose-200">
+          ⚠️ Mật khẩu không chính xác! Học sinh không được phép truy cập khu vực này.
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-600 px-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="remember-auth" class="rounded text-indigo-600 focus:ring-indigo-500">
+            <span>Ghi nhớ đăng nhập trên máy của cô</span>
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-indigo-200 transition flex items-center justify-center gap-2 text-base active:scale-98">
+          <span>🔐</span> <span>Đăng Nhập Vào Sổ Quản Lý</span>
         </button>
       </form>
-      <div class="mt-4 text-[11px] text-slate-400">💡 Hệ thống sẽ tự động ghi nhớ phiên đăng nhập để cô không cần nhập lại mật khẩu lần sau.</div>
+      <div class="mt-5 pt-4 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-center gap-1.5">
+        <span>🛡️</span> <span>Hệ thống bảo vệ dữ liệu điểm số & thông tin học sinh</span>
+      </div>
     </div>
   </div>
 
@@ -618,31 +642,132 @@
     }
 
     // ĐĂNG NHẬP & XÁC THỰC GIÁO VIÊN
-    function verifyPin() {
-      const input = document.getElementById('input-pin').value.trim();
-      if (input === getTeacherPin()) {
-        localStorage.setItem('ktpl12_teacher_authed', 'true');
-        sessionStorage.setItem('ktpl12_teacher_authed', 'true');
-        document.getElementById('pin-screen').classList.add('hidden');
-        document.getElementById('dashboard-screen').classList.remove('hidden');
-        const lockBtn = document.getElementById('header-lock-btn');
-        if (lockBtn) lockBtn.classList.remove('hidden');
-        loadDashboardData();
-        startAutoRefresh();
+    function togglePinVisibility() {
+      const input = document.getElementById('input-pin');
+      const btn = document.getElementById('toggle-pin-btn');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.innerText = '🙈';
       } else {
-        document.getElementById('pin-error').classList.remove('hidden');
+        input.type = 'password';
+        if (btn) btn.innerText = '👁️';
       }
     }
 
+    // ĐĂNG NHẬP & XÁC THỰC MẬT KHẨU GIÁO VIÊN
+    function verifyPin() {
+      const input = document.getElementById('input-pin').value.trim();
+      const err = document.getElementById('pin-error');
+      const remember = document.getElementById('remember-auth')?.checked;
+
+      if (input === getTeacherPin()) {
+        if (err) err.classList.add('hidden');
+        sessionStorage.setItem('ktpl12_teacher_authed', 'true');
+        if (remember) {
+          localStorage.setItem('ktpl12_teacher_authed', 'true');
+        } else {
+          localStorage.removeItem('ktpl12_teacher_authed');
+        }
+
+        document.getElementById('pin-screen').classList.add('hidden');
+        document.getElementById('dashboard-screen').classList.remove('hidden');
+        
+        const lockBtn = document.getElementById('header-lock-btn');
+        if (lockBtn) lockBtn.classList.remove('hidden');
+        const changePinBtn = document.getElementById('header-change-pin-btn');
+        if (changePinBtn) changePinBtn.classList.remove('hidden');
+
+        document.getElementById('input-pin').value = '';
+
+        loadDashboardData();
+        startAutoRefresh();
+      } else {
+        if (err) {
+          err.classList.remove('hidden');
+          err.innerText = "⚠️ Mật khẩu không chính xác! Học sinh không được phép truy cập khu vực này.";
+        }
+        const pinInput = document.getElementById('input-pin');
+        if (pinInput) {
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      }
+    }
+
+    // ĐĂNG XUẤT VÀ KHÓA SỔ ĐIỂM
     function logoutTeacher() {
       localStorage.removeItem('ktpl12_teacher_authed');
       sessionStorage.removeItem('ktpl12_teacher_authed');
       stopAutoRefresh();
       document.getElementById('dashboard-screen').classList.add('hidden');
       document.getElementById('pin-screen').classList.remove('hidden');
+      
       const lockBtn = document.getElementById('header-lock-btn');
       if (lockBtn) lockBtn.classList.add('hidden');
-      document.getElementById('input-pin').value = getTeacherPin();
+      const changePinBtn = document.getElementById('header-change-pin-btn');
+      if (changePinBtn) changePinBtn.classList.add('hidden');
+
+      const pinInput = document.getElementById('input-pin');
+      if (pinInput) {
+        pinInput.value = '';
+        pinInput.focus();
+      }
+      const err = document.getElementById('pin-error');
+      if (err) err.classList.add('hidden');
+    }
+
+    // CÁC HÀM QUẢN LÝ ĐỔI MẬT KHẨU GIÁO VIÊN
+    function openChangePinModal() {
+      const modal = document.getElementById('change-pin-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.getElementById('pin-current').value = '';
+        document.getElementById('pin-new').value = '';
+        document.getElementById('pin-confirm').value = '';
+        document.getElementById('change-pin-error').classList.add('hidden');
+        document.getElementById('change-pin-success').classList.add('hidden');
+      }
+    }
+
+    function closeChangePinModal() {
+      const modal = document.getElementById('change-pin-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitChangePin() {
+      const cur = document.getElementById('pin-current').value.trim();
+      const nPin = document.getElementById('pin-new').value.trim();
+      const cPin = document.getElementById('pin-confirm').value.trim();
+      const errBox = document.getElementById('change-pin-error');
+      const succBox = document.getElementById('change-pin-success');
+
+      errBox.classList.add('hidden');
+      succBox.classList.add('hidden');
+
+      if (cur !== getTeacherPin()) {
+        errBox.innerText = "Mật khẩu hiện tại không chính xác!";
+        errBox.classList.remove('hidden');
+        return;
+      }
+      if (nPin.length < 4) {
+        errBox.innerText = "Mật khẩu mới phải có tối thiểu 4 ký tự!";
+        errBox.classList.remove('hidden');
+        return;
+      }
+      if (nPin !== cPin) {
+        errBox.innerText = "Mật khẩu mới và xác nhận mật khẩu không trùng khớp!";
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      localStorage.setItem('ktpl12_teacher_pin', nPin);
+      succBox.innerText = "✅ Đổi mật khẩu thành công! Hãy ghi nhớ mật khẩu mới.";
+      succBox.classList.remove('hidden');
+
+      setTimeout(() => {
+        closeChangePinModal();
+      }, 1500);
     }
 
     function openGoogleSheetDirectly() {
@@ -1909,21 +2034,60 @@
     window.addEventListener('DOMContentLoaded', () => {
       initMasterLessonSelect();
 
-      // Kiểm tra nếu đã xác thực trước đó thì vào thẳng Dashboard
+      // Chỉ vào thẳng Dashboard nếu có phiên xác thực hợp lệ
       const isAuthed = (localStorage.getItem('ktpl12_teacher_authed') === 'true' || sessionStorage.getItem('ktpl12_teacher_authed') === 'true');
       if (isAuthed) {
         document.getElementById('pin-screen').classList.add('hidden');
         document.getElementById('dashboard-screen').classList.remove('hidden');
         const lockBtn = document.getElementById('header-lock-btn');
         if (lockBtn) lockBtn.classList.remove('hidden');
+        const changePinBtn = document.getElementById('header-change-pin-btn');
+        if (changePinBtn) changePinBtn.classList.remove('hidden');
         loadDashboardData();
         startAutoRefresh();
       } else {
         const pinInput = document.getElementById('input-pin');
-        if (pinInput) pinInput.value = getTeacherPin();
+        if (pinInput) {
+          pinInput.value = '';
+          pinInput.focus();
+        }
       }
     });
 
   </script>
+
+  <!-- MODAL ĐỔI MẬT KHẨU GIÁO VIÊN -->
+  <div id="change-pin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl border border-slate-100 text-left">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔑</span>
+          <h3 class="font-bold text-slate-800 text-base">Đổi Mật Khẩu Giáo Viên</h3>
+        </div>
+        <button onclick="closeChangePinModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold p-1">✕</button>
+      </div>
+      <form onsubmit="event.preventDefault(); submitChangePin();" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Mật khẩu hiện tại:</label>
+          <input type="password" id="pin-current" placeholder="Nhập mật khẩu đang dùng..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-800 font-mono">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Mật khẩu mới:</label>
+          <input type="password" id="pin-new" placeholder="Nhập mật khẩu mới (tối thiểu 4 ký tự)..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-800 font-mono">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Xác nhận mật khẩu mới:</label>
+          <input type="password" id="pin-confirm" placeholder="Nhập lại mật khẩu mới..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-800 font-mono">
+        </div>
+        <div id="change-pin-error" class="hidden text-rose-600 font-bold bg-rose-50 p-2.5 rounded-xl border border-rose-200 text-center"></div>
+        <div id="change-pin-success" class="hidden text-emerald-700 font-bold bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-center"></div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeChangePinModal()" class="px-3.5 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-medium">Hủy</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow">Lưu Mật Khẩu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
