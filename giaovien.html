@@ -25,6 +25,22 @@
       width: 6px;
       height: 6px;
     }
+    
+    .sticky-col-stt {
+      position: sticky;
+      left: 0;
+      z-index: 15;
+    }
+    .sticky-col-name {
+      position: sticky;
+      left: 44px;
+      z-index: 15;
+      box-shadow: 3px 0 6px -2px rgba(0,0,0,0.08);
+    }
+    th.sticky-col-stt, th.sticky-col-name {
+      z-index: 25;
+    }
+
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #cbd5e1;
       border-radius: 4px;
@@ -261,21 +277,30 @@
       </div>
     </div>
 
-    <!-- THANH CHUYỂN ĐỔI CHẾ ĐỘ XEM: SỔ ĐIỂM CHUẨN vs BẢNG ĐÁNH GIÁ TIẾN BỘ & CHUYÊN CẦN -->
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-3">
-      <div class="inline-flex p-1 bg-slate-200/90 rounded-2xl shadow-inner gap-1">
-        <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white">
-          <span>📋</span> <span>Sổ Điểm Theo STT (Dán vnEdu)</span>
+    <!-- THANH CHUYỂN ĐỔI CHẾ ĐỘ XEM: 1. MA TRẬN 16 BÀI | 2. SỔ ĐIỂM VNEDU | 3. LỊCH SỬ LUYỆN LẠI -->
+    <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-3">
+      <div class="inline-flex p-1.5 bg-slate-200/90 rounded-2xl shadow-inner gap-1.5 flex-wrap">
+        <button id="tab-btn-matrix" onclick="switchMainViewTab('matrix')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white">
+          <span>📊</span> <span>Bảng Điểm 16 Bài (Bài 1, Bài 2, Bài 3...)</span>
+          <span class="bg-amber-400 text-slate-900 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">Trọng tâm ⭐</span>
+        </button>
+        <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700">
+          <span>📋</span> <span>Sổ Điểm Chi Tiết 1 Bài (vnEdu)</span>
         </button>
         <button id="tab-btn-progress" onclick="switchMainViewTab('progress')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700">
-          <span>📈</span> <span>Tổng Kết Lần Làm & Đánh Giá Tiến Bộ</span>
-          <span class="bg-amber-400 text-slate-900 text-[10px] px-2 py-0.5 rounded-full font-black">Mới ⭐</span>
+          <span>📈</span> <span>Lịch Sử Luyện Lại Cùng Bài</span>
         </button>
       </div>
 
-      <div id="progression-actions" class="hidden flex items-center gap-2">
-        <button onclick="exportProgressionReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow transition flex items-center gap-1.5" title="Xuất file báo cáo mức độ thường xuyên và sự tiến bộ của học sinh">
-          <span>📥</span> <span>Xuất Báo Cáo Tiến Bộ & Chuyên Cần (.CSV)</span>
+      <div id="main-export-actions" class="flex items-center gap-2 flex-wrap">
+        <button id="btn-export-matrix" onclick="exportAll16LessonsMatrix()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất toàn bộ bảng điểm 16 bài ra file Excel chuẩn tiếng Việt UTF-8">
+          <span>📥</span> <span>Xuất Excel Bảng Điểm 16 Bài (.CSV)</span>
+        </button>
+        <button id="btn-export-gradebook" onclick="exportToExcelOfficial()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất sổ điểm bài đang chọn để dán vào vnEdu">
+          <span>📋</span> <span>Xuất Sổ Điểm vnEdu Bài Đang Xem</span>
+        </button>
+        <button id="btn-export-progress" onclick="exportProgressionReport()" class="hidden bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất báo cáo số lần luyện lại và tinh thần tự giác của học sinh">
+          <span>📈</span> <span>Xuất Báo Cáo Luyện Lại (.CSV)</span>
         </button>
       </div>
     </div>
@@ -435,26 +460,32 @@
     ];
 
     // Chế độ xem hiện tại: 'gradebook' (Sổ điểm chuẩn) hoặc 'progress' (Đánh giá tiến bộ)
-    let currentMainViewTab = 'gradebook';
+    let currentMainViewTab = 'matrix';
 
     // Bài học hiện tại đang xem (Mặc định: Bài 1)
     let currentActiveLessonId = 1;
 
     function switchMainViewTab(tab) {
       currentMainViewTab = tab;
+      const btnMatrix = document.getElementById('tab-btn-matrix');
       const btnGb = document.getElementById('tab-btn-gradebook');
       const btnProg = document.getElementById('tab-btn-progress');
-      const progActions = document.getElementById('progression-actions');
+      
+      const expMatrix = document.getElementById('btn-export-matrix');
+      const expGb = document.getElementById('btn-export-gradebook');
+      const expProg = document.getElementById('btn-export-progress');
 
-      if (tab === 'gradebook') {
-        btnGb.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white";
-        btnProg.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700";
-        if (progActions) progActions.classList.add('hidden');
-      } else {
-        btnProg.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white";
-        btnGb.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700";
-        if (progActions) progActions.classList.remove('hidden');
-      }
+      const activeClass = "px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white";
+      const inactiveClass = "px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700";
+
+      if (btnMatrix) btnMatrix.className = (tab === 'matrix') ? activeClass : inactiveClass;
+      if (btnGb) btnGb.className = (tab === 'gradebook') ? activeClass : inactiveClass;
+      if (btnProg) btnProg.className = (tab === 'progress') ? activeClass : inactiveClass;
+
+      if (expMatrix) expMatrix.classList.toggle('hidden', tab !== 'matrix');
+      if (expGb) expGb.classList.toggle('hidden', tab !== 'gradebook');
+      if (expProg) expProg.classList.toggle('hidden', tab !== 'progress');
+
       applyFilters();
     }
 
@@ -891,8 +922,13 @@
       const allCombined = [...viewItems, ...unmatchedSubs];
 
       const filtered = allCombined.filter(item => {
-        if (statusFilter === 'DONE' && !item.isDone) return false;
-        if (statusFilter === 'PENDING' && item.isDone) return false;
+        let isDoneCheck = item.isDone;
+        if (currentMainViewTab === 'matrix') {
+          const p = getStudent16LessonsProgress(item);
+          isDoneCheck = p.completedCount > 0;
+        }
+        if (statusFilter === 'DONE' && !isDoneCheck) return false;
+        if (statusFilter === 'PENDING' && isDoneCheck) return false;
         if (search) {
           const n = normText(item.name);
           const c = normText(item.className);
@@ -993,11 +1029,17 @@
       const classTitle = selectedClass === 'ALL' ? 'TẤT CẢ 3 LỚP' : `LỚP ${selectedClass}`;
 
       if (heading) {
-        if (currentActiveLessonId === 'ALL') {
-          heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC - ${classTitle}`;
+        if (currentMainViewTab === 'matrix') {
+          heading.innerHTML = `<span class="text-indigo-900">BẢNG MA TRẬN ĐIỂM 16 BÀI SGK KTPL 12</span> <span class="text-indigo-600 font-normal text-sm">(${classTitle})</span>`;
+        } else if (currentMainViewTab === 'progress') {
+          heading.innerHTML = `<span class="text-purple-900">LỊCH SỬ LUYỆN LẠI & ĐÁNH GIÁ CHUYÊN CẦN</span> <span class="text-purple-600 font-normal text-sm">(${classTitle})</span>`;
         } else {
-          const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
-          heading.innerText = `DANH SÁCH HỌC SINH - ${lesObj.title.toUpperCase()} (${classTitle})`;
+          if (currentActiveLessonId === 'ALL') {
+            heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC - ${classTitle}`;
+          } else {
+            const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+            heading.innerText = `DANH SÁCH HỌC SINH - ${lesObj.title.toUpperCase()} (${classTitle})`;
+          }
         }
       }
     }
@@ -1011,8 +1053,19 @@
       }
 
       const total = items.length;
-      const doneItems = items.filter(i => i.isDone);
-      const pendingItems = items.filter(i => !i.isDone);
+      let doneItems = items.filter(i => i.isDone);
+      let pendingItems = items.filter(i => !i.isDone);
+
+      if (currentMainViewTab === 'matrix') {
+        doneItems = items.filter(i => {
+          const p = getStudent16LessonsProgress(i);
+          return p.completedCount > 0;
+        });
+        pendingItems = items.filter(i => {
+          const p = getStudent16LessonsProgress(i);
+          return p.completedCount === 0;
+        });
+      }
 
       const doneCount = doneItems.length;
       const pendingCount = pendingItems.length;
@@ -1048,7 +1101,27 @@
       const thead = document.getElementById('dashboard-table-head');
       if (!thead) return;
 
-      if (currentMainViewTab === 'gradebook') {
+      if (currentMainViewTab === 'matrix') {
+        // CHẾ ĐỘ MA TRẬN TIẾN ĐỘ 16 BÀI (CHÍNH)
+        const lessonHeaders = ALL_16_LESSONS.map(l => 
+          `<th class="py-3 px-1.5 text-center min-w-[52px] border-l border-slate-200/80 bg-slate-100/90" title="${l.title}">
+            <div class="font-black text-indigo-900">B${l.id}</div>
+            <div class="text-[9px] text-slate-400 font-normal">Bài ${l.id}</div>
+          </th>`
+        ).join('');
+
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3 px-2 text-center w-11 sticky-col-stt bg-slate-100 border-r border-slate-200">STT</th>
+            <th class="py-3 px-3 sticky-col-name bg-slate-100 min-w-[175px] border-r border-slate-200">Họ và Tên Học Sinh</th>
+            <th class="py-3 px-2 text-center w-16 bg-slate-100">Lớp</th>
+            ${lessonHeaders}
+            <th class="py-3 px-2 text-center w-20 border-l border-slate-200 bg-slate-100" title="Số bài SGK đã làm">Đã làm</th>
+            <th class="py-3 px-2 text-center w-16 bg-slate-100" title="Điểm trung bình các bài đã làm">ĐTB</th>
+            <th class="py-3 px-3 min-w-[210px] bg-slate-100" title="Tiến trình phát triển qua các bài (Ví dụ: B1: 5.0 ➔ B2: 7.0)">Tiến Trình Điểm Các Bài</th>
+            <th class="py-3 px-2 text-center w-16 bg-slate-100">Chi tiết</th>
+          </tr>`;
+      } else if (currentMainViewTab === 'gradebook') {
         thead.innerHTML = `
           <tr>
             <th class="py-3 px-3 text-center w-12">STT</th>
@@ -1077,6 +1150,136 @@
       }
     }
 
+    
+    // TÍNH TOÁN ĐIỂM 16 BÀI & TIẾN TRÌNH PHÁT TRIỂN CHO TỪNG HỌC SINH
+    function getStudent16LessonsProgress(student) {
+      const studentNorm = normText(student.name);
+      const studentClean = cleanSubName(student.name);
+
+      let customMappings = {};
+      try { customMappings = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}'); } catch(e) {}
+
+      // Lấy tất cả bài nộp của học sinh này trên toàn bộ hệ thống
+      const studentSubs = allRawSubmissions.filter(sub => {
+        const subNorm = normText(sub.name);
+        const subClean = cleanSubName(sub.name);
+
+        if (customMappings[subNorm] && (normText(customMappings[subNorm]) === studentNorm || customMappings[subNorm] === student.studentId)) return true;
+        if (customMappings[subClean] && (normText(customMappings[subClean]) === studentNorm || customMappings[subClean] === student.studentId)) return true;
+
+        if (!isClassMatch(sub.className, student.className)) return false;
+
+        if (subClean === studentClean || subNorm === studentNorm) return true;
+        if (subNorm.includes(studentNorm) || subClean.includes(studentClean)) return true;
+
+        const subParts = subClean.split(' ');
+        if (subParts.length >= 2 && studentClean.endsWith(subClean)) {
+          return true;
+        }
+        return false;
+      });
+
+      // Đối chiếu điểm cho từng bài trong 16 bài
+      let completedLessons = [];
+      let totalScoreSum = 0;
+      const lessonResults = {};
+
+      ALL_16_LESSONS.forEach(les => {
+        const subsOfLesson = studentSubs.filter(s => s.lessonId === les.id);
+        if (subsOfLesson.length > 0) {
+          const best = [...subsOfLesson].sort((a, b) => parseFloat(b.score) - parseFloat(a.score))[0];
+          const bestScoreNum = parseFloat(best.score) || 0;
+          completedLessons.push({
+            id: les.id,
+            title: les.title,
+            score: best.score,
+            scoreNum: bestScoreNum,
+            correctCount: best.correctCount,
+            timeElapsed: best.timeElapsed,
+            timestamp: best.timestamp,
+            attempts: subsOfLesson.length,
+            subs: subsOfLesson
+          });
+          totalScoreSum += bestScoreNum;
+          lessonResults[les.id] = {
+            hasDone: true,
+            score: best.score,
+            scoreNum: bestScoreNum,
+            correctCount: best.correctCount,
+            timeElapsed: best.timeElapsed,
+            timestamp: best.timestamp,
+            attempts: subsOfLesson.length
+          };
+        } else {
+          lessonResults[les.id] = { hasDone: false, score: null };
+        }
+      });
+
+      const completedCount = completedLessons.length;
+      const avgScore = completedCount > 0 ? (totalScoreSum / completedCount).toFixed(1) : '-';
+
+      // Tạo chuỗi tiến trình phát triển qua các bài (Ví dụ: B1: 5.0 ➔ B2: 7.0)
+      let progressHtml = '';
+      let progressText = '';
+      let evaluationText = '';
+
+      if (completedCount === 0) {
+        progressHtml = `<span class="text-slate-400 italic text-[11px]">Chưa làm bài nào</span>`;
+        progressText = 'Chưa làm bài nào';
+        evaluationText = 'Chưa tham gia luyện tập';
+      } else if (completedCount === 1) {
+        const item = completedLessons[0];
+        progressHtml = `<span class="inline-flex items-center gap-1 font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          <span>B${item.id}:</span> <b class="text-indigo-700">${item.score}đ</b>
+        </span>`;
+        progressText = `B${item.id}: ${item.score}đ`;
+        evaluationText = `Đã hoàn thành Bài ${item.id} (${item.score}đ)`;
+      } else {
+        // Có từ 2 bài trở lên: hiển thị chuỗi điểm và độ tăng giảm
+        const partsHtml = completedLessons.map(l => {
+          let color = "text-slate-700 bg-slate-100 border-slate-200";
+          if (l.scoreNum >= 9.0) color = "text-emerald-800 bg-emerald-50 border-emerald-300";
+          else if (l.scoreNum >= 7.0) color = "text-blue-800 bg-blue-50 border-blue-300";
+          else if (l.scoreNum >= 5.0) color = "text-amber-800 bg-amber-50 border-amber-300";
+          return `<span class="inline-flex items-center px-1.5 py-0.5 rounded border text-[11px] font-mono font-bold ${color}" title="${l.title}: ${l.score}đ (${l.correctCount})">B${l.id}: ${l.score}</span>`;
+        }).join('<span class="text-slate-300 text-xs font-black">➔</span>');
+
+        // So sánh bài đầu tiên và bài mới nhất
+        const first = completedLessons[0];
+        const last = completedLessons[completedLessons.length - 1];
+        const delta = parseFloat((last.scoreNum - first.scoreNum).toFixed(1));
+
+        let deltaBadge = '';
+        if (delta > 0) {
+          deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0">🚀 +${delta}đ</span>`;
+          evaluationText = `Tiến bộ rõ rệt (+${delta}đ từ B${first.id} lên B${last.id})`;
+        } else if (delta === 0 && last.scoreNum >= 9.0) {
+          deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 shrink-0">💎 Xuất sắc</span>`;
+          evaluationText = `Duy trì kết quả xuất sắc (${last.scoreNum}đ)`;
+        } else if (delta === 0) {
+          deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200 shrink-0">Ổn định</span>`;
+          evaluationText = `Điểm số ổn định qua các bài`;
+        } else {
+          deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 shrink-0">⚠️ ${delta}đ</span>`;
+          evaluationText = `Điểm B${last.id} giảm nhẹ so với B${first.id}, cần ôn thêm`;
+        }
+
+        progressHtml = `<div class="flex items-center gap-1.5 flex-wrap">${partsHtml} ${deltaBadge}</div>`;
+        progressText = completedLessons.map(l => `B${l.id}: ${l.score}`).join(' ➔ ') + (delta > 0 ? ` (+${delta}đ)` : '');
+      }
+
+      return {
+        completedLessons,
+        completedCount,
+        avgScore,
+        lessonResults,
+        progressHtml,
+        progressText,
+        evaluationText,
+        allSubs: studentSubs
+      };
+    }
+
     function renderTableRows(items) {
       renderTableThead();
       const tbody = document.getElementById('dashboard-table-body');
@@ -1089,8 +1292,111 @@
       }
       emptyMsg.classList.add('hidden');
 
-      if (currentMainViewTab === 'gradebook') {
-        // CHẾ ĐỘ 1: SỔ ĐIỂM THEO STT (CHUẨN VNEDU)
+      if (currentMainViewTab === 'matrix') {
+        // ==========================================
+        // CHẾ ĐỘ 1: MA TRẬN ĐIỂM TIẾN ĐỘ 16 BÀI (MỚI ⭐)
+        // ==========================================
+        items.forEach((item) => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-indigo-50/40 transition bg-white border-b border-slate-100";
+
+          const pInfo = getStudent16LessonsProgress(item);
+          const safeItemName = (item.name || '').replace(/'/g, "\\'");
+          const safeItemClass = (item.className || '').replace(/'/g, "\\'");
+
+          // Render 16 ô điểm tương ứng 16 bài
+          const lessonCells = ALL_16_LESSONS.map(les => {
+            const res = pInfo.lessonResults[les.id];
+            if (res && res.hasDone) {
+              const sc = res.scoreNum;
+              let badgeStyle = "bg-slate-100 text-slate-800 border-slate-200";
+              if (sc >= 9.0) badgeStyle = "bg-emerald-100 text-emerald-800 border-emerald-300 font-black";
+              else if (sc >= 8.0) badgeStyle = "bg-teal-100 text-teal-800 border-teal-300 font-bold";
+              else if (sc >= 6.5) badgeStyle = "bg-blue-100 text-blue-800 border-blue-200 font-semibold";
+              else if (sc >= 5.0) badgeStyle = "bg-amber-100 text-amber-800 border-amber-200 font-medium";
+              else badgeStyle = "bg-rose-100 text-rose-800 border-rose-200 font-medium";
+
+              const attemptsNote = res.attempts > 1 ? ` (${res.attempts} lần làm)` : '';
+              const tooltip = `Bài ${les.id}: ${res.score}đ (${res.correctCount}) lúc ${res.timestamp}${attemptsNote}`;
+
+              return `<td class="py-2 px-1 text-center border-l border-slate-100" title="${tooltip}">
+                <span class="inline-block px-1.5 py-0.5 rounded text-xs font-mono border ${badgeStyle} cursor-pointer hover:scale-110 transition" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">${res.score}</span>
+              </td>`;
+            } else {
+              return `<td class="py-2 px-1 text-center border-l border-slate-100 text-slate-300 font-mono text-xs select-none">-</td>`;
+            }
+          }).join('');
+
+          // Cột số bài đã làm
+          const completedBadge = pInfo.completedCount > 0 
+            ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${pInfo.completedCount >= 2 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700'}">${pInfo.completedCount} / 16</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-xs text-slate-400 bg-slate-50">0 / 16</span>`;
+
+          // Cột điểm trung bình
+          const avgBadge = pInfo.avgScore !== '-' 
+            ? `<span class="font-mono font-bold text-xs text-slate-800">${pInfo.avgScore}</span>` 
+            : `<span class="text-slate-300 font-mono">-</span>`;
+
+          tr.innerHTML = `
+            <td class="py-2.5 px-2 text-center text-slate-400 font-mono font-bold sticky-col-stt bg-white">${item.stt}</td>
+            <td class="py-2.5 px-3 font-semibold text-slate-800 hover:text-indigo-700 cursor-pointer sticky-col-name bg-white" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')" title="Bấm xem chi tiết các lần làm">
+              ${item.name}
+            </td>
+            <td class="py-2.5 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">${item.className}</span></td>
+            ${lessonCells}
+            <td class="py-2.5 px-2 text-center border-l border-slate-100">${completedBadge}</td>
+            <td class="py-2.5 px-2 text-center">${avgBadge}</td>
+            <td class="py-2.5 px-3 text-xs">${pInfo.progressHtml}</td>
+            <td class="py-2.5 px-2 text-center">
+              <button onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')" class="bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-700 p-1.5 rounded-lg text-xs font-semibold transition" title="Xem hồ sơ học tập">
+                👁️ Xem
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // DÒNG TỔNG KẾT TOÀN DIỆN 16 BÀI Ở CHÂN BẢNG
+        const summaryTr = document.createElement('tr');
+        summaryTr.className = "bg-slate-100/90 font-bold border-t-2 border-indigo-300 text-[11px] text-slate-700 sticky bottom-0 z-20 shadow-lg";
+
+        // Thống kê từng bài
+        const lessonSummaries = ALL_16_LESSONS.map(les => {
+          let count = 0;
+          let sumScore = 0;
+          items.forEach(it => {
+            const p = getStudent16LessonsProgress(it);
+            const r = p.lessonResults[les.id];
+            if (r && r.hasDone) {
+              count++;
+              sumScore += r.scoreNum;
+            }
+          });
+          const avg = count > 0 ? (sumScore / count).toFixed(1) : '-';
+          return `<td class="py-2.5 px-1 text-center border-l border-slate-200" title="Bài ${les.id}: ${count} học sinh đã làm, ĐTB: ${avg}">
+            <div class="text-[10px] text-indigo-700 font-black">${count > 0 ? count + ' em' : '-'}</div>
+            <div class="text-[9px] text-slate-500 font-mono">${count > 0 ? avg + 'đ' : ''}</div>
+          </td>`;
+        }).join('');
+
+        summaryTr.innerHTML = `
+          <td class="py-2.5 px-2 text-center sticky-col-stt bg-slate-100 font-black text-indigo-700">∑</td>
+          <td class="py-2.5 px-3 sticky-col-name bg-slate-100 font-bold text-slate-800">
+            Tổng kết cả lớp (${items.length} HS)
+          </td>
+          <td class="py-2.5 px-2 text-center text-slate-500 font-mono">-</td>
+          ${lessonSummaries}
+          <td class="py-2.5 px-2 text-center border-l border-slate-200 text-indigo-800">Đã nộp</td>
+          <td class="py-2.5 px-2 text-center text-indigo-800">ĐTB</td>
+          <td class="py-2.5 px-3 text-slate-500 font-normal">Hệ thống tự động đồng bộ thời gian thực</td>
+          <td class="py-2.5 px-2 text-center">-</td>
+        `;
+        tbody.appendChild(summaryTr);
+
+      } else if (currentMainViewTab === 'gradebook') {
+        // ==========================================
+        // CHẾ ĐỘ 2: SỔ ĐIỂM THEO STT (CHUẨN VNEDU)
+        // ==========================================
         items.forEach((item) => {
           const tr = document.createElement('tr');
           if (item.isUnmatched) {
@@ -1140,8 +1446,11 @@
           `;
           tbody.appendChild(tr);
         });
+
       } else {
-        // CHẾ ĐỘ 2: BẢNG TỔNG KẾT TIẾN BỘ & MỨC ĐỘ THƯỜNG XUYÊN
+        // ==========================================
+        // CHẾ ĐỘ 3: BẢNG TỔNG KẾT TIẾN BỘ & MỨC ĐỘ THƯỜNG XUYÊN CÙNG BÀI
+        // ==========================================
         items.forEach((item) => {
           const tr = document.createElement('tr');
           tr.className = "hover:bg-slate-50 transition bg-white";
@@ -1162,8 +1471,8 @@
             <td class="py-2.5 px-3">${pInfo.chainHtml}</td>
             <td class="py-2.5 px-3 text-center">${pInfo.attitudeBadge}</td>
             <td class="py-2.5 px-2 text-center">
-              <button onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-lg border border-indigo-200 transition flex items-center justify-center gap-1 mx-auto" title="Xem dòng thời gian làm bài chi tiết">
-                <span>🔍</span> <span>Xem</span>
+              <button onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg text-xs font-bold transition">
+                🔍 Hồ sơ
               </button>
             </td>
           `;
@@ -1306,53 +1615,61 @@
 
       if (!modal) return;
 
-      const pInfo = getStudentProgressionInfo({ name: studentName, className: className });
+      const p16 = getStudent16LessonsProgress({ name: studentName, className: className });
+      const pSingle = getStudentProgressionInfo({ name: studentName, className: className });
 
       if (nameEl) nameEl.innerText = studentName;
       if (metaEl) metaEl.innerText = `Lớp: ${className} • Môn Giáo dục Kinh tế & Pháp luật 12`;
-      if (statCount) statCount.innerText = pInfo.count;
-      if (statFirst) statFirst.innerText = (pInfo.count > 0) ? `${pInfo.firstScore} / 10` : '-';
-      if (statBest) statBest.innerText = (pInfo.count > 0) ? `${pInfo.bestScore} / 10` : '-';
+      
+      if (statCount) statCount.innerText = `${p16.completedCount} / 16`;
+      if (statFirst) statFirst.innerText = (p16.completedCount > 0 && p16.completedLessons[0]) ? `${p16.completedLessons[0].score}` : '-';
+      if (statBest) statBest.innerText = p16.avgScore !== '-' ? `${p16.avgScore} (ĐTB)` : '-';
       
       if (statDelta) {
-        if (pInfo.count <= 1) statDelta.innerText = '0.0';
-        else statDelta.innerText = (parseFloat(pInfo.delta) > 0 ? `+${pInfo.delta}` : pInfo.delta);
-      }
-
-      // Đưa ra nhận xét sư phạm
-      if (evalBox) {
-        if (pInfo.count === 0) {
-          evalBox.innerHTML = `<div class="font-bold text-amber-900">⏳ Học sinh chưa thực hiện bài luyện tập nào</div><div class="text-[11px] text-amber-700 mt-0.5">Cô có thể bấm nút "Nhắc Zalo" ở thanh công cụ để đôn đốc em tham gia nhé.</div>`;
-        } else if (pInfo.count >= 2 && parseFloat(pInfo.delta) > 0) {
-          evalBox.innerHTML = `<div class="font-bold text-emerald-900">🚀 Học sinh có tinh thần tự học rất cao & tiến bộ rõ rệt!</div><div class="text-[11px] text-emerald-700 mt-0.5">Em đã chủ động làm lại bài để cải thiện điểm số (tăng <b>+${pInfo.delta} điểm</b> so với lần đầu). Rất đáng tuyên dương trước lớp!</div>`;
-        } else if (pInfo.bestScore >= 9.0) {
-          evalBox.innerHTML = `<div class="font-bold text-indigo-900">💎 Học sinh nắm bài rất vững chắc và đạt kết quả xuất sắc!</div><div class="text-[11px] text-indigo-700 mt-0.5">Em đạt điểm số cao ngay từ những lần đầu, nắm chắc các khái niệm và câu hỏi tình huống trong SGK.</div>`;
+        if (p16.completedCount >= 2) {
+          const fScore = p16.completedLessons[0].scoreNum;
+          const lScore = p16.completedLessons[p16.completedLessons.length - 1].scoreNum;
+          const diff = (lScore - fScore).toFixed(1);
+          statDelta.innerText = diff > 0 ? `+${diff}` : diff;
         } else {
-          evalBox.innerHTML = `<div class="font-bold text-slate-800">💡 Học sinh đã hoàn thành 1 lần làm bài</div><div class="text-[11px] text-slate-600 mt-0.5">Khuyến khích em vào làm lại bài để rèn luyện thêm kỹ năng phản xạ và đạt điểm tối đa nhé.</div>`;
+          statDelta.innerText = '0.0';
         }
       }
 
-      // Render danh sách các lần làm
-      if (timelineBox) {
-        const subs = pInfo.subs || [];
-        if (subs.length === 0) {
-          timelineBox.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">Chưa có lịch sử làm bài.</div>`;
+      // Đưa ra nhận xét sư phạm tổng thể qua các bài
+      if (evalBox) {
+        if (p16.completedCount === 0) {
+          evalBox.innerHTML = `<div class="font-bold text-amber-900">⏳ Học sinh chưa hoàn thành bài luyện tập nào</div><div class="text-[11px] text-amber-700 mt-0.5">Cô có thể bấm nút "Nhắc Zalo" ở thanh công cụ để đôn đốc em tham gia nhé.</div>`;
+        } else if (p16.completedCount >= 2) {
+          evalBox.innerHTML = `<div class="font-bold text-emerald-900">🚀 Đánh giá tiến độ qua các bài học SGK:</div><div class="text-xs text-emerald-800 mt-1 font-semibold">${p16.progressText}</div><div class="text-[11px] text-emerald-700 mt-0.5">${p16.evaluationText}. Em theo sát tiến độ học tập và có ý thức rèn luyện rất tốt!</div>`;
         } else {
-          // Hiển thị từ mới nhất đến cũ nhất
-          const reversedSubs = [...subs].reverse();
-          timelineBox.innerHTML = reversedSubs.map((s, idx) => {
-            const attemptNum = subs.length - idx;
+          const item = p16.completedLessons[0];
+          evalBox.innerHTML = `<div class="font-bold text-indigo-900">💎 Đã hoàn thành Bài ${item.id}: ${item.score} điểm</div><div class="text-[11px] text-indigo-700 mt-0.5">Khuyến khích em tiếp tục hoàn thành các bài tiếp theo trong chương trình 16 bài SGK KTPL 12 nhé cô.</div>`;
+        }
+      }
+
+      // Render danh sách các bài đã làm & các lần nộp
+      if (timelineBox) {
+        const allSubs = p16.allSubs || [];
+        if (allSubs.length === 0) {
+          timelineBox.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">Chưa có dữ liệu bài nộp.</div>`;
+        } else {
+          timelineBox.innerHTML = allSubs.map((s, idx) => {
             const scoreNum = parseFloat(s.score) || 0;
             let badgeColor = "bg-slate-100 text-slate-800 border-slate-200";
             if (scoreNum >= 9.0) badgeColor = "bg-emerald-50 text-emerald-800 border-emerald-300 font-black";
             else if (scoreNum >= 7.0) badgeColor = "bg-blue-50 text-blue-800 border-blue-300 font-bold";
+            else if (scoreNum >= 5.0) badgeColor = "bg-amber-50 text-amber-800 border-amber-300 font-semibold";
+            else badgeColor = "bg-rose-50 text-rose-800 border-rose-300 font-semibold";
+
+            const lesTitle = ALL_16_LESSONS.find(l => l.id === s.lessonId)?.title || `Bài ${s.lessonId}`;
 
             return `
               <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-3">
-                  <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-800 font-bold flex items-center justify-center shrink-0">L${attemptNum}</span>
+                  <span class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-800 font-black flex items-center justify-center shrink-0">B${s.lessonId}</span>
                   <div>
-                    <div class="font-bold text-slate-800">Lần làm thứ ${attemptNum} ${attemptNum === 1 ? '(Lần đầu)' : ''}</div>
+                    <div class="font-bold text-slate-800">${lesTitle}</div>
                     <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mã: ${s.subCode || '#KT12'} • ${s.timestamp || ''}</div>
                   </div>
                 </div>
@@ -1507,35 +1824,16 @@
 
       // Tạo tiêu đề các cột 16 bài
       const lessonCols = ALL_16_LESSONS.map(l => `"Bài ${l.id}"`);
-      const colHeaders = ["STT", "Mã định danh", "Họ và tên", "Lớp", ...lessonCols, "Số bài đã làm", "Điểm Trung Bình"];
+      const colHeaders = ["STT", "Mã định danh", "Họ và tên", "Lớp", ...lessonCols, "Số bài đã làm", "Điểm Trung Bình", "Tiến Trình Điểm Các Bài", "Đánh Giá Tiến Bộ"];
 
       // Đối chiếu điểm từng bài cho từng học sinh
       const rows = rosterList.map(student => {
-        const studentNorm = normText(student.name);
-        const studentClean = cleanSubName(student.name);
-
-        const studentSubs = allRawSubmissions.filter(sub => {
-          if (!isClassMatch(sub.className, student.className)) return false;
-          const subNorm = normText(sub.name);
-          const subClean = cleanSubName(sub.name);
-          return (subClean === studentClean || subNorm === studentNorm || subNorm.includes(studentNorm) || subClean.includes(studentClean));
-        });
-
-        let completedCount = 0;
-        let totalScoreSum = 0;
+        const pInfo = getStudent16LessonsProgress(student);
 
         const scoresBy16Lessons = ALL_16_LESSONS.map(les => {
-          const subsOfLesson = studentSubs.filter(s => s.lessonId === les.id);
-          if (subsOfLesson.length > 0) {
-            const best = [...subsOfLesson].sort((a, b) => parseFloat(b.score) - parseFloat(a.score))[0];
-            completedCount++;
-            totalScoreSum += parseFloat(best.score);
-            return `"${best.score}"`;
-          }
-          return '""';
+          const res = pInfo.lessonResults[les.id];
+          return (res && res.hasDone) ? `"${res.score}"` : '""';
         });
-
-        const avgScore = completedCount > 0 ? (totalScoreSum / completedCount).toFixed(1) : '""';
 
         return [
           student.stt,
@@ -1543,13 +1841,17 @@
           `"${student.name.replace(/"/g, '""')}"`,
           `"${student.className}"`,
           ...scoresBy16Lessons,
-          completedCount,
-          avgScore
+          pInfo.completedCount,
+          `"${pInfo.avgScore}"`,
+          `"${pInfo.progressText.replace(/"/g, '""')}"`,
+          `"${pInfo.evaluationText.replace(/"/g, '""')}"`
         ];
       });
 
       const csvContent = "\uFEFF" + [
-        `"BẢNG TỔNG HỢP MA TRẬN ĐIỂM 16 BÀI SGK KTPL 12 - ${classNameStr}"`,
+        `"BẢNG TỔNG HỢP MA TRẬN ĐIỂM 16 BÀI SGK KTPL 12 - ${classNameStr.replace(/_/g, ' ')}"`,
+        `"Ngày xuất: ${now.toLocaleString('vi-VN')} - Giáo viên: Trương Thùy Linh Kiều"`,
+        "",
         colHeaders.join(","),
         ...rows.map(r => r.join(","))
       ].join("\r\n");
