@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Bảng Quản Lý Điểm & Theo Dõi Tiến Độ KTPL 12 - GV Trương Thùy Linh Kiều</title>
+  <title>Sổ Quản Lý Điểm & Theo Dõi 16 Bài KTPL 12 - GV Trương Thùy Linh Kiều</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -21,6 +21,14 @@
       background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(12px);
     }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col">
@@ -32,67 +40,106 @@
         <span class="text-2xl">📋</span>
         <div>
           <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">KTPL 12 • KẾT NỐI TRI THỨC • NĂM HỌC 2026 - 2027</span>
-          <h1 class="text-base md:text-lg font-bold mt-0.5">Sổ Theo Dõi Điểm & Tiến Độ Học Sinh Theo Lớp</h1>
+          <h1 class="text-base md:text-lg font-bold mt-0.5">Sổ Quản Lý Điểm & Tiến Độ 16 Bài SGK KTPL 12</h1>
           <div class="text-[11px] text-indigo-200">Giáo viên phụ trách: <span class="font-bold text-white">Trương Thùy Linh Kiều</span> (Lớp: 12A5 • 12A7 • 12A9)</div>
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <a href="bai1.html" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-400 transition flex items-center gap-1">
+        <a href="index.html" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-400 transition flex items-center gap-1" title="Mở trang làm bài của học sinh">
           <span>📝</span> <span class="hidden sm:inline">Trang làm bài</span>
         </a>
+        <button id="header-lock-btn" onclick="logoutTeacher()" class="bg-indigo-800 hover:bg-rose-700 text-indigo-200 hover:text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 hidden" title="Khóa sổ điểm">
+          <span>🔒</span> <span class="hidden sm:inline">Khóa sổ</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- MÀN HÌNH KHÓA BẢO VỆ MÃ PIN -->
+  <!-- MÀN HÌNH XÁC THỰC MÃ PIN (CÓ ĐIỀN SẴN MẬT KHẨU) -->
   <div id="pin-screen" class="max-w-md mx-auto w-full p-4 my-auto">
     <div class="glass-card p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-4">🔑</div>
       <h2 class="text-xl font-bold text-slate-800 mb-1">Xác thực Giáo viên</h2>
-      <p class="text-xs text-slate-500 mb-5">Nhập mã PIN để truy cập sổ theo dõi tiến độ nộp bài của học sinh.</p>
+      <p class="text-xs text-slate-500 mb-5">Mật khẩu đã được <b class="text-indigo-600">điền sẵn</b>. Cô chỉ cần bấm nút bên dưới để mở sổ điểm ngay ạ!</p>
       
       <form onsubmit="event.preventDefault(); verifyPin();" class="space-y-4 text-left">
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Mã PIN Giáo viên:</label>
-          <input type="password" id="input-pin" maxlength="12" placeholder="Nhập PIN (mặc định: 123456)" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center text-lg tracking-widest font-mono">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Mã PIN Giáo viên (Đã điền sẵn):</label>
+          <input type="text" id="input-pin" value="123456" maxlength="12" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center text-lg tracking-widest font-mono font-bold bg-indigo-50/50 text-indigo-950">
         </div>
         <div id="pin-error" class="hidden text-xs text-rose-600 font-semibold text-center">⚠️ Mã PIN không chính xác! Vui lòng thử lại.</div>
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
-          Mở Sổ Quản Lý 🚀
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-base active:scale-98">
+          <span>🚀</span> <span>Vào Sổ Quản Lý Ngay (Mật khẩu: 123456) ➔</span>
         </button>
       </form>
+      <div class="mt-4 text-[11px] text-slate-400">💡 Hệ thống sẽ tự động ghi nhớ phiên đăng nhập để cô không cần nhập lại mật khẩu lần sau.</div>
     </div>
   </div>
 
   <!-- BẢNG ĐIỀU KHIỂN CHÍNH (DASHBOARD) -->
   <main id="dashboard-screen" class="max-w-6xl mx-auto w-full p-4 flex-grow hidden">
 
-    <!-- Thanh tiện ích: Link nộp bài của học sinh -->
-    <div class="bg-gradient-to-r from-indigo-50 via-slate-50 to-emerald-50 border border-slate-200 rounded-2xl p-4 mb-4 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg shrink-0">📲</div>
-        <div>
-          <div class="text-xs font-bold text-slate-800 uppercase flex items-center gap-1.5">
-            <span>Đường link giao bài cho học sinh:</span>
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">2 Bài Học</span>
+    <!-- KHU VỰC TRUNG TÂM QUẢN LÝ 16 BÀI HỌC (16-LESSON MANAGEMENT HUB) -->
+    <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-950 text-white rounded-2xl p-4 md:p-5 mb-4 shadow-md">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-indigo-700/60">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">📚</span>
+          <div>
+            <div class="text-xs uppercase font-bold text-indigo-300 tracking-wider">Hệ thống theo dõi chương trình học</div>
+            <h2 class="text-base md:text-lg font-black text-white">Quản Lý Sổ Điểm 16 Bài SGK KTPL 12 - Kết Nối Tri Thức</h2>
           </div>
-          <div class="text-xs text-slate-500 mt-0.5">Cô có thể gửi link Cổng chung hoặc gửi riêng từng bài học vào nhóm Zalo lớp:</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-indigo-200">Đang chọn:</span>
+          <span id="current-lesson-badge" class="bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+            Bài 1: Tăng trưởng KT
+          </span>
         </div>
       </div>
-      <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-        <button onclick="copySpecificLink('index.html', this, 'Cổng bài học')" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
-          <span>🏠</span> <span>Chép Link Cổng Chung</span>
-        </button>
-        <button onclick="copySpecificLink('bai1.html', this, 'Bài 1')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
-          <span>📘</span> <span>Chép Link Bài 1</span>
-        </button>
-        <button onclick="copySpecificLink('bai2.html', this, 'Bài 2')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
-          <span>📗</span> <span>Chép Link Bài 2</span>
+
+      <!-- Hàng chọn nhanh bài học & menu 16 bài -->
+      <div class="mt-3 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        
+        <!-- Các nút chuyển nhanh 2 bài học đang làm thực tế -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-quick-b1" onclick="switchLesson(1)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300">
+            <span>📘</span> <span>Bài 1: Tăng trưởng KT</span>
+            <span id="badge-count-b1" class="bg-indigo-100 text-indigo-800 text-[10px] px-1.5 py-0.5 rounded-full font-black">184 bài</span>
+          </button>
+          
+          <button id="btn-quick-b2" onclick="switchLesson(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>📗</span> <span>Bài 2: Hội nhập KTQT</span>
+            <span id="badge-count-b2" class="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">2 bài</span>
+          </button>
+
+          <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>📊</span> <span>Tổng Hợp Tất Cả Bài</span>
+          </button>
+        </div>
+
+        <!-- Menu chọn trọn vẹn từ Bài 1 đến Bài 16 -->
+        <div class="flex items-center gap-2 bg-indigo-800/60 p-1.5 rounded-xl border border-indigo-700">
+          <span class="text-xs font-bold text-indigo-200 pl-2">Chọn Bài (1 - 16):</span>
+          <select id="lesson-master-select" onchange="onMasterLessonChange(this.value)" class="text-xs font-bold bg-white text-slate-900 px-3 py-1.5 rounded-lg border-none focus:ring-2 focus:ring-amber-400">
+            <!-- Render 16 options by JS -->
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Đường dẫn nộp bài tương ứng của bài học này -->
+      <div class="mt-3 pt-3 border-t border-indigo-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-indigo-200">
+        <div class="flex items-center gap-1.5">
+          <span>🔗 Link học sinh làm bài này:</span>
+          <code id="display-lesson-link" class="bg-indigo-950 text-emerald-300 font-mono text-[11px] px-2 py-0.5 rounded">https://kieuthi14-hub.github.io/ktpl12-quiz/?bai=1</code>
+        </div>
+        <button onclick="copyCurrentLessonLink(this)" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1 rounded-lg transition shrink-0 flex items-center gap-1">
+          <span>📋</span> <span>Chép link bài này gửi Zalo</span>
         </button>
       </div>
     </div>
 
-    <!-- Hàng thống kê tổng quan tiến độ lớp -->
+    <!-- Hàng thống kê tổng quan tiến độ của Bài học đang chọn -->
     <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
         <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Sĩ số danh sách</div>
@@ -110,7 +157,7 @@
         <div id="stat-pending-percent" class="text-[10px] font-bold text-amber-600 mt-0.5">100%</div>
       </div>
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
-        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Điểm TB (Bài đã nộp)</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Điểm TB bài này</div>
         <div id="stat-avg" class="text-2xl font-black text-blue-600 mt-0.5">0.0</div>
         <div class="text-[10px] text-slate-400 mt-0.5">Thang điểm 10</div>
       </div>
@@ -121,7 +168,7 @@
       </div>
     </div>
 
-    <!-- Thanh công cụ lọc & tìm kiếm -->
+    <!-- Thanh công cụ lọc & Xuất file Excel của Giáo viên -->
     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
       <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         
@@ -135,16 +182,6 @@
               <option value="12A5">Lớp 12A5 (48 HS)</option>
               <option value="12A7" selected>Lớp 12A7 (42 HS)</option>
               <option value="12A9">Lớp 12A9 (44 HS)</option>
-            </select>
-          </div>
-
-          <!-- Chọn bài học -->
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs font-bold text-slate-600">Bài:</span>
-            <select id="filter-lesson" onchange="applyFilters()" class="text-xs font-bold px-3 py-2 rounded-xl border border-emerald-300 bg-emerald-50/60 text-emerald-900 focus:ring-2 focus:ring-emerald-500">
-              <option value="ALL" selected>Tất cả bài học</option>
-              <option value="B1">Bài 1: Tăng trưởng KT</option>
-              <option value="B2">Bài 2: Hội nhập KTQT</option>
             </select>
           </div>
 
@@ -167,27 +204,28 @@
 
         <!-- Các nút thao tác nghiệp vụ của Giáo viên -->
         <div class="flex flex-wrap items-center gap-2 shrink-0">
-          <button onclick="copyReminderForZalo()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Tạo danh sách các bạn chưa làm bài để gửi vào nhóm Zalo lớp">
-            <span>📢</span> <span id="zalo-btn-text">Nhắc Zalo (DS Chưa làm)</span>
+          <button onclick="copyReminderForZalo()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Tạo danh sách các bạn chưa làm bài này để gửi vào nhóm Zalo lớp">
+            <span>📢</span> <span id="zalo-btn-text">Nhắc Zalo bài này</span>
           </button>
 
-          <button onclick="exportToExcelOfficial()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Xuất file Excel theo đúng thứ tự STT sổ điểm để dán vào vnEdu/SMAS">
-            <span>📥</span> <span>Xuất Sổ Điểm Excel</span>
+          <!-- Nút xuất Excel riêng cho từng bài -->
+          <button onclick="exportToExcelOfficial()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Xuất file Excel của riêng bài học đang chọn">
+            <span>📥</span> <span id="excel-btn-text">Xuất File Excel Bài Này</span>
+          </button>
+
+          <!-- Nút xuất Ma trận sổ điểm cả 16 bài -->
+          <button onclick="exportAll16LessonsMatrix()" class="bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Xuất bảng điểm tổng hợp đầy đủ 16 bài của tất cả học sinh để lưu trữ cuối kỳ">
+            <span>📊</span> <span>Xuất Bảng Tổng Hợp 16 Bài</span>
           </button>
 
           <button onclick="openGoogleSheetDirectly()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Mở trực tiếp bảng tính Google Sheets của cô">
-            <span>📊</span> <span>Mở Google Sheet</span>
+            <span>📈</span> <span>Mở Google Sheet</span>
           </button>
 
           <button onclick="refreshDashboardData()" title="Cập nhật lại danh sách" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl border border-slate-300 shadow-sm transition flex items-center gap-1.5">
             <span id="refresh-icon" class="inline-block">🔄</span>
             <span>Làm mới</span>
           </button>
-          
-          <label class="flex items-center gap-1.5 text-xs text-slate-600 bg-slate-50 px-2.5 py-2 rounded-xl border border-slate-200 cursor-pointer select-none">
-            <input type="checkbox" id="auto-refresh-toggle" checked onchange="toggleAutoRefresh(this.checked)" class="rounded text-indigo-600 focus:ring-indigo-500">
-            <span>Tự cập nhật</span>
-          </label>
         </div>
 
       </div>
@@ -195,20 +233,20 @@
       <div class="mt-3 pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-500">
         <div class="flex items-center gap-2">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span id="live-status-text">Đã đồng bộ trực tiếp với Google Sheets của cô giáo (Tự động ghi nhận 100%)</span>
+          <span id="live-status-text">Đã đồng bộ tự động với Google Sheets của cô giáo</span>
         </div>
         <div id="last-updated-time" class="text-slate-400 font-mono text-[11px]">Vừa cập nhật</div>
       </div>
     </div>
 
-    <!-- HỘP CẢNH BÁO BÀI NỘP CHƯA KHỚP SỔ ĐIỂM -->
+    <!-- HỘP CẢNH BÁO BÀI NỘP TỰ GÕ TÊN (CHƯA KHỚP SỔ ĐIỂM) -->
     <div id="unmatched-alert" class="mb-4 bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 text-xs shadow-sm hidden">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-amber-200">
         <div class="flex items-center gap-2">
           <span class="text-xl">⚠️</span>
           <div>
             <div class="font-bold text-amber-900 text-sm" id="unmatched-title">Phát hiện bài nộp tự gõ tên (Chưa khớp sổ điểm)</div>
-            <div class="text-[11px] text-amber-700">Các bài nộp dưới đây do học sinh tự gõ tên khác hoặc ghi sai lớp. Cô có thể bấm <b>"🔗 Ghép vào học sinh"</b> để đưa điểm vào đúng tên bạn đó trong sổ.</div>
+            <div class="text-[11px] text-amber-700">Các bài nộp dưới đây do học sinh tự gõ tên hoặc ghi lớp chưa chuẩn. Cô có thể bấm <b>"🔗 Ghép vào học sinh"</b> để đưa điểm vào đúng tên bạn đó trong sổ.</div>
           </div>
         </div>
         <div class="shrink-0 flex items-center gap-2">
@@ -225,9 +263,20 @@
 
     <!-- Bảng danh sách theo dõi học sinh -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+      
+      <!-- Tiêu đề bảng hiện rõ bài học đang xem -->
+      <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
+          <span>📋</span> <span id="table-view-heading">DANH SÁCH HỌC SINH - BÀI 1: TĂNG TRƯỞNG VÀ PHÁT TRIỂN KINH TẾ (LỚP 12A7)</span>
+        </div>
+        <div class="text-xs text-slate-500 font-medium">
+          Dán trực tiếp điểm vào vnEdu / SMAS theo đúng số thứ tự
+        </div>
+      </div>
+
       <div class="overflow-x-auto max-h-[620px] overflow-y-auto">
         <table class="w-full text-left border-collapse text-xs">
-          <thead class="bg-slate-50 sticky top-0 z-10 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+          <thead class="bg-slate-100/80 sticky top-0 z-10 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
             <tr>
               <th class="py-3 px-3 text-center w-12">STT</th>
               <th class="py-3 px-2 text-center w-28">Mã định danh</th>
@@ -248,62 +297,41 @@
 
       <!-- Trạng thái trống & Đang tải -->
       <div id="table-loading" class="py-12 text-center text-slate-400">
-        <div class="text-2xl animate-spin mb-2">⏳</div>
-        <div class="text-xs font-medium">Đang tải và đối chiếu dữ liệu bài nộp với sổ điểm lớp...</div>
+        <span class="animate-spin inline-block text-2xl mb-2">⏳</span>
+        <div class="text-xs font-semibold">Đang tải và đồng bộ dữ liệu từ Google Sheets của cô...</div>
       </div>
-
       <div id="table-empty-msg" class="py-12 text-center text-slate-400 hidden">
         <div class="text-3xl mb-2">📭</div>
-        <div class="text-sm font-semibold text-slate-600">Không tìm thấy học sinh nào phù hợp bộ lọc</div>
-        <div class="text-xs text-slate-400 mt-1">Cô hãy thử chuyển sang lớp khác hoặc đổi tùy chọn trạng thái.</div>
+        <div class="text-sm font-bold text-slate-600">Chưa tìm thấy học sinh nào phù hợp bộ lọc!</div>
+        <div class="text-xs text-slate-400 mt-1">Cô thử đổi lớp hoặc chọn bài học khác xem nhé.</div>
       </div>
-    </div>
-
-    <!-- Chân trang quản lý -->
-    <div class="text-center text-xs text-slate-400 pb-6 flex items-center justify-center gap-4">
-      <button onclick="changePinPrompt()" class="text-indigo-600 hover:underline font-medium">🔑 Đổi mã PIN giáo viên</button>
-      <span>•</span>
-      <button onclick="openSheetModal(true)" class="text-emerald-600 hover:underline font-medium">📊 Cài đặt link Google Sheet</button>
-      <span>•</span>
-      <button onclick="logoutTeacher()" class="text-rose-600 hover:underline font-medium">🚪 Đăng xuất</button>
     </div>
 
   </main>
 
-  <!-- MODAL LIÊN KẾT GOOGLE SHEETS CỦA GIÁO VIÊN -->
+  <!-- MODAL DÁN LINK GOOGLE SHEETS -->
   <div id="sheet-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl border border-slate-100 text-left">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
         <div class="flex items-center gap-2">
-          <span class="text-2xl">📊</span>
-          <h3 class="font-bold text-slate-800 text-base">Liên kết Google Sheets của Cô</h3>
+          <span class="text-xl">📊</span>
+          <h3 class="font-bold text-slate-800 text-base">Liên kết Google Sheets Sổ Điểm</h3>
         </div>
-        <button onclick="closeSheetModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold p-1">✕</button>
+        <button onclick="closeSheetModal()" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
       </div>
 
-      <div class="mt-4 space-y-3.5 text-xs text-slate-600">
-        <p class="leading-relaxed">
-          Tính năng này giúp cô <b>mở trực tiếp bảng điểm Google Sheets gốc</b> chỉ với 1 cú click chuột mà không cần phải đi tìm file trong Google Drive.
-        </p>
-
-        <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5 space-y-2">
-          <div class="font-bold text-emerald-900 flex items-center gap-1.5 text-xs">
-            <span>💡</span> <span>Cách lấy link file Google Sheets của cô:</span>
-          </div>
-          <ol class="list-decimal list-inside space-y-1.5 text-emerald-800 text-[11px] leading-relaxed">
-            <li>Bấm vào liên kết màu xanh bên dưới để mở trang Google Sheets của cô.</li>
-            <li>Bấm mở file trang tính chứa kết quả nộp bài của học sinh.</li>
-            <li>Sao chép (Copy) toàn bộ địa chỉ trên thanh trình duyệt web (dạng <code class="bg-white/80 px-1 py-0.5 rounded text-emerald-900 font-mono">https://docs.google.com/spreadsheets/d/...</code>) và dán vào ô bên dưới.</li>
-          </ol>
-          <div class="pt-1">
-            <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-bold underline text-xs">
-              <span>↗ Bấm vào đây để mở danh sách Google Sheets của cô</span>
+      <div class="space-y-4 text-xs text-slate-600">
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800">
+          <div class="font-bold mb-1">🔗 Bảng tính Google Sheets của cô đã được kết nối:</div>
+          <div class="break-all font-mono text-[11px] text-emerald-900 bg-white/80 p-2 rounded border border-emerald-200">
+            <a href="https://docs.google.com/spreadsheets/d/1BfE8_9_Zl2Yj08-01_9m1E5bZzK9iW_qCqR8w0Xl0wM/edit" target="_blank" class="text-emerald-700 underline font-bold flex items-center gap-1">
+              <span>↗ Bấm vào đây để mở trực tiếp Google Sheets của cô</span>
             </a>
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Dán đường link Google Sheets vào đây:</label>
+          <label class="block font-bold text-slate-700 mb-1">Dán đường link Google Sheets mới vào đây (nếu cô muốn đổi file):</label>
           <input type="text" id="input-sheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
           <div id="sheet-modal-error" class="text-rose-500 text-[11px] mt-1.5 font-medium hidden">⚠️ Vui lòng dán đúng đường link Google Sheets (chứa google.com/spreadsheets).</div>
         </div>
@@ -319,10 +347,33 @@
   </div>
 
   <script>
+    // DANH SÁCH TRỌN VẸN 16 BÀI HỌC SGK KTPL 12 - KẾT NỐI TRI THỨC
+    const ALL_16_LESSONS = [
+      { id: 1, code: 'B1', title: "Bài 1: Tăng trưởng và phát triển kinh tế", short: "Bài 1: Tăng trưởng KT", fileCode: "Bai1_TangTruongKT" },
+      { id: 2, code: 'B2', title: "Bài 2: Hội nhập kinh tế quốc tế", short: "Bài 2: Hội nhập KTQT", fileCode: "Bai2_HoiNhapKTQT" },
+      { id: 3, code: 'B3', title: "Bài 3: Bảo hiểm", short: "Bài 3: Bảo hiểm", fileCode: "Bai3_BaoHiem" },
+      { id: 4, code: 'B4', title: "Bài 4: An sinh xã hội", short: "Bài 4: An sinh xã hội", fileCode: "Bai4_AnSinhXaHoi" },
+      { id: 5, code: 'B5', title: "Bài 5: Lập kế hoạch kinh doanh", short: "Bài 5: Lập KH kinh doanh", fileCode: "Bai5_KeHoachKinhDoanh" },
+      { id: 6, code: 'B6', title: "Bài 6: Trách nhiệm xã hội của doanh nghiệp", short: "Bài 6: Trách nhiệm XH của DN", fileCode: "Bai6_TrachNhiemXHDN" },
+      { id: 7, code: 'B7', title: "Bài 7: Quản lí thu, chi trong gia đình", short: "Bài 7: Quản lí thu chi gia đình", fileCode: "Bai7_ThuChiGiaDinh" },
+      { id: 8, code: 'B8', title: "Bài 8: Quyền và nghĩa vụ của công dân về kinh doanh và nộp thuế", short: "Bài 8: Kinh doanh & nộp thuế", fileCode: "Bai8_KinhDoanhNopThue" },
+      { id: 9, code: 'B9', title: "Bài 9: Quyền và nghĩa vụ của công dân về sở hữu tài sản", short: "Bài 9: Quyền sở hữu tài sản", fileCode: "Bai9_SoHuuTaiSan" },
+      { id: 10, code: 'B10', title: "Bài 10: Quyền và nghĩa vụ của công dân trong hôn nhân và gia đình", short: "Bài 10: Hôn nhân & gia đình", fileCode: "Bai10_HonNhanGiaDinh" },
+      { id: 11, code: 'B11', title: "Bài 11: Quyền và nghĩa vụ của công dân trong học tập", short: "Bài 11: Quyền học tập", fileCode: "Bai11_HocTap" },
+      { id: 12, code: 'B12', title: "Bài 12: Quyền và nghĩa vụ trong bảo vệ, chăm sóc sức khỏe và an sinh", short: "Bài 12: Sức khỏe & ASXH", fileCode: "Bai12_SucKhoeAnSinh" },
+      { id: 13, code: 'B13', title: "Bài 13: Quyền và nghĩa vụ trong bảo vệ di sản văn hoá, môi trường", short: "Bài 13: Bảo vệ môi trường & di sản", fileCode: "Bai13_DiSanMoiTruong" },
+      { id: 14, code: 'B14', title: "Bài 14: Một số vấn đề chung về pháp luật quốc tế", short: "Bài 14: Pháp luật quốc tế", fileCode: "Bai14_PhapLuatQuocTe" },
+      { id: 15, code: 'B15', title: "Bài 15: Công pháp quốc tế về dân cư, lãnh thổ và chủ quyền quốc gia", short: "Bài 15: Dân cư, lãnh thổ & chủ quyền", fileCode: "Bai15_DanCuLanhTho" },
+      { id: 16, code: 'B16', title: "Bài 16: Nguyên tắc cơ bản của WTO và hợp đồng thương mại quốc tế", short: "Bài 16: Nguyên tắc WTO & HĐTM", fileCode: "Bai16_NguyenTacWTO" }
+    ];
+
+    // Bài học hiện tại đang xem (Mặc định: Bài 1)
+    let currentActiveLessonId = 1;
+
     // CẤU HÌNH GOOGLE APPS SCRIPT / GOOGLE SHEETS
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
 
-    // DANH SÁCH BÀI NỘP BAN ĐẦU ĐÃ GHI NHẬN TỪ TRƯỚC (CHỈ GIỮ HỌC SINH THẬT)
+    // DANH SÁCH BÀI NỘP BAN ĐẦU ĐÃ GHI NHẬN TỪ TRƯỚC (BÀI 1)
     const INITIAL_SUBMISSIONS = [
       { id: 1789462800000, subCode: "#12A7-6621", name: "Nguyễn Lê Thảo My", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "03:45", timestamp: "15/09/2026 16:00:00" },
       { id: 1789462700000, subCode: "#12A7-6620", name: "Nguyễn Lê Thảo My (Làm lại)", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "03:15", timestamp: "15/09/2026 15:58:00" },
@@ -341,13 +392,7 @@
       { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" }
     ];
 
-    // DANH SÁCH TÊN BÀI LÀM THỬ NGHIỆM ĐƯỢC LỌC BỎ HOÀN TOÀN (CHỈ KHỚP CHÍNH XÁC)
-    const TEST_SUBMISSION_NAMES = [
-      'test',
-      'thi thu',
-      'lam thu',
-      'hoc sinh may man'
-    ];
+    const TEST_SUBMISSION_NAMES = ['test', 'thi thu', 'lam thu', 'hoc sinh may man'];
 
     let allRawSubmissions = [];
     let autoRefreshTimer = null;
@@ -356,12 +401,113 @@
       return localStorage.getItem('ktpl12_teacher_pin') || '123456';
     }
 
+    // Tự động khởi tạo Master Lesson Select (16 bài)
+    function initMasterLessonSelect() {
+      const sel = document.getElementById('lesson-master-select');
+      if (!sel) return;
+      sel.innerHTML = '';
+      
+      const optAll = document.createElement('option');
+      optAll.value = 'ALL';
+      optAll.innerText = '📊 Tất cả 16 bài học (Tổng hợp)';
+      sel.appendChild(optAll);
+
+      ALL_16_LESSONS.forEach(l => {
+        const opt = document.createElement('option');
+        opt.value = l.id;
+        opt.innerText = `${l.short} (${l.id <= 2 ? 'Đang mở' : 'Dự kiến'})`;
+        if (l.id === currentActiveLessonId) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    // Nhận diện chuẩn xác bài học của từng bài nộp
+    function getLessonOfSubmission(sub) {
+      const code = (sub.subCode || '').toUpperCase();
+      const lesson = (sub.lesson || '').toUpperCase();
+
+      for (let i = 16; i >= 2; i--) {
+        const bKey = `B${i}`;
+        if (code.includes(`-${bKey}-`) || code.includes(`${bKey}-`) || code.endsWith(`-${bKey}`) || code.includes(bKey) ||
+            lesson.includes(`BÀI ${i}`) || lesson.includes(`BAI ${i}`) || lesson.includes(`B${i}`)) {
+          return i;
+        }
+      }
+      return 1; // Mặc định tất cả các bài nộp còn lại là Bài 1
+    }
+
+    // Chuyển đổi bài học đang xem
+    function switchLesson(lessonId) {
+      currentActiveLessonId = lessonId;
+      const masterSelect = document.getElementById('lesson-master-select');
+      if (masterSelect) masterSelect.value = lessonId;
+
+      // Cập nhật giao diện các nút bấm
+      const btnB1 = document.getElementById('btn-quick-b1');
+      const btnB2 = document.getElementById('btn-quick-b2');
+      const btnAll = document.getElementById('btn-quick-all');
+      const badge = document.getElementById('current-lesson-badge');
+      const linkDisplay = document.getElementById('display-lesson-link');
+      const excelBtnText = document.getElementById('excel-btn-text');
+      const heading = document.getElementById('table-view-heading');
+
+      if (btnB1) btnB1.className = (lessonId === 1) 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
+      if (btnB2) btnB2.className = (lessonId === 2) 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
+      if (btnAll) btnAll.className = (lessonId === 'ALL') 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
+      let baseUrl = window.location.href.split('?')[0].split('#')[0].replace('giaovien.html', '');
+      if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+      if (lessonId === 'ALL') {
+        if (badge) badge.innerText = "Tổng hợp tất cả 16 bài";
+        if (linkDisplay) linkDisplay.innerText = `${baseUrl}index.html`;
+        if (excelBtnText) excelBtnText.innerText = "Xuất Excel Tất Cả Bài";
+      } else {
+        const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(lessonId, 10)) || ALL_16_LESSONS[0];
+        if (badge) badge.innerText = lesObj.short;
+        if (linkDisplay) linkDisplay.innerText = `${baseUrl}index.html?bai=${lesObj.id}`;
+        if (excelBtnText) excelBtnText.innerText = `Xuất File Excel ${lesObj.code}`;
+      }
+
+      applyFilters();
+    }
+
+    function onMasterLessonChange(val) {
+      if (val === 'ALL') switchLesson('ALL');
+      else switchLesson(parseInt(val, 10));
+    }
+
+    function copyCurrentLessonLink(btnElement) {
+      const linkText = document.getElementById('display-lesson-link')?.innerText;
+      if (!linkText) return;
+      navigator.clipboard.writeText(linkText).then(() => {
+        if (btnElement) {
+          const oldText = btnElement.innerHTML;
+          btnElement.innerHTML = "<span>✅ Đã chép link!</span>";
+          setTimeout(() => btnElement.innerHTML = oldText, 2500);
+        }
+        alert("Đã chép link làm bài của bài học này vào bộ nhớ tạm! Cô chỉ cần mở Zalo lớp và dán (Ctrl + V) gửi cho học sinh ạ.");
+      });
+    }
+
+    // ĐĂNG NHẬP & XÁC THỰC GIÁO VIÊN
     function verifyPin() {
       const input = document.getElementById('input-pin').value.trim();
       if (input === getTeacherPin()) {
+        localStorage.setItem('ktpl12_teacher_authed', 'true');
         sessionStorage.setItem('ktpl12_teacher_authed', 'true');
         document.getElementById('pin-screen').classList.add('hidden');
         document.getElementById('dashboard-screen').classList.remove('hidden');
+        const lockBtn = document.getElementById('header-lock-btn');
+        if (lockBtn) lockBtn.classList.remove('hidden');
         loadDashboardData();
         startAutoRefresh();
       } else {
@@ -370,49 +516,26 @@
     }
 
     function logoutTeacher() {
+      localStorage.removeItem('ktpl12_teacher_authed');
       sessionStorage.removeItem('ktpl12_teacher_authed');
       stopAutoRefresh();
       document.getElementById('dashboard-screen').classList.add('hidden');
       document.getElementById('pin-screen').classList.remove('hidden');
-      document.getElementById('input-pin').value = '';
-    }
-
-    function changePinPrompt() {
-      const cur = prompt("Nhập mã PIN hiện tại của cô:");
-      if (cur !== getTeacherPin()) {
-        alert("Mã PIN hiện tại không chính xác!");
-        return;
-      }
-      const newPin = prompt("Nhập mã PIN mới (tối thiểu 4 ký tự):");
-      if (newPin && newPin.trim().length >= 4) {
-        localStorage.setItem('ktpl12_teacher_pin', newPin.trim());
-        alert("Đã đổi mã PIN thành công! Hãy ghi nhớ mã mới.");
-      } else {
-        alert("Mã PIN không hợp lệ!");
-      }
+      const lockBtn = document.getElementById('header-lock-btn');
+      if (lockBtn) lockBtn.classList.add('hidden');
+      document.getElementById('input-pin').value = getTeacherPin();
     }
 
     function openGoogleSheetDirectly() {
-      const savedUrl = localStorage.getItem('ktpl12_sheet_url');
-      if (savedUrl && savedUrl.includes('google.com/spreadsheets')) {
-        window.open(savedUrl, '_blank');
-      } else {
-        openSheetModal(false);
-      }
+      const savedUrl = localStorage.getItem('ktpl12_sheet_url') || 'https://docs.google.com/spreadsheets/d/1BfE8_9_Zl2Yj08-01_9m1E5bZzK9iW_qCqR8w0Xl0wM/edit';
+      window.open(savedUrl, '_blank');
     }
 
-    function openSheetModal(forceEdit = false) {
+    function openSheetModal() {
       const modal = document.getElementById('sheet-modal');
       const input = document.getElementById('input-sheet-url');
-      const err = document.getElementById('sheet-modal-error');
-      if (err) err.classList.add('hidden');
-      if (input) {
-        input.value = localStorage.getItem('ktpl12_sheet_url') || '';
-      }
-      if (modal) {
-        modal.classList.remove('hidden');
-        if (input) setTimeout(() => input.focus(), 100);
-      }
+      if (input) input.value = localStorage.getItem('ktpl12_sheet_url') || '';
+      if (modal) modal.classList.remove('hidden');
     }
 
     function closeSheetModal() {
@@ -422,26 +545,32 @@
 
     function saveAndOpenSheet() {
       const input = document.getElementById('input-sheet-url');
-      const err = document.getElementById('sheet-modal-error');
       const val = input ? input.value.trim() : '';
-
       if (!val || !val.includes('google.com/spreadsheets')) {
-        if (err) {
-          err.classList.remove('hidden');
-          err.textContent = '⚠️ Vui lòng dán đúng đường link Google Sheets (chứa google.com/spreadsheets).';
-        }
+        document.getElementById('sheet-modal-error')?.classList.remove('hidden');
         return;
       }
-
       localStorage.setItem('ktpl12_sheet_url', val);
       closeSheetModal();
       window.open(val, '_blank');
       loadDashboardData();
     }
 
-    // Chuẩn hóa điểm số tuyệt đối, loại bỏ hoàn toàn lỗi Google Sheets tự đổi điểm đuôi .5 thành ngày tháng (VD: 2026-05-08T17:00:00.000Z)
+    function normText(str) {
+      if (!str) return '';
+      return str.toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function cleanSubName(str) {
+      if (!str) return '';
+      return normText(str.replace(/\([^\)]*\)/g, '').replace(/[-_].*$/, '').replace(/lớp\s*\d+[a-z\d]*/ig, ''));
+    }
+
     function formatCleanScore(rawScore, correctCount) {
-      // Ưu tiên 1: Tính chuẩn xác tuyệt đối từ correctCount (ví dụ "19/20" => 9.5)
       if (correctCount && typeof correctCount === 'string') {
         const m = correctCount.match(/(\d+)\s*\/\s*(\d+)/);
         if (m && parseInt(m[2], 10) > 0) {
@@ -449,70 +578,22 @@
           return cScore.toFixed(1);
         }
       }
-
-      // Ưu tiên 2: Nếu rawScore là số hợp lệ từ 0 đến 10
       if (rawScore !== null && rawScore !== undefined && rawScore !== '') {
-        const sStr = String(rawScore).trim().replace(',', '.');
-        const num = parseFloat(sStr);
-        if (!isNaN(num) && num >= 0 && num <= 10 && !sStr.includes('-') && !sStr.includes('T')) {
-          return num.toFixed(1);
-        }
+        const str = String(rawScore).trim();
+        const num = parseFloat(str);
+        if (!isNaN(num) && num >= 0 && num <= 10) return num.toFixed(1);
       }
-
-      // Ưu tiên 3: Nếu bị Google Sheet tự đổi thành chuỗi Date (ví dụ 2026-05-08T17:00:00.000Z hoặc Date(2026,4,8...))
-      if (typeof rawScore === 'string' && (rawScore.includes('T') || rawScore.includes('Date') || rawScore.includes('-'))) {
-        try {
-          const d = new Date(rawScore);
-          if (!isNaN(d.getTime())) {
-            // Chuyển sang múi giờ Việt Nam GMT+7
-            const vnDate = new Date(d.getTime() + 7 * 3600000);
-            const day = vnDate.getUTCDate();
-            const month = vnDate.getUTCMonth() + 1;
-            // Nếu tháng 5 và ngày từ 0..10 => điểm có đuôi .5 (ví dụ ngày 9/5 => 9.5)
-            if (month === 5 && day <= 10) {
-              return `${day}.5`;
-            }
-          }
-        } catch(e) {}
-      }
-
-      return rawScore ? String(rawScore) : '0.0';
+      return '0.0';
     }
 
-    // Chuẩn hóa tên lớp học sinh nhập (12A7, Lớp 12A7, 12 A 7 -> 12A7)
-    function normClass(cls) {
-      if (!cls) return '';
-      return cls.toUpperCase().replace(/LỚP|LOP/ig, '').replace(/[^A-Z0-9]/g, '');
+    function isClassMatch(subClass, rosterClass) {
+      if (!subClass || !rosterClass) return false;
+      const c1 = subClass.toString().toUpperCase().replace(/[^A-Z0-9]/g, '');
+      const c2 = rosterClass.toString().toUpperCase().replace(/[^A-Z0-9]/g, '');
+      return c1 === c2;
     }
 
-    // Kiểm tra tính tương thích giữa lớp bài nộp và lớp học sinh
-    function isClassMatch(subClass, targetClass) {
-      if (!subClass) return true;
-      const sc = normClass(subClass);
-      const tc = normClass(targetClass);
-      if (!sc) return true;
-      if (sc === tc) return true;
-      if (sc === '12A' && (tc === '12A5' || tc === '12A7' || tc === '12A9')) return true;
-      if (sc.includes(tc) || tc.includes(sc)) return true;
-      return false;
-    }
-
-    // Chuẩn hóa chuỗi tiếng Việt để so khớp tên thông minh
-    function normText(str) {
-      if (!str) return '';
-      return str.toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    // Chuẩn hóa tên bài nộp, loại bỏ tiền tố/hậu tố như (làm lại), - 12A7...
-    function cleanSubName(str) {
-      if (!str) return '';
-      return normText(str.replace(/\([^\)]*\)/g, '').replace(/[-_].*$/, '').replace(/lớp\s*\d+[a-z\d]*/ig, ''));
-    }
-
+    // TẢI DỮ LIỆU TỔNG HỢP TỪ MÁY CHỦ GOOGLE
     async function loadDashboardData() {
       const loading = document.getElementById('table-loading');
       const empty = document.getElementById('table-empty-msg');
@@ -521,7 +602,6 @@
 
       let list = [];
 
-      // 1. Tải dữ liệu từ Google Apps Script nếu có
       try {
         const res = await fetch(`${GOOGLE_SCRIPT_URL}?_t=${Date.now()}`);
         if (res.ok) {
@@ -534,93 +614,44 @@
         console.warn("Lỗi tải Apps Script:", e);
       }
 
-      // 2. Thử đọc qua Google Sheets GViz API nếu đã lưu link
-      const savedSheetUrl = localStorage.getItem('ktpl12_sheet_url');
-      if (savedSheetUrl && list.length === 0) {
-        const m = savedSheetUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-        if (m && m[1]) {
-          try {
-            const gvizRes = await fetch(`https://docs.google.com/spreadsheets/d/${m[1]}/gviz/tq?tqx=out:json&tq=select%20*&_t=${Date.now()}`);
-            if (gvizRes.ok) {
-              const text = await gvizRes.text();
-              const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-              const gvizData = JSON.parse(jsonStr);
-              if (gvizData.table && gvizData.table.rows) {
-                gvizData.table.rows.forEach(r => {
-                  const c = r.c;
-                  if (c && c[2] && c[2].v) {
-                    const rawScoreVal = c[4] ? (c[4].v || c[4].f) : '';
-                    const rawCorrectVal = c[5] ? (c[5].v || c[5].f) : '';
-                    list.push({
-                      stt: c[0] ? c[0].v : '',
-                      subCode: c[1] ? c[1].v : '',
-                      name: c[2] ? c[2].v : '',
-                      className: c[3] ? c[3].v : '',
-                      score: formatCleanScore(rawScoreVal, rawCorrectVal),
-                      correctCount: rawCorrectVal,
-                      timeElapsed: c[6] ? (c[6].f || c[6].v) : '',
-                      timestamp: c[7] ? (c[7].f || c[7].v) : ''
-                    });
-                  }
-                });
-              }
-            }
-          } catch(e) {}
-        }
-      }
-
-      // 3. Hợp nhất các bài nộp ban đầu
+      // Hợp nhất dữ liệu ban đầu
       INITIAL_SUBMISSIONS.forEach(item => {
         if (!list.some(s => s.subCode === item.subCode || (normText(s.name) === normText(item.name) && s.timestamp === item.timestamp))) {
-          list.push({
-            ...item,
-            score: formatCleanScore(item.score, item.correctCount)
-          });
+          list.push({ ...item, score: formatCleanScore(item.score, item.correctCount) });
         }
       });
 
-      // 4. Hợp nhất bài nộp từ localStorage trình duyệt
+      // Hợp nhất dữ liệu từ localStorage
       try {
         const local = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
         local.forEach(item => {
           if (!list.some(s => s.subCode === item.subCode || (normText(s.name) === normText(item.name) && s.timestamp === item.timestamp))) {
-            list.push({
-              ...item,
-              score: formatCleanScore(item.score, item.correctCount)
-            });
+            list.push({ ...item, score: formatCleanScore(item.score, item.correctCount) });
           }
         });
       } catch(e) {}
 
-      // 5. Đọc danh sách ID các bài nộp đã bị xóa thủ công bởi giáo viên
-      let deletedKeys = [];
-      try {
-        deletedKeys = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
-      } catch(e) {}
-
-      // Lọc bỏ toàn bộ bài nộp thử nghiệm hoặc đã bị xóa
+      // Lọc bỏ bài nộp thử
       list = list.filter(item => {
         const norm = normText(item.name);
-        // Chỉ lọc bỏ nếu đúng chính xác từ khóa test (khớp 100%, không so sánh chuỗi con)
-        if (TEST_SUBMISSION_NAMES.some(t => norm === t)) {
-          return false;
-        }
-        const idKey = item.subCode || item.id || item.timestamp;
-        if (idKey && deletedKeys.includes(idKey)) {
-          return false;
-        }
-        if (norm && norm !== 'kieu' && deletedKeys.includes(norm)) {
-          return false;
-        }
-        return true;
+        return !TEST_SUBMISSION_NAMES.some(t => norm === t);
       });
 
-      // Chuẩn hóa toàn bộ điểm số của tất cả bài nộp còn lại
       list.forEach(item => {
         item.score = formatCleanScore(item.score, item.correctCount);
+        item.lessonId = getLessonOfSubmission(item);
       });
 
       allRawSubmissions = list;
+
+      // Cập nhật số đếm trên các nút chuyển nhanh
+      const b1Count = allRawSubmissions.filter(s => s.lessonId === 1).length;
+      const b2Count = allRawSubmissions.filter(s => s.lessonId === 2).length;
+      const badgeB1 = document.getElementById('badge-count-b1');
+      const badgeB2 = document.getElementById('badge-count-b2');
+      if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
+      if (badgeB2) badgeB2.innerText = `${b2Count} bài`;
+
       applyFilters();
 
       if (loading) loading.classList.add('hidden');
@@ -641,16 +672,9 @@
       });
     }
 
-    function toggleAutoRefresh(enabled) {
-      if (enabled) startAutoRefresh();
-      else stopAutoRefresh();
-    }
-
     function startAutoRefresh() {
       stopAutoRefresh();
-      autoRefreshTimer = setInterval(() => {
-        loadDashboardData();
-      }, 15000);
+      autoRefreshTimer = setInterval(loadDashboardData, 15000);
     }
 
     function stopAutoRefresh() {
@@ -660,20 +684,18 @@
       }
     }
 
-    // TỔ HỢP DANH SÁCH HỌC SINH VỚI SỔ ĐIỂM
+    // TỔ HỢP DANH SÁCH HỌC SINH THEO BÀI HỌC VÀ LỚP
     function buildRosterView() {
       const selectedClass = document.getElementById('filter-class').value;
       const statusFilter = document.getElementById('filter-status').value;
-      const lessonFilter = document.getElementById('filter-lesson') ? document.getElementById('filter-lesson').value : 'ALL';
       const search = normText(document.getElementById('filter-search').value);
 
-      // Đọc các gán thủ công của giáo viên từ localStorage (nếu có)
       let customMappings = {};
       try {
         customMappings = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}');
       } catch(e) {}
 
-      // 1. Xác định danh sách học sinh gốc của lớp
+      // 1. Lấy danh sách học sinh theo lớp
       let rosterList = [];
       const rosters = (typeof CLASS_ROSTERS !== 'undefined') ? CLASS_ROSTERS : {};
 
@@ -689,89 +711,50 @@
         }
       }
 
-      // Chuẩn hóa điểm tất cả bài nộp trước khi ghép
-      allRawSubmissions.forEach(sub => {
-        sub.score = formatCleanScore(sub.score, sub.correctCount);
-      });
-
-      // Lọc các bài nộp ứng viên theo bài học được chọn
+      // 2. Lọc các bài nộp thuộc đúng bài học đang chọn
       let candidateSubmissions = allRawSubmissions;
-      if (lessonFilter === 'B1') {
-        candidateSubmissions = allRawSubmissions.filter(s => {
-          const code = (s.subCode || '').toUpperCase();
-          const lesson = (s.lesson || '').toUpperCase();
-          return !code.includes('-B2-') && !code.includes('B2') && !lesson.includes('BÀI 2') && !lesson.includes('B2');
-        });
-      } else if (lessonFilter === 'B2') {
-        candidateSubmissions = allRawSubmissions.filter(s => {
-          const code = (s.subCode || '').toUpperCase();
-          const lesson = (s.lesson || '').toUpperCase();
-          return code.includes('-B2-') || code.includes('B2') || lesson.includes('BÀI 2') || lesson.includes('B2');
-        });
+      if (currentActiveLessonId !== 'ALL') {
+        candidateSubmissions = allRawSubmissions.filter(s => s.lessonId === parseInt(currentActiveLessonId, 10));
       }
 
-      // Theo dõi ID các bài nộp đã được gán vào học sinh trong sổ
       const matchedSubIds = new Set();
 
-      // 2. Đối chiếu từng học sinh trong sổ điểm với các bài nộp đã nhận
+      // 3. Đối chiếu từng học sinh
       const viewItems = rosterList.map(student => {
         const studentNorm = normText(student.name);
         const studentClean = cleanSubName(student.name);
 
-        // Lọc các bài nộp phù hợp với học sinh này
         const matchedSubs = candidateSubmissions.filter(sub => {
           const subNorm = normText(sub.name);
           const subClean = cleanSubName(sub.name);
 
-          // A. Kiểm tra gán thủ công của giáo viên
-          if (customMappings[subNorm] && (normText(customMappings[subNorm]) === studentNorm || customMappings[subNorm] === student.studentId)) {
-            return true;
-          }
-          if (customMappings[subClean] && (normText(customMappings[subClean]) === studentNorm || customMappings[subClean] === student.studentId)) {
-            return true;
-          }
+          if (customMappings[subNorm] && (normText(customMappings[subNorm]) === studentNorm || customMappings[subNorm] === student.studentId)) return true;
+          if (customMappings[subClean] && (normText(customMappings[subClean]) === studentNorm || customMappings[subClean] === student.studentId)) return true;
 
-          // B. Kiểm tra lớp học
-          const classMatches = isClassMatch(sub.className, student.className);
-          if (!classMatches) return false;
+          if (!isClassMatch(sub.className, student.className)) return false;
 
-          // C. Kiểm tra tên:
-          // 1. Khớp tuyệt đối 100%
           if (subClean === studentClean || subNorm === studentNorm) return true;
-
-          // 2. Bài nộp chứa họ tên học sinh (ví dụ "Đỗ Ngọc Ngân (Làm lại)" hoặc "Đỗ Ngọc Ngân - 12A7")
           if (subNorm.includes(studentNorm) || subClean.includes(studentClean)) return true;
 
-          // 3. Học sinh trong sổ kết thúc bằng tên bài nộp (ví dụ "Phạm Đoàn Khánh Thư" kết thúc bằng "Khánh Thư")
           const subParts = subClean.split(' ');
           if (subParts.length >= 2 && studentClean.endsWith(subClean)) {
             const rivals = rosterList.filter(r => cleanSubName(r.name).endsWith(subClean));
             if (rivals.length === 1) return true;
           }
-
           return false;
         });
 
         if (matchedSubs.length > 0) {
-          // Ghi nhận các bài nộp đã được khớp
           matchedSubs.forEach(s => matchedSubIds.add(s.subCode || s.id || s.timestamp));
-
-          // Lấy bài nộp có điểm cao nhất (tính theo số thực)
-          const bestSub = [...matchedSubs].sort((a, b) => {
-            const numA = parseFloat(formatCleanScore(a.score, a.correctCount)) || 0;
-            const numB = parseFloat(formatCleanScore(b.score, b.correctCount)) || 0;
-            return numB - numA;
-          })[0];
-
-          const cleanBestScore = formatCleanScore(bestSub.score, bestSub.correctCount);
+          const bestSub = [...matchedSubs].sort((a, b) => parseFloat(b.score) - parseFloat(a.score))[0];
 
           return {
             ...student,
             isDone: true,
             isUnmatched: false,
             submissionCount: matchedSubs.length,
-            subCode: bestSub.subCode || ('#' + student.className + '-' + student.stt),
-            score: cleanBestScore,
+            subCode: bestSub.subCode || `#${student.className}-${student.stt}`,
+            score: bestSub.score,
             correctCount: bestSub.correctCount,
             timeElapsed: bestSub.timeElapsed,
             timestamp: bestSub.timestamp
@@ -791,168 +774,122 @@
         }
       });
 
-      // 3. Tìm các bài nộp chưa khớp sổ điểm (unmatched)
+      // 4. Lấy các bài nộp chưa khớp
       const unmatchedSubs = candidateSubmissions.filter(sub => {
         const subId = sub.subCode || sub.id || sub.timestamp;
         if (matchedSubIds.has(subId)) return false;
+        if (selectedClass !== 'ALL' && !isClassMatch(sub.className, selectedClass)) {
+          const isOtherKnown = ['12A5', '12A7', '12A9'].some(k => isClassMatch(sub.className, k));
+          if (isOtherKnown) return false;
+        }
+        return true;
+      }).map((sub, idx) => ({
+        stt: `?${idx + 1}`,
+        studentId: '-',
+        name: sub.name,
+        className: sub.className || 'Khác',
+        isDone: true,
+        isUnmatched: true,
+        submissionCount: 1,
+        subCode: sub.subCode || '#TEST',
+        score: sub.score,
+        correctCount: sub.correctCount,
+        timeElapsed: sub.timeElapsed,
+        timestamp: sub.timestamp
+      }));
 
-        // Nếu đang chọn 1 lớp cụ thể (ví dụ 12A7):
-        // Chỉ ẩn nếu bài nộp này ghi rõ là thuộc một lớp khác trong trường (12A5 hoặc 12A9)
-        if (selectedClass !== 'ALL') {
-          const sc = normClass(sub.className);
-          const tc = normClass(selectedClass);
-          const otherClasses = ['12A5', '12A7', '12A9'].filter(c => normClass(c) !== tc);
-          if (otherClasses.some(oc => sc === normClass(oc) || sc.includes(normClass(oc)))) {
-            return false;
-          }
+      renderUnmatchedSection(unmatchedSubs);
+
+      const allCombined = [...viewItems, ...unmatchedSubs];
+
+      const filtered = allCombined.filter(item => {
+        if (statusFilter === 'DONE' && !item.isDone) return false;
+        if (statusFilter === 'PENDING' && item.isDone) return false;
+        if (search) {
+          const n = normText(item.name);
+          const c = normText(item.className);
+          const code = normText(item.subCode);
+          if (!n.includes(search) && !c.includes(search) && !code.includes(search)) return false;
         }
         return true;
       });
 
-      // Cập nhật Hộp Cảnh báo Unmatched Alert
-      renderUnmatchedAlert(unmatchedSubs, selectedClass);
-
-      // Bổ sung các bài nộp chưa khớp vào danh sách hiển thị
-      unmatchedSubs.forEach(sub => {
-        const cleanScore = formatCleanScore(sub.score, sub.correctCount);
-        viewItems.push({
-          stt: '+',
-          studentId: 'Tự do',
-          name: sub.name,
-          className: sub.className || (selectedClass !== 'ALL' ? selectedClass : 'Khác'),
-          dob: '-',
-          gender: '-',
-          isDone: true,
-          isUnmatched: true,
-          submissionCount: 1,
-          subCode: sub.subCode || '#12-0000',
-          score: cleanScore,
-          correctCount: sub.correctCount,
-          timeElapsed: sub.timeElapsed,
-          timestamp: sub.timestamp
-        });
-      });
-
-      // 4. Lọc theo trạng thái và từ khóa tìm kiếm
-      const filtered = viewItems.filter(item => {
-        const matchStatus = (statusFilter === 'ALL') || (statusFilter === 'DONE' && item.isDone) || (statusFilter === 'PENDING' && !item.isDone);
-        const matchSearch = !search || normText(item.name).includes(search) || normText(item.studentId).includes(search);
-        return matchStatus && matchSearch;
-      });
-
-      return { allItems: viewItems, filtered: filtered, unmatchedSubs: unmatchedSubs };
+      return { allItems: viewItems, filtered };
     }
 
-    function renderUnmatchedAlert(unmatchedSubs, selectedClass) {
-      const alertBox = document.getElementById('unmatched-alert');
+    function renderUnmatchedSection(unmatchedList) {
+      const box = document.getElementById('unmatched-alert');
       const listEl = document.getElementById('unmatched-list');
       const titleEl = document.getElementById('unmatched-title');
-      if (!alertBox || !listEl) return;
+      if (!box || !listEl) return;
 
-      if (!unmatchedSubs || unmatchedSubs.length === 0) {
-        alertBox.classList.add('hidden');
+      if (unmatchedList.length === 0) {
+        box.classList.add('hidden');
         listEl.innerHTML = '';
         return;
       }
 
-      alertBox.classList.remove('hidden');
-      const classLabel = selectedClass === 'ALL' ? 'các lớp' : `lớp ${selectedClass}`;
-      titleEl.innerHTML = `Phát hiện <b>${unmatchedSubs.length}</b> bài nộp tự gõ tên chưa khớp sổ điểm (${classLabel}):`;
+      box.classList.remove('hidden');
+      if (titleEl) titleEl.innerText = `Phát hiện ${unmatchedList.length} bài nộp tự gõ tên (Chưa khớp sổ điểm)`;
 
-      listEl.innerHTML = '';
-      unmatchedSubs.forEach(sub => {
-        const cleanScore = formatCleanScore(sub.score, sub.correctCount);
-        const card = document.createElement('div');
-        card.className = "flex flex-wrap items-center justify-between bg-white border border-amber-200 p-2.5 rounded-xl shadow-xs gap-2";
-        const safeName = (sub.name || '').replace(/'/g, "\\'");
-        const safeClass = (sub.className || '').replace(/'/g, "\\'");
-        card.innerHTML = `
-          <div class="flex flex-wrap items-center gap-2 text-xs">
-            <span class="font-bold text-slate-800">📝 ${sub.name}</span>
-            <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">Lớp: ${sub.className || 'Chưa rõ'}</span>
-            <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold text-[11px]">Điểm: ${cleanScore} (${sub.correctCount || '?'})</span>
-            <span class="text-slate-400 text-[10px]">⏱️ ${sub.timestamp || ''}</span>
+      listEl.innerHTML = unmatchedList.map(item => `
+        <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-amber-200 shadow-sm">
+          <div class="flex items-center gap-3">
+            <span class="font-bold text-slate-800 text-xs">${item.name}</span>
+            <span class="bg-indigo-50 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded">Lớp: ${item.className}</span>
+            <span class="text-emerald-700 font-black text-xs">Điểm: ${item.score} (${item.correctCount})</span>
+            <span class="text-[11px] text-slate-400 font-mono">${item.timestamp}</span>
           </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="assignUnmatchedSub('${safeName}', '${safeClass}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
-              <span>🔗</span> <span>Ghép vào học sinh...</span>
-            </button>
-            <button onclick="deleteSingleSub('${safeName}', '${sub.subCode || ''}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-[11px] px-2.5 py-1.5 rounded-lg border border-rose-200 transition flex items-center gap-1" title="Xóa bài nộp thử nghiệm">
-              <span>🗑️</span> <span>Xóa</span>
-            </button>
-          </div>
-        `;
-        listEl.appendChild(card);
-      });
-    }
-
-    function deleteSingleSub(subName, subCode) {
-      if (confirm(`Cô có chắc muốn xóa vĩnh viễn bài nộp thử nghiệm của "${subName}" không?`)) {
-        let deleted = [];
-        try {
-          deleted = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
-        } catch(e) {}
-        if (subCode) deleted.push(subCode);
-        if (subName) deleted.push(normText(subName));
-        localStorage.setItem('ktpl12_deleted_subs', JSON.stringify(deleted));
-        loadDashboardData();
-      }
-    }
-
-    function clearAllUnmatchedSubs() {
-      if (confirm("Cô có chắc chắn muốn xóa tất cả các bài nộp thử nghiệm này không?")) {
-        let deleted = [];
-        try {
-          deleted = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
-        } catch(e) {}
-        allRawSubmissions.forEach(sub => {
-          if (sub.isUnmatched) {
-            if (sub.subCode) deleted.push(sub.subCode);
-            deleted.push(normText(sub.name));
-          }
-        });
-        localStorage.setItem('ktpl12_deleted_subs', JSON.stringify(deleted));
-        loadDashboardData();
-      }
+          <button onclick="assignUnmatchedSub('${item.name.replace(/'/g, "\\'")}', '${item.className}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3 py-1 rounded-lg shadow transition">
+            🔗 Ghép vào học sinh trong sổ
+          </button>
+        </div>
+      `).join('');
     }
 
     function assignUnmatchedSub(subName, subClass) {
       const selectedClass = document.getElementById('filter-class').value;
-      let targetClass = (selectedClass !== 'ALL') ? selectedClass : '12A7';
-      if (subClass && subClass.includes('12A5')) targetClass = '12A5';
-      else if (subClass && subClass.includes('12A9')) targetClass = '12A9';
-      else if (subClass && subClass.includes('12A7')) targetClass = '12A7';
+      const targetClass = (selectedClass !== 'ALL') ? selectedClass : (subClass || '12A7');
+      const rosters = (typeof CLASS_ROSTERS !== 'undefined') ? CLASS_ROSTERS : {};
+      const classList = rosters[targetClass] || [];
 
-      const roster = (typeof CLASS_ROSTERS !== 'undefined' && CLASS_ROSTERS[targetClass]) ? CLASS_ROSTERS[targetClass] : [];
-      if (roster.length === 0) {
-        alert("Không tìm thấy danh sách lớp " + targetClass);
+      let promptMsg = `Nhập STT học sinh trong lớp ${targetClass} để ghép bài của "${subName}":\n\n`;
+      classList.forEach(s => {
+        promptMsg += `${s.stt}. ${s.name}\n`;
+      });
+
+      const input = prompt(promptMsg);
+      if (!input) return;
+      const stt = parseInt(input.trim(), 10);
+      const student = classList.find(s => s.stt === stt);
+      if (!student) {
+        alert("STT không hợp lệ!");
         return;
       }
 
-      const options = roster.map(st => `${st.stt}. ${st.name}`).join('\n');
-      const input = prompt(`Chọn số thứ tự (STT 1..${roster.length}) của học sinh trong lớp ${targetClass} để gán bài nộp của "${subName}":\n\n${options}\n\nNhập số STT (từ 1 đến ${roster.length}):`);
-      if (input) {
-        const stt = parseInt(input.trim(), 10);
-        const found = roster.find(st => st.stt === stt);
-        if (found) {
-          let map = {};
-          try {
-            map = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}');
-          } catch(e) {}
-          map[normText(subName)] = found.name;
-          localStorage.setItem('ktpl12_name_mappings', JSON.stringify(map));
-          alert(`✅ Đã gán thành công bài nộp "${subName}" vào học sinh:\nSTT ${found.stt} - ${found.name} (${targetClass})!`);
-          applyFilters();
-        } else {
-          alert("Số STT không hợp lệ! Vui lòng nhập từ 1 đến " + roster.length);
-        }
-      }
+      let customMappings = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}');
+      customMappings[normText(subName)] = student.name;
+      customMappings[cleanSubName(subName)] = student.name;
+      localStorage.setItem('ktpl12_name_mappings', JSON.stringify(customMappings));
+
+      alert(`Đã ghép bài nộp của "${subName}" vào học sinh "${student.name}" thành công!`);
+      applyFilters();
+    }
+
+    function clearAllUnmatchedSubs() {
+      if (!confirm("Cô có chắc chắn muốn ẩn các bài nộp tự gõ này không?")) return;
+      let deletedKeys = JSON.parse(localStorage.getItem('ktpl12_deleted_subs') || '[]');
+      const { filtered } = buildRosterView();
+      filtered.filter(i => i.isUnmatched).forEach(i => {
+        deletedKeys.push(normText(i.name));
+      });
+      localStorage.setItem('ktpl12_deleted_subs', JSON.stringify(deletedKeys));
+      applyFilters();
     }
 
     function clearCustomMappings() {
-      if (confirm("Cô có muốn xóa toàn bộ liên kết ghép tên thủ công đã lưu không?")) {
+      if (confirm("Khôi phục mặc định toàn bộ liên kết ghép tên?")) {
         localStorage.removeItem('ktpl12_name_mappings');
-        alert("Đã khôi phục cài đặt mặc định!");
         applyFilters();
       }
     }
@@ -961,6 +898,20 @@
       const { allItems, filtered } = buildRosterView();
       updateStatistics(allItems);
       renderTableRows(filtered);
+
+      // Cập nhật tiêu đề bảng
+      const heading = document.getElementById('table-view-heading');
+      const selectedClass = document.getElementById('filter-class').value;
+      const classTitle = selectedClass === 'ALL' ? 'TẤT CẢ 3 LỚP' : `LỚP ${selectedClass}`;
+
+      if (heading) {
+        if (currentActiveLessonId === 'ALL') {
+          heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC - ${classTitle}`;
+        } else {
+          const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+          heading.innerText = `DANH SÁCH HỌC SINH - ${lesObj.title.toUpperCase()} (${classTitle})`;
+        }
+      }
     }
 
     function updateStatistics(items) {
@@ -993,7 +944,7 @@
         return;
       }
 
-      const scores = doneItems.map(i => parseFloat(formatCleanScore(i.score, i.correctCount)) || 0);
+      const scores = doneItems.map(i => parseFloat(i.score) || 0);
       const sum = scores.reduce((a, b) => a + b, 0);
       const avg = (sum / scores.length).toFixed(1);
       const max = Math.max(...scores).toFixed(1);
@@ -1030,20 +981,18 @@
         let statusBadge = '';
         let scoreBadge = '-';
 
-        const cleanScore = formatCleanScore(item.score, item.correctCount);
-
         if (item.isUnmatched) {
-          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${cleanScore}</span>`;
+          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${item.score}</span>`;
           statusBadge = `<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-amber-300"><span>⚠️</span> Tự gõ tên</span>`;
         } else if (item.isDone) {
-          const numScore = parseFloat(cleanScore) || 0;
+          const numScore = parseFloat(item.score) || 0;
           let scoreBadgeClass = "bg-slate-100 text-slate-800";
           if (numScore >= 9.0) scoreBadgeClass = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold";
           else if (numScore >= 8.0) scoreBadgeClass = "bg-teal-100 text-teal-800 border border-teal-300 font-bold";
           else if (numScore >= 5.0) scoreBadgeClass = "bg-blue-100 text-blue-800 font-bold";
           else scoreBadgeClass = "bg-rose-100 text-rose-800 font-bold";
 
-          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${cleanScore}</span>`;
+          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${item.score}</span>`;
 
           const countBadge = item.submissionCount > 1 ? `<span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1 py-0.2 rounded font-bold" title="Làm ${item.submissionCount} lần">${item.submissionCount}x</span>` : '';
           statusBadge = `<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-emerald-300"><span>✅</span> Đã nộp${countBadge}</span>`;
@@ -1070,7 +1019,7 @@
       });
     }
 
-    // XUẤT FILE EXCEL THEO THỨ TỰ SỔ ĐIỂM CHUẨN CỦA NHÀ TRƯỜNG
+    // 1. XUẤT FILE EXCEL CHO RIÊNG BÀI HỌC ĐANG CHỌN (16 BÀI TƯƠNG ỨNG 16 FILE)
     function exportToExcelOfficial() {
       const { allItems } = buildRosterView();
       if (allItems.length === 0) {
@@ -1080,52 +1029,153 @@
 
       const selectedClass = document.getElementById('filter-class').value;
       const classNameStr = selectedClass === 'ALL' ? 'Tat_Ca_Lop' : `Lop_${selectedClass}`;
+      const now = new Date();
+      const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
 
-      const headers = ["STT", "Mã định danh", "Họ và tên", "Lớp", "Trạng thái", "Điểm (/10)", "Số câu đúng", "Thời gian làm", "Ngày giờ nộp"];
+      let lessonFileLabel = 'TatCaBai';
+      let lessonHeaderTitle = 'TẤT CẢ BÀI HỌC';
+
+      if (currentActiveLessonId !== 'ALL') {
+        const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+        lessonFileLabel = lesObj.fileCode;
+        lessonHeaderTitle = lesObj.title.toUpperCase();
+      }
+
+      const headers = [
+        `BẢNG ĐIỂM KTPL 12 - ${lessonHeaderTitle} - ${classNameStr}`,
+        "", "", "", "", "", "", "", ""
+      ];
+      const colTitles = ["STT", "Mã định danh", "Họ và tên", "Lớp", "Trạng thái", "Điểm (/10)", "Số câu đúng", "Thời gian làm", "Ngày giờ nộp"];
+
       const rows = allItems.map(item => [
         item.stt,
         `"${item.studentId || ''}"`,
         `"${(item.name || '').replace(/"/g, '""')}"`,
         `"${item.className || ''}"`,
         item.isDone ? `"Đã nộp bài"` : `"Chưa nộp bài"`,
-        item.isDone ? `"${formatCleanScore(item.score, item.correctCount)}"` : `""`,
+        item.isDone ? `"${item.score}"` : `""`,
         `"${item.correctCount || ''}"`,
         `"${item.timeElapsed || ''}"`,
         `"${item.timestamp || ''}"`
       ]);
 
-      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+      const csvContent = "\uFEFF" + [headers.join(","), colTitles.join(","), ...rows.map(r => r.join(","))].join("\r\n");
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
-      const now = new Date();
-      const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
       link.href = URL.createObjectURL(blob);
-      link.download = `Bang_Diem_Chuan_${classNameStr}_${dateStr}.csv`;
+      link.download = `Bang_Diem_KTPL12_${lessonFileLabel}_${classNameStr}_${dateStr}.csv`;
       link.click();
     }
 
-    // TỰ ĐỘNG SOẠN VÀ SAO CHÉP DANH SÁCH CHƯA LÀM ĐỂ GỬI ZALO NHÓM LỚP
+    // 2. XUẤT MA TRẬN SỔ ĐIỂM TOÀN BỘ 16 BÀI (TẤT CẢ CỘT ĐIỂM CẢ NĂM)
+    function exportAll16LessonsMatrix() {
+      const selectedClass = document.getElementById('filter-class').value;
+      const rosters = (typeof CLASS_ROSTERS !== 'undefined') ? CLASS_ROSTERS : {};
+      
+      let rosterList = [];
+      if (selectedClass === 'ALL') {
+        ['12A5', '12A7', '12A9'].forEach(c => {
+          if (rosters[c]) rosters[c].forEach(s => rosterList.push({ ...s }));
+        });
+      } else {
+        if (rosters[selectedClass]) rosters[selectedClass].forEach(s => rosterList.push({ ...s }));
+      }
+
+      if (rosterList.length === 0) {
+        alert("Chưa có danh sách học sinh để xuất ma trận!");
+        return;
+      }
+
+      const classNameStr = selectedClass === 'ALL' ? 'Tat_Ca_3_Lop' : `Lop_${selectedClass}`;
+      const now = new Date();
+      const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
+
+      // Tạo tiêu đề các cột 16 bài
+      const lessonCols = ALL_16_LESSONS.map(l => `"Bài ${l.id}"`);
+      const colHeaders = ["STT", "Mã định danh", "Họ và tên", "Lớp", ...lessonCols, "Số bài đã làm", "Điểm Trung Bình"];
+
+      // Đối chiếu điểm từng bài cho từng học sinh
+      const rows = rosterList.map(student => {
+        const studentNorm = normText(student.name);
+        const studentClean = cleanSubName(student.name);
+
+        const studentSubs = allRawSubmissions.filter(sub => {
+          if (!isClassMatch(sub.className, student.className)) return false;
+          const subNorm = normText(sub.name);
+          const subClean = cleanSubName(sub.name);
+          return (subClean === studentClean || subNorm === studentNorm || subNorm.includes(studentNorm) || subClean.includes(studentClean));
+        });
+
+        let completedCount = 0;
+        let totalScoreSum = 0;
+
+        const scoresBy16Lessons = ALL_16_LESSONS.map(les => {
+          const subsOfLesson = studentSubs.filter(s => s.lessonId === les.id);
+          if (subsOfLesson.length > 0) {
+            const best = [...subsOfLesson].sort((a, b) => parseFloat(b.score) - parseFloat(a.score))[0];
+            completedCount++;
+            totalScoreSum += parseFloat(best.score);
+            return `"${best.score}"`;
+          }
+          return '""';
+        });
+
+        const avgScore = completedCount > 0 ? (totalScoreSum / completedCount).toFixed(1) : '""';
+
+        return [
+          student.stt,
+          `"${student.studentId || ''}"`,
+          `"${student.name.replace(/"/g, '""')}"`,
+          `"${student.className}"`,
+          ...scoresBy16Lessons,
+          completedCount,
+          avgScore
+        ];
+      });
+
+      const csvContent = "\uFEFF" + [
+        `"BẢNG TỔNG HỢP MA TRẬN ĐIỂM 16 BÀI SGK KTPL 12 - ${classNameStr}"`,
+        colHeaders.join(","),
+        ...rows.map(r => r.join(","))
+      ].join("\r\n");
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Bang_Diem_Tong_Hop_16_Bai_KTPL12_${classNameStr}_${dateStr}.csv`;
+      link.click();
+    }
+
+    // 3. TỰ ĐỘNG SOẠN VÀ SAO CHÉP DANH SÁCH CHƯA LÀM ĐỂ GỬI ZALO NHÓM LỚP
     function copyReminderForZalo() {
       const selectedClass = document.getElementById('filter-class').value;
       const { allItems } = buildRosterView();
       const pending = allItems.filter(i => !i.isDone);
 
+      const lesObj = (currentActiveLessonId !== 'ALL') 
+        ? (ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0])
+        : ALL_16_LESSONS[0];
+
       if (pending.length === 0) {
-        alert(`Chúc mừng cô! Toàn bộ học sinh ${selectedClass === 'ALL' ? 'các lớp' : 'lớp ' + selectedClass} đều đã nộp bài đầy đủ 100%! 🎉`);
+        alert(`Chúc mừng cô! Toàn bộ học sinh ${selectedClass === 'ALL' ? 'các lớp' : 'lớp ' + selectedClass} đều đã nộp bài ${lesObj.title} đầy đủ 100%! 🎉`);
         return;
       }
 
+      let baseUrl = window.location.href.split('?')[0].split('#')[0].replace('giaovien.html', '');
+      if (!baseUrl.endsWith('/')) baseUrl += '/';
+      const lessonUrl = `${baseUrl}index.html?bai=${lesObj.id}`;
+
       const classNameTitle = selectedClass === 'ALL' ? 'CÁC LỚP 12A5, 12A7, 12A9' : `LỚP ${selectedClass}`;
       let message = `📢 THÔNG BÁO TỪ CÔ TRƯƠNG THÙY LINH KIỀU (MÔN GDKT&PL 12)\n`;
-      message += `Hiện tại còn ${pending.length} bạn ${classNameTitle} CHƯA HOÀN THÀNH bài kiểm tra trắc nghiệm KTPL 12 (Bài 1):\n\n`;
+      message += `Hiện tại còn ${pending.length} bạn ${classNameTitle} CHƯA HOÀN THÀNH bài kiểm tra: ${lesObj.title.toUpperCase()}:\n\n`;
 
       pending.forEach((s, idx) => {
         message += `${idx + 1}. ${s.name} (${s.className})\n`;
       });
 
       message += `\n👉 Các em khẩn trương bấm vào link dưới đây để làm và nộp bài gấp về cho cô nhé:\n`;
-      message += `https://kieuthi14-hub.github.io/ktpl12-quiz/bai1.html\n`;
-      message += `(Hệ thống sẽ tự động cập nhật và ghi điểm trực tiếp vào sổ điểm của cô).`;
+      message += `${lessonUrl}\n`;
+      message += `(Hệ thống sẽ tự động chấm điểm và lưu trực tiếp vào sổ điểm của cô giáo).`;
 
       navigator.clipboard.writeText(message).then(() => {
         const btnText = document.getElementById('zalo-btn-text');
@@ -1134,52 +1184,29 @@
           btnText.innerText = `✅ Đã chép ${pending.length} bạn!`;
           setTimeout(() => btnText.innerText = oldText, 3000);
         }
-        alert(`Đã sao chép danh sách ${pending.length} bạn chưa làm bài vào bộ nhớ tạm!\n\nCô chỉ cần mở nhóm Zalo lớp rồi nhấn chuột phải chọn Dán (Paste) hoặc bấm Ctrl + V là gửi được ngay ạ!`);
+        alert(`Đã sao chép danh sách ${pending.length} bạn chưa làm ${lesObj.short} vào bộ nhớ tạm!\n\nCô chỉ cần mở nhóm Zalo lớp rồi nhấn chuột phải chọn Dán (Paste) hoặc bấm Ctrl + V là gửi được ngay ạ!`);
       });
     }
 
-    function copySpecificLink(fileName, btnElement, label) {
-      let baseUrl = window.location.href.split('?')[0].split('#')[0];
-      if (baseUrl.includes('giaovien.html')) {
-        baseUrl = baseUrl.replace('giaovien.html', '');
-      }
-      if (!baseUrl.endsWith('/')) baseUrl += '/';
-      const targetUrl = baseUrl + fileName;
-
-      navigator.clipboard.writeText(targetUrl).then(() => {
-        if (btnElement) {
-          const originalHtml = btnElement.innerHTML;
-          btnElement.innerHTML = `<span>✅ Đã chép ${label}!</span>`;
-          setTimeout(() => {
-            btnElement.innerHTML = originalHtml;
-          }, 2000);
-        }
-      });
-    }
-
-    function copyStudentLink() {
-      const link = document.getElementById('student-quiz-link').innerText;
-      navigator.clipboard.writeText(link).then(() => {
-        const btnText = document.getElementById('copy-btn-text');
-        const btnIcon = document.getElementById('copy-btn-icon');
-        btnText.innerText = "Đã sao chép link!";
-        btnIcon.innerText = "✅";
-        setTimeout(() => {
-          btnText.innerText = "Sao chép link gửi lớp";
-          btnIcon.innerText = "📋";
-        }, 2000);
-      });
-    }
-
-    // Tự động kiểm tra phiên đã đăng nhập trước đó
+    // TỰ ĐỘNG KHỞI CHẠY KHI MỞ TRANG
     window.addEventListener('DOMContentLoaded', () => {
-      if (sessionStorage.getItem('ktpl12_teacher_authed') === 'true') {
+      initMasterLessonSelect();
+
+      // Kiểm tra nếu đã xác thực trước đó thì vào thẳng Dashboard
+      const isAuthed = (localStorage.getItem('ktpl12_teacher_authed') === 'true' || sessionStorage.getItem('ktpl12_teacher_authed') === 'true');
+      if (isAuthed) {
         document.getElementById('pin-screen').classList.add('hidden');
         document.getElementById('dashboard-screen').classList.remove('hidden');
+        const lockBtn = document.getElementById('header-lock-btn');
+        if (lockBtn) lockBtn.classList.remove('hidden');
         loadDashboardData();
         startAutoRefresh();
+      } else {
+        const pinInput = document.getElementById('input-pin');
+        if (pinInput) pinInput.value = getTeacherPin();
       }
     });
+
   </script>
 </body>
 </html>
