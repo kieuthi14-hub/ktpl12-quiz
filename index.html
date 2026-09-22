@@ -6,180 +6,1555 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Học Tập & Luyện Tập KTPL 12 - Kết Nối Tri Thức</title>
+  <title>Luyện Tập Trắc Nghiệm KTPL 12 - Kết Nối Tri Thức</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- html2canvas for downloading result certificate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Class Rosters Data -->
+  <script src="rosters.js"></script>
   <style>
     body { font-family: 'Lexend', sans-serif; }
     .glass-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(12px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-slate-100 via-indigo-50/40 to-slate-200 min-h-screen text-slate-800 flex flex-col justify-between">
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between">
 
   <!-- Header -->
-  <header class="bg-indigo-700 text-white py-4 shadow-lg sticky top-0 z-30">
-    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div class="text-center sm:text-left">
-        <div class="flex items-center justify-center sm:justify-start gap-2">
-          <span class="text-[11px] font-bold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">KTPL 12 • Kết nối tri thức</span>
-          <span class="text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded-full flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Trực tuyến 24/7
-          </span>
-        </div>
-        <h1 class="text-lg md:text-xl font-extrabold mt-1 tracking-tight">Hệ Thống Luyện Tập Trắc Nghiệm Phản Xạ</h1>
-        <p class="text-xs text-indigo-200">GVBM: Cô Trương Thùy Linh Kiều • Các lớp 12A5, 12A7, 12A9</p>
+  <header class="bg-indigo-700 text-white py-3.5 shadow-md sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
+      <div>
+        <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">KTPL 12 • Kết nối tri thức</span>
+        <h1 id="header-lesson-title" class="text-base md:text-lg font-bold mt-0.5">Bài 2: Hội nhập kinh tế quốc tế</h1>
       </div>
-
       <div class="flex items-center gap-2">
-        <a href="giaovien.html" class="bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold px-4 py-2 rounded-xl shadow transition flex items-center gap-1.5" title="Mở Sổ Theo Dõi Điểm & Tiến Độ Học Sinh">
-          <span>📋</span> <span>Sổ Điểm & Quản Lý GV</span>
+        <a href="index.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Quay lại Cổng Chọn Bài Học">
+          <span>🏠</span> <span class="hidden sm:inline">Cổng bài học</span>
         </a>
+        <a href="giaovien.html" class="bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Mở Sổ Theo Dõi Điểm & Tiến Độ Học Sinh">
+          <span>📋</span> <span class="hidden sm:inline">Sổ Điểm & Quản Lý</span> Giáo Viên
+        </a>
+        <div id="header-timer" class="text-xs font-mono font-semibold text-indigo-200 hidden bg-indigo-800/80 px-2 py-1 rounded">⏱️ 00:00</div>
       </div>
     </div>
   </header>
 
   <!-- Main Container -->
-  <main class="max-w-5xl mx-auto w-full p-4 sm:p-6 flex-grow">
-    
-    <!-- Hero Banner -->
-    <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-md mb-8 text-center sm:text-left relative overflow-hidden">
-      <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-100 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-      <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div class="space-y-2 max-w-xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs rounded-full font-bold">
-            <span>🎯</span> <span>Cổng Ôn Tập Trắc Nghiệm Tự Động Hóa</span>
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug">
-            Chọn Bài Học Để Bắt Đầu Luyện Tập
-          </h2>
-          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Học sinh chọn đúng bài đang học, chọn lớp và họ tên theo danh sách sổ điểm của cô. Kết quả và điểm số sẽ được tự động ghi nhận trực tiếp vào sổ điểm Google Sheets của giáo viên.
-          </p>
-        </div>
-        <div class="shrink-0 grid grid-cols-3 gap-2 text-center">
-          <div class="bg-white/80 p-3 rounded-2xl border border-slate-200 shadow-sm">
-            <div class="text-lg font-black text-indigo-600">48</div>
-            <div class="text-[10px] font-bold text-slate-500">Lớp 12A5</div>
-          </div>
-          <div class="bg-white/80 p-3 rounded-2xl border border-slate-200 shadow-sm">
-            <div class="text-lg font-black text-indigo-600">42</div>
-            <div class="text-[10px] font-bold text-slate-500">Lớp 12A7</div>
-          </div>
-          <div class="bg-white/80 p-3 rounded-2xl border border-slate-200 shadow-sm">
-            <div class="text-lg font-black text-indigo-600">44</div>
-            <div class="text-[10px] font-bold text-slate-500">Lớp 12A9</div>
-          </div>
-        </div>
+  <main class="max-w-2xl mx-auto w-full p-4 flex-grow flex items-center justify-center">
+
+    <!-- 1. MÀN HÌNH BẮT ĐẦU -->
+    <div id="start-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 text-center">
+      <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3">🎯</div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-300 text-emerald-700 text-xs rounded-full font-semibold mb-3">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+        <span>Hệ thống nộp bài trực tuyến: ĐÃ KẾT NỐI 🟢</span>
       </div>
-    </div>
-
-    <!-- Danh sách các bài học -->
-    <div class="mb-4 flex items-center justify-between">
-      <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-        <span>📚</span> <span>Danh Sách Bài Học (KNTT 12)</span>
-      </h3>
-      <span class="text-xs text-slate-500">2 bài đã mở</span>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-
-      <!-- BÀI 1 -->
-      <div class="bg-white rounded-3xl p-6 border-2 border-indigo-100 hover:border-indigo-400 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+      <h2 class="text-2xl font-bold text-slate-800">Luyện Tập Trắc Nghiệm Phản Xạ</h2>
+      <p class="text-slate-500 text-sm mt-2 mb-6">Hệ thống trắc nghiệm phản xạ KTPL 12 Kết nối tri thức. Em chỉ cần chọn bài học, lớp và họ tên là bắt đầu làm bài. Điểm số sẽ tự động lưu về bảng điểm của cô giáo.</p>
+      
+      <div class="space-y-4 max-w-sm mx-auto text-left">
         <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200">
-              Bài 1
-            </span>
-            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đã mở • 133+ bài nộp
-            </span>
-          </div>
-          <h4 class="text-lg font-extrabold text-slate-900 group-hover:text-indigo-600 transition">
-            Tăng Trưởng & Phát Triển Kinh Tế
-          </h4>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-            Hệ thống 20 câu trắc nghiệm phản xạ: Bản chất tăng trưởng, chỉ tiêu GDP, GNI, HDI, cơ cấu ngành và phát triển bền vững.
-          </p>
-          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px]">
-            <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">⏱️ 20 câu hỏi</span>
-            <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">💡 Có lời giải chi tiết</span>
-            <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">🏆 Cấp phiếu điểm</span>
-          </div>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100">
-          <a href="bai1.html" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
-            <span>Bắt Đầu Làm Bài 1</span> <span>➔</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- BÀI 2 -->
-      <div class="bg-white rounded-3xl p-6 border-2 border-emerald-200 hover:border-emerald-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden">
-        <div class="absolute -top-3 -right-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] font-black uppercase px-6 py-2 rotate-12 shadow-sm">
-          Mới Nhất ✨
+          <label class="block text-xs font-bold text-indigo-900 uppercase mb-1 flex items-center justify-between">
+            <span>1. Chọn Bài học muốn làm *</span>
+            <span class="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">2 Bài Học</span>
+          </label>
+          <select id="selected-lesson" onchange="onLessonChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-indigo-50/50 font-bold text-indigo-950 transition shadow-sm">
+            <option value="2" selected>📗 Bài 2: Hội nhập kinh tế quốc tế (20 câu - Mới)</option>
+            <option value="1">📘 Bài 1: Tăng trưởng &amp; phát triển kinh tế (20 câu)</option>
+          </select>
         </div>
         <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200">
-              Bài 2
-            </span>
-            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Vừa Cập Nhật
-            </span>
-          </div>
-          <h4 class="text-lg font-extrabold text-slate-900 group-hover:text-emerald-700 transition">
-            Hội Nhập Kinh Tế Quốc Tế
-          </h4>
-          <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-            Hệ thống 20 câu trắc nghiệm phản xạ: Cấp độ song phương, khu vực (ASEAN), toàn cầu (WTO), các hình thức đầu tư FDI/FII, FTA thế hệ mới, cơ hội và thách thức của Việt Nam.
-          </p>
-          <div class="mt-4 flex flex-wrap gap-1.5 text-[11px]">
-            <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">⏱️ 20 câu hỏi</span>
-            <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">💡 Có lời giải chi tiết</span>
-            <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">🏆 Mã bài nộp B2</span>
-          </div>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100">
-          <a href="bai2.html" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
-            <span>Bắt Đầu Làm Bài 2</span> <span>➔</span>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Hộp thông tin dành cho Giáo viên -->
-    <div class="bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-emerald-500/10 border border-amber-200 rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3 text-center sm:text-left">
-        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 text-2xl flex items-center justify-center shrink-0">
-          👩‍🏫
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">2. Chọn Lớp của em *</label>
+          <select id="student-class" onchange="onClassChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
+            <option value="">-- Bấm vào đây để chọn lớp --</option>
+            <option value="12A5">Lớp 12A5 (48 học sinh)</option>
+            <option value="12A7">Lớp 12A7 (42 học sinh)</option>
+            <option value="12A9">Lớp 12A9 (44 học sinh)</option>
+            <option value="Khác">Lớp khác...</option>
+          </select>
+          <input type="text" id="student-class-other" placeholder="Nhập tên lớp của em..." class="hidden mt-2 w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
         </div>
         <div>
-          <h4 class="font-extrabold text-slate-800 text-sm">Khu Vực Quản Lý Của Giáo Viên</h4>
-          <p class="text-xs text-slate-500">Xem tiến độ nộp bài, điểm số chi tiết của 134 học sinh theo 3 lớp, xuất file Excel và nhắc danh sách chưa làm qua Zalo.</p>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">3. Họ và tên học sinh *</label>
+          <input type="text" id="student-name" list="student-names-list" placeholder="Chọn hoặc gõ tên của em..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-medium" autocomplete="off">
+          <datalist id="student-names-list"></datalist>
+          <div id="class-hint" class="text-[11px] text-slate-500 mt-1.5 leading-snug">💡 Em chọn lớp trước, hệ thống sẽ tự động hiện danh sách họ tên để chọn nhanh và không bị sai sót.</div>
+        </div>
+        <div class="flex items-center gap-2 pt-1 text-xs text-slate-600">
+          <input type="checkbox" id="shuffle-options-check" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+          <label for="shuffle-options-check">Trộn ngẫu nhiên cả thứ tự các đáp án A, B, C, D</label>
         </div>
       </div>
-      <a href="giaovien.html" class="shrink-0 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-3 rounded-xl shadow transition flex items-center gap-2">
-        <span>Vào Sổ Điểm Giáo Viên</span> <span>➔</span>
-      </a>
+
+      <button onclick="startQuiz()" class="mt-6 w-full max-w-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-95">
+        Bắt đầu làm bài 🚀
+      </button>
+    </div>
+
+    <!-- 2. MÀN HÌNH LÀM BÀI -->
+    <div id="quiz-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 hidden">
+      <!-- Progress & Timer -->
+      <div class="mb-5">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-1.5">
+          <span id="question-number">Câu hỏi 1/20</span>
+          <span id="quiz-timer" class="font-mono bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200">⏱️ 00:00</span>
+          <span id="score-counter" class="text-emerald-700 font-bold">Điểm: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-300" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="mb-6">
+        <h3 id="question-text" class="text-base md:text-lg font-semibold text-slate-800 leading-snug">Nội dung câu hỏi...</h3>
+      </div>
+
+      <!-- Options -->
+      <div id="options-container" class="space-y-3">
+        <!-- Nút đáp án render bằng JS -->
+      </div>
+
+      <!-- Feedback / Explanation Box -->
+      <div id="feedback-box" class="mt-5 p-4 rounded-xl border hidden text-sm">
+        <div id="feedback-status" class="font-bold flex items-center gap-1.5 mb-1"></div>
+        <div id="feedback-explanation" class="text-slate-600 leading-relaxed"></div>
+      </div>
+
+      <!-- Next Button -->
+      <button id="next-btn" onclick="nextQuestion()" class="mt-6 w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 px-6 rounded-xl shadow transition-all hidden">
+        Câu tiếp theo ➔
+      </button>
+    </div>
+
+    <!-- 3. MÀN HÌNH TỔNG KẾT KẾT QUẢ -->
+    <div id="result-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 text-center hidden">
+      <div id="cert-badge" class="text-5xl mb-2">🏆</div>
+      <h2 class="text-2xl font-bold text-slate-800">Kết Quả Đánh Giá</h2>
+      
+      <!-- Thông báo đồng bộ lên hệ thống giáo viên -->
+      <div id="cloud-sync-status" class="my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center">
+        <div class="flex items-center justify-center gap-1.5 font-bold text-sm">
+          <span class="animate-spin">⏳</span> Đang lưu kết quả lên hệ thống giáo viên...
+        </div>
+      </div>
+
+      <!-- Mã nộp bài xác nhận -->
+      <div id="submission-code-box" class="mb-3 py-2 px-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center justify-between font-mono font-bold hidden">
+        <span>MÃ NỘP BÀI: <b id="display-sub-code" class="text-amber-900 text-sm">#KT12-12A7-8492</b></span>
+        <button onclick="copySubmissionCode()" class="text-xs bg-amber-200 hover:bg-amber-300 text-amber-900 px-2 py-0.5 rounded font-sans font-normal">Sao chép</button>
+      </div>
+
+      <!-- Phiếu nộp bài dạng thẻ -->
+      <div id="certificate" class="mt-2 p-5 bg-indigo-50 border-2 border-indigo-200 rounded-2xl text-left shadow-sm">
+        <div class="flex justify-between items-center border-b border-indigo-200 pb-3 mb-3">
+          <div>
+            <div class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Học sinh</div>
+            <div id="res-name" class="font-bold text-slate-800 text-lg">Nguyễn Văn A</div>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span id="res-class" class="text-xs text-slate-500 font-medium">Lớp: 12A1</span>
+              <span class="text-slate-300">•</span>
+              <span class="text-xs text-indigo-600 font-mono font-semibold">Mã: <b id="res-sub-code">-</b></span>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-indigo-600 font-semibold uppercase tracking-wider">Điểm số</div>
+            <div id="res-score" class="text-3xl font-extrabold text-indigo-600">10 / 10</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-xs text-slate-600 mb-3 bg-white p-2.5 rounded-xl border border-indigo-100 text-center">
+          <div>
+            <div class="text-slate-400">Số câu đúng</div>
+            <b id="res-correct" class="text-emerald-600 text-sm font-bold">20/20</b>
+          </div>
+          <div>
+            <div class="text-slate-400">Tỉ lệ chính xác</div>
+            <b id="res-percent" class="text-indigo-600 text-sm font-bold">100%</b>
+          </div>
+          <div>
+            <div class="text-slate-400">Thời gian làm</div>
+            <b id="res-time" class="text-slate-700 text-sm font-bold">03:45</b>
+          </div>
+        </div>
+
+        <div class="p-3 bg-white rounded-xl border border-indigo-100">
+          <div class="text-xs font-semibold text-slate-500 uppercase mb-1">Nhận xét của giáo viên:</div>
+          <p id="res-comment" class="text-xs md:text-sm font-medium text-slate-700">Xuất sắc! Em đã nắm rất vững bản chất bài học.</p>
+        </div>
+
+        <div class="mt-3 text-[11px] text-slate-400 flex justify-between items-center border-t border-indigo-100 pt-2">
+          <span id="cert-topic" class="font-semibold text-indigo-700">Bài 2: Hội nhập kinh tế quốc tế</span>
+          <span id="res-timestamp">15/09/2026 14:00</span>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-400 mt-2.5 italic">👉 Học sinh hãy bấm nút tải ảnh phiếu điểm hoặc gửi Zalo bên dưới để lưu bằng chứng nộp bài.</p>
+
+      <!-- Action Buttons -->
+      <div class="mt-4 space-y-2.5 max-w-sm mx-auto">
+        <button onclick="shareToZalo()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+          <span>📲</span> Gửi xác nhận điểm vào Zalo nhóm lớp
+        </button>
+        <button onclick="downloadCertificate()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+          <span>📥</span> Tải ảnh phiếu điểm nộp thầy cô (.PNG)
+        </button>
+        <button onclick="toggleReviewSection()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 px-4 rounded-xl border border-slate-300 transition text-sm">
+          📋 Xem lại toàn bộ câu hỏi & lời giải
+        </button>
+        <button onclick="restartQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl shadow transition text-sm">
+          Làm lại bài mới 🔄
+        </button>
+      </div>
+
+      <!-- Review Section -->
+      <div id="review-section" class="mt-6 text-left hidden border-t border-slate-200 pt-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-slate-800 text-base">Chi tiết bài làm (20 câu)</h3>
+          <div class="flex gap-1 text-xs">
+            <button onclick="filterReview('all')" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium review-tab" id="tab-all">Tất cả</button>
+            <button onclick="filterReview('wrong')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-medium review-tab" id="tab-wrong">Câu sai</button>
+          </div>
+        </div>
+        <div id="review-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+          <!-- Render review cards -->
+        </div>
+      </div>
     </div>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="py-5 text-center text-xs text-slate-400 border-t border-slate-200/60 bg-white/50">
-    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <div>Hệ thống ôn tập trắc nghiệm KTPL 12 • Kết nối tri thức với cuộc sống</div>
-      <div class="text-[11px] text-slate-400">Tự động kết nối Google Sheets • Giáo viên: Cô Kiều</div>
+  <!-- 4. MODAL ĐĂNG NHẬP GIÁO VIÊN -->
+  <div id="teacher-login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl border border-slate-100 text-center">
+      <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mx-auto text-2xl mb-3">🔐</div>
+      <h3 class="text-lg font-bold text-slate-800">Xác thực Giáo viên</h3>
+      <p class="text-xs text-slate-500 mt-1 mb-4">Nhập mã PIN để truy cập Bảng quản lý điểm số của học sinh.</p>
+      
+      <input type="password" id="teacher-pin" placeholder="Nhập mã PIN (Mặc định: 123456)" class="w-full px-4 py-2.5 text-center text-base tracking-widest font-mono rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 mb-2">
+      <div id="login-error" class="text-xs text-rose-500 font-medium mb-3 hidden">Mã PIN chưa chính xác! Vui lòng thử lại.</div>
+      
+      <div class="flex gap-2">
+        <button onclick="closeTeacherLogin()" class="w-1/2 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-semibold text-sm hover:bg-slate-50">Hủy</button>
+        <button onclick="submitTeacherLogin()" class="w-1/2 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold text-sm shadow">Đăng nhập ➔</button>
+      </div>
+      <p class="text-[11px] text-slate-400 mt-3">Mã PIN mặc định: <b class="text-slate-600">123456</b></p>
     </div>
+  </div>
+
+  <!-- 5. BẢNG QUẢN LÝ ĐIỂM GIÁO VIÊN (DASHBOARD) -->
+  <div id="teacher-dashboard-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+    <div class="bg-white w-full max-w-4xl max-h-[92vh] rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
+      
+      <!-- Dashboard Header -->
+      <div class="bg-indigo-700 text-white p-4 sm:p-5 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">Khu vực quản lý</span>
+          <h2 class="text-lg sm:text-xl font-bold mt-1">📊 Bảng Điểm Học Sinh Trực Tuyến</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="refreshDashboardData()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg border border-indigo-400 flex items-center gap-1 transition">
+            <span id="refresh-icon">🔄</span> Cập nhật
+          </button>
+          <button onclick="closeTeacherDashboard()" class="text-white/80 hover:text-white text-2xl font-bold px-2 py-0.5">✕</button>
+        </div>
+      </div>
+
+      <!-- Quick Statistics -->
+      <div class="p-4 bg-slate-50 border-b border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase">Tổng số bài nộp</div>
+          <div id="stat-total" class="text-2xl font-black text-indigo-600">0</div>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase">Điểm trung bình</div>
+          <div id="stat-avg" class="text-2xl font-black text-emerald-600">0.0</div>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase">Điểm cao nhất</div>
+          <div id="stat-max" class="text-2xl font-black text-amber-500">0</div>
+        </div>
+        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase">Tỉ lệ đạt (≥ 5đ)</div>
+          <div id="stat-pass" class="text-2xl font-black text-indigo-600">0%</div>
+        </div>
+      </div>
+
+      <!-- Controls: Filter, Search & Export -->
+      <div class="p-4 border-b border-slate-200 flex flex-wrap gap-2.5 items-center justify-between bg-white">
+        <div class="flex flex-wrap gap-2 items-center flex-grow max-w-lg">
+          <input type="text" id="filter-search" oninput="applyFilters()" placeholder="🔍 Tìm tên học sinh..." class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-grow">
+          <select id="filter-class" onchange="applyFilters()" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+            <option value="ALL">Tất cả các lớp</option>
+          </select>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+            <span>📥</span> Xuất file Excel (.CSV)
+          </button>
+          <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold px-3 py-2 rounded-lg border border-rose-200 transition">
+            🗑️ Xóa danh sách
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="flex-grow overflow-y-auto custom-scrollbar p-4 bg-slate-100">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-600">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-semibold border-b border-slate-200">
+                <tr>
+                  <th class="py-3 px-3 text-center w-10">STT</th>
+                  <th class="py-3 px-3">Họ và tên</th>
+                  <th class="py-3 px-2 text-center">Lớp</th>
+                  <th class="py-3 px-2 text-center">Mã nộp</th>
+                  <th class="py-3 px-2 text-center">Điểm số</th>
+                  <th class="py-3 px-2 text-center">Số câu đúng</th>
+                  <th class="py-3 px-2 text-center">Thời gian</th>
+                  <th class="py-3 px-3 text-right">Ngày giờ nộp</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-table-body" class="divide-y divide-slate-100">
+                <!-- Render rows bằng JS -->
+              </tbody>
+            </table>
+          </div>
+          <div id="table-empty-msg" class="p-8 text-center text-slate-400 text-sm hidden">
+            Chưa có học sinh nào nộp bài. Khi học sinh làm bài xong, danh sách sẽ tự động xuất hiện ở đây!
+          </div>
+          <div id="table-loading" class="p-8 text-center text-slate-500 text-sm">
+            <span class="animate-spin inline-block mr-1">⏳</span> Đang tải dữ liệu từ máy chủ đám mây...
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="p-3 bg-white border-t border-slate-200 text-center text-xs text-slate-400 flex justify-between items-center px-4">
+        <span>Đám mây đồng bộ tự động 24/7</span>
+        <button onclick="changePinPrompt()" class="text-indigo-600 hover:underline font-medium">Đổi mã PIN giáo viên</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-3 text-center text-xs text-slate-400">
+    Hệ thống ôn tập Giáo dục Kinh tế và Pháp luật 12 • Bản quyền giáo dục
   </footer>
 
+  <script>
+    // GOOGLE APPS SCRIPT / GOOGLE SHEETS BACKEND (GHI TRỰC TIẾP VÀO GOOGLE SHEET CỦA CÔ)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
+
+    // DỮ LIỆU 20 CÂU HỎI CHUẨN SGK KTPL 12 (BÀI 1)
+    
+    const questionsBank_Bai1 = [
+  {
+    "q": "Sự gia tăng về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định được gọi là gì?",
+    "options": [
+      "Tăng trưởng kinh tế",
+      "Phát triển kinh tế",
+      "Lạm phát kinh tế",
+      "Khủng hoảng kinh tế"
+    ],
+    "answer": 0,
+    "exp": "Theo SGK trang 7: Tăng trưởng kinh tế là sự tăng lên về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định."
+  },
+  {
+    "q": "Chỉ tiêu đo lường giá trị bằng tiền của tất cả hàng hoá, dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định là gì?",
+    "options": [
+      "GNI",
+      "GDP",
+      "HDI",
+      "Hệ số Gini"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 7: Tổng sản phẩm quốc nội (GDP) là giá trị bằng tiền của tất cả hàng hoá và dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định."
+  },
+  {
+    "q": "Chỉ tiêu đo lường tổng thu nhập từ hàng hoá, dịch vụ cuối cùng do công dân của quốc gia tạo ra (cả ở trong và ngoài lãnh thổ) là gì?",
+    "options": [
+      "GDP",
+      "GNI",
+      "FDI",
+      "ODA"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 8: Tổng thu nhập quốc dân (GNI) là thước đo thu nhập do công dân quốc gia tạo ra cả ở trong và ngoài lãnh thổ."
+  },
+  {
+    "q": "Để so sánh mức sống và mức thu nhập thực tế giữa người dân các quốc gia với nhau, người ta dùng chỉ tiêu nào?",
+    "options": [
+      "Tổng GDP",
+      "GNI bình quân đầu người",
+      "Tỉ lệ thất nghiệp",
+      "Quy mô vốn đầu tư"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 9: GNI/người được dùng làm thước đo so sánh kết quả tăng trưởng, mức thu nhập và mức sống của người dân giữa các quốc gia."
+  },
+  {
+    "q": "Doanh thu của doanh nghiệp 100% vốn đầu tư nước ngoài (FDI) sản xuất trên lãnh thổ Việt Nam được tính vào chỉ tiêu nào của nước ta?",
+    "options": [
+      "Chỉ tính vào GNI",
+      "Tính vào GDP của Việt Nam",
+      "Không tính vào GDP",
+      "Tính vào kiều hối"
+    ],
+    "answer": 1,
+    "exp": "GDP tính toàn bộ sản phẩm cuối cùng làm ra trên lãnh thổ Việt Nam, bất kể người tạo ra là công dân trong nước hay doanh nghiệp nước ngoài."
+  },
+  {
+    "q": "Khoản kiều hối do công dân Việt Nam đi lao động ở nước ngoài gửi về nước được tính vào chỉ tiêu nào của Việt Nam?",
+    "options": [
+      "GNI",
+      "GDP",
+      "CPI",
+      "FDI"
+    ],
+    "answer": 0,
+    "exp": "GNI tính tổng thu nhập do công dân quốc gia tạo ra (bao gồm cả thu nhập chuyển từ ngoài lãnh thổ về nước)."
+  },
+  {
+    "q": "Khi so sánh tốc độ tăng trưởng kinh tế giữa các năm, người ta phải tính theo giá năm gốc nhằm loại trừ yếu tố nào?",
+    "options": [
+      "Lạm phát (biến động giá cả)",
+      "Tỉ lệ tăng dân số",
+      "Thuế xuất nhập khẩu",
+      "Diện tích đất đai"
+    ],
+    "answer": 0,
+    "exp": "Theo SGK trang 7: Do có sự biến động của giá cả (lạm phát) nên khi so sánh cần tính GDP của năm hiện tại theo giá của năm gốc."
+  },
+  {
+    "q": "Trong mối quan hệ với phát triển kinh tế, tăng trưởng kinh tế đóng vai trò là",
+    "options": [
+      "mục tiêu cao nhất",
+      "điều kiện tiền đề cần thiết",
+      "kết quả sau cùng",
+      "yếu tố duy nhất quyết định"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 13: Tăng trưởng kinh tế là sự thay đổi về lượng, là điều kiện tiền đề cho phát triển kinh tế."
+  },
+  {
+    "q": "Sự tăng trưởng kinh tế gắn liền với chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội được gọi là",
+    "options": [
+      "tăng trưởng kinh tế",
+      "phát triển kinh tế",
+      "mở rộng thị trường",
+      "hội nhập quốc tế"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 13: Phát triển kinh tế là sự tăng trưởng kinh tế gắn liền với sự chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội."
+  },
+  {
+    "q": "Trong ba loại cơ cấu kinh tế (ngành, vùng, thành phần kinh tế), cơ cấu nào giữ vai trò quan trọng nhất?",
+    "options": [
+      "Cơ cấu vùng kinh tế",
+      "Cơ cấu ngành kinh tế",
+      "Cơ cấu thành phần kinh tế",
+      "Cơ cấu vốn đầu tư"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 11: Trong cơ cấu kinh tế, cơ cấu ngành kinh tế (công nghiệp - nông nghiệp - dịch vụ) giữ vai trò quan trọng nhất."
+  },
+  {
+    "q": "Sự chuyển dịch cơ cấu ngành kinh tế theo hướng tích cực thể hiện ở chỉ tiêu nào sau đây?",
+    "options": [
+      "Tỉ trọng công nghiệp, dịch vụ tăng; tỉ trọng nông nghiệp giảm",
+      "Tỉ trọng nông nghiệp tăng vọt",
+      "Tỉ trọng tất cả các ngành đều giảm",
+      "Chỉ phát triển nông nghiệp thuần túy"
+    ],
+    "answer": 0,
+    "exp": "Theo SGK trang 11, 13: Chuyển dịch tích cực thể hiện ở tỉ trọng công nghiệp, dịch vụ tăng lên, tỉ trọng nông nghiệp giảm đi nhưng giá trị tuyệt đối các ngành đều tăng."
+  },
+  {
+    "q": "Chỉ số phát triển con người (HDI) là thước đo tổng hợp phản ánh sự tiến bộ con người qua 3 tiêu chí nào?",
+    "options": [
+      "Tuổi thọ, giáo dục và thu nhập",
+      "Dân số, việc làm và tiền tệ",
+      "Xuất khẩu, nhập khẩu và tỉ giá",
+      "Đô thị hóa, rừng tự nhiên và điện sinh hoạt"
+    ],
+    "answer": 0,
+    "exp": "Theo SGK trang 11-12: HDI đo lường qua Tuổi thọ trung bình, Chỉ số giáo dục và Chỉ số thu nhập (GDP/người, GNI/người)."
+  },
+  {
+    "q": "Chỉ tiêu đo lường tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản trong cuộc sống gọi là",
+    "options": [
+      "tỉ lệ thất nghiệp",
+      "tỉ lệ hộ nghèo đa chiều",
+      "chỉ số giá tiêu dùng",
+      "hệ số bất bình đẳng"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 12: Tỉ lệ hộ nghèo đa chiều tính bằng tỉ lệ hộ nghèo trong tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản."
+  },
+  {
+    "q": "Hệ số bất bình đẳng trong phân phối thu nhập (hệ số Gini) nhận giá trị trong khoảng nào?",
+    "options": [
+      "Từ -1 đến 1",
+      "Từ 0 đến 1",
+      "Từ 1 đến 10",
+      "Từ 0% đến 100%"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 12: Hệ số Gini nhận giá trị từ 0 đến 1, trong đó 0 là bình đẳng tuyệt đối, 1 là bất bình đẳng tuyệt đối."
+  },
+  {
+    "q": "Khi hệ số Gini có xu hướng giảm dần, điều đó chứng tỏ điều gì trong xã hội?",
+    "options": [
+      "Bất bình đẳng thu nhập gia tăng",
+      "Khoảng cách giàu nghèo có xu hướng thu hẹp lại",
+      "Nền kinh tế suy thoái",
+      "Dân số tăng nhanh"
+    ],
+    "answer": 1,
+    "exp": "Hệ số Gini càng thấp (càng gần 0) thì sự phân phối thu nhập càng bình đẳng, khoảng cách giàu nghèo càng thu hẹp."
+  },
+  {
+    "q": "Quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: kinh tế, xã hội và bảo vệ môi trường được gọi là",
+    "options": [
+      "kinh tế thị trường",
+      "phát triển bền vững",
+      "tăng trưởng nhanh",
+      "hội nhập toàn cầu"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 15: Phát triển bền vững là quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: phát triển kinh tế, phát triển xã hội và bảo vệ môi trường."
+  },
+  {
+    "q": "Đảng và Nhà nước ta luôn khẳng định quan điểm nhất quán nào về bảo vệ môi trường trong phát triển kinh tế?",
+    "options": [
+      "Ưu tiên tăng trưởng, xử lý môi trường sau",
+      "Không đánh đổi môi trường lấy tăng trưởng kinh tế bằng mọi giá",
+      "Đóng cửa tất cả các nhà máy",
+      "Chỉ bảo vệ môi trường tại các thành phố lớn"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 15: Đảng và Nhà nước ta luôn chủ trương duy trì tăng trưởng bền vững, không đánh đổi tăng trưởng kinh tế bằng mọi giá."
+  },
+  {
+    "q": "Yếu tố nào sau đây phản ánh mặt chất lượng của sự phát triển kinh tế?",
+    "options": [
+      "Sự gia tăng đơn thuần quy mô GDP",
+      "Sự tiến bộ xã hội và phân phối công bằng",
+      "Mức tăng kim ngạch xuất khẩu thô",
+      "Tốc độ in thêm tiền mặt"
+    ],
+    "answer": 1,
+    "exp": "Tăng trưởng chỉ phản ánh mặt lượng; sự tiến bộ xã hội, công bằng và bảo vệ môi trường phản ánh mặt chất của phát triển kinh tế."
+  },
+  {
+    "q": "Nếu một nền kinh tế có GDP tăng trưởng rất cao nhưng môi trường bị hủy hoại và khoảng cách giàu nghèo ngày càng sâu sắc, thì đó là",
+    "options": [
+      "phát triển bền vững",
+      "tăng trưởng kinh tế không hợp lí",
+      "kinh tế tri thức hiện đại",
+      "tiến bộ xã hội"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 15: Tăng trưởng không hợp lí là tăng trưởng không gắn với phát triển xã hội và bảo vệ môi trường, tạo ra sự bất ổn xã hội."
+  },
+  {
+    "q": "Điều kiện tiên quyết để một quốc gia đang phát triển như Việt Nam khắc phục tình trạng tụt hậu là gì?",
+    "options": [
+      "Tăng cường nhập khẩu hàng tiêu dùng",
+      "Đẩy mạnh tăng trưởng và phát triển kinh tế",
+      "Cắt giảm ngân sách giáo dục",
+      "Hạn chế mở rộng doanh nghiệp"
+    ],
+    "answer": 1,
+    "exp": "Theo SGK trang 10, 14: Tăng trưởng và phát triển kinh tế là điều kiện tiên quyết để khắc phục tình trạng tụt hậu đối với quốc gia đang phát triển như Việt Nam."
+  }
+];
+    const questionsBank_Bai2 = [
+  {
+    "q": "Trong đàm phán thương mại, một quốc gia chỉ đòi đối tác miễn thuế cho mình nhưng kiên quyết áp thuế cao bảo hộ hàng nội địa đã vi phạm nguyên tắc cơ bản nào của hội nhập kinh tế quốc tế?",
+    "options": [
+      "Bảo hộ tuyệt đối sản xuất trong nước",
+      "Chia sẻ lợi ích và cùng có lợi",
+      "Tôn trọng quyền tự do định đoạt đơn phương",
+      "Ưu tiên phát triển công nghiệp nặng"
+    ],
+    "answer": 1,
+    "exp": "Theo nguyên tắc hội nhập kinh tế quốc tế: Các bên phải chia sẻ lợi ích, bình đẳng và cùng có lợi; không được vụ lợi đơn phương hoặc chỉ đòi quyền lợi riêng cho mình."
+  },
+  {
+    "q": "Khoa học – kỹ thuật phát triển thúc đẩy phân công lao động vượt biên giới, khiến các nền kinh tế gắn kết và phụ thuộc lẫn nhau đã tạo nên xu thế khách quan nào?",
+    "options": [
+      "Xu thế khép kín nền kinh tế",
+      "Xu thế biệt lập thị trường khu vực",
+      "Xu thế toàn cầu hóa kinh tế",
+      "Xu thế độc quyền tư nhân quốc tế"
+    ],
+    "answer": 2,
+    "exp": "Phân công lao động quốc tế ngày càng sâu sắc và sự phát triển mạnh mẽ của khoa học – kỹ thuật là động lực cốt lõi tạo nên xu thế tất yếu khách quan: Toàn cầu hóa kinh tế."
+  },
+  {
+    "q": "Việc Việt Nam gia nhập chuỗi cung ứng toàn cầu, thu hút công nghệ cao để không bị bỏ lại phía sau trước Cách mạng công nghiệp 4.0 nhằm đạt mục tiêu chiến lược nào?",
+    "options": [
+      "Rút ngắn khoảng cách phát triển, khắc phục nguy cơ tụt hậu",
+      "Thâu tóm toàn bộ thị trường công nghệ thế giới",
+      "Loại bỏ hoàn toàn các ngành kinh tế truyền thống",
+      "Tự cung tự cấp mọi mặt hàng công nghiệp chế tạo"
+    ],
+    "answer": 0,
+    "exp": "Hội nhập kinh tế giúp quốc gia tận dụng thời cơ, tiếp thu công nghệ tiên tiến để rút ngắn khoảng cách phát triển và khắc phục nguy cơ tụt hậu so với các nước phát triển."
+  },
+  {
+    "q": "Khi các tập đoàn đa quốc gia mở rộng đầu tư nhà máy quy mô lớn tại Việt Nam, thị trường lao động trong nước trực tiếp nhận được lợi ích kinh tế – xã hội cốt lõi nào?",
+    "options": [
+      "Xóa bỏ hoàn toàn tình trạng chuyển dịch lao động",
+      "Tạo việc làm và nâng cao thu nhập cho người lao động",
+      "Miễn thuế thu nhập cá nhân vĩnh viễn cho công nhân",
+      "Người lao động không cần qua đào tạo nghề chuyên môn"
+    ],
+    "answer": 1,
+    "exp": "Việc các tập đoàn đa quốc gia mở rộng đầu tư xây dựng nhà máy giúp tạo thêm hàng triệu việc làm mới, nâng cao thu nhập và cải thiện đời sống cho người lao động."
+  },
+  {
+    "q": "Hiệp định Thương mại giữa Việt Nam và Hoa Kỳ (BTA) có đặc trưng là dễ thỏa thuận vì chỉ có 2 bên tham gia; đây là biểu hiện của cấp độ hội nhập nào?",
+    "options": [
+      "Hội nhập kinh tế khu vực",
+      "Hội nhập kinh tế toàn cầu",
+      "Hội nhập kinh tế song phương",
+      "Hội nhập kinh tế đa phương"
+    ],
+    "answer": 2,
+    "exp": "Hội nhập song phương là sự hợp tác, thỏa thuận kinh tế giữa 2 quốc gia hoặc vùng lãnh thổ (ở đây là Việt Nam và Hoa Kỳ), có ưu điểm là dễ thỏa thuận ưu đãi riêng."
+  },
+  {
+    "q": "Việc Việt Nam cùng 9 nước ASEAN và 5 đối tác ngoài khối ký kết Hiệp định Đối tác Kinh tế Toàn diện Khu vực (RCEP) phản ánh cấp độ hội nhập nào?",
+    "options": [
+      "Hội nhập kinh tế khu vực",
+      "Hội nhập kinh tế song phương",
+      "Hội nhập kinh tế toàn cầu",
+      "Hội nhập kinh tế bán phần"
+    ],
+    "answer": 0,
+    "exp": "RCEP là hiệp định thương mại giữa các quốc gia trong khu vực Đông Nam Á và các đối tác trong cùng khu vực địa lý, thể hiện cấp độ hội nhập kinh tế khu vực."
+  },
+  {
+    "q": "Năm 2007, việc Việt Nam gia nhập WTO và tham gia các cơ chế của Quỹ Tiền tệ Quốc tế (IMF) thể hiện cấp độ hội nhập nào?",
+    "options": [
+      "Hội nhập kinh tế song phương",
+      "Hội nhập kinh tế khu vực",
+      "Hội nhập kinh tế nội khối",
+      "Hội nhập kinh tế toàn cầu"
+    ],
+    "answer": 3,
+    "exp": "WTO và IMF là các tổ chức quốc tế quy mô toàn cầu rộng lớn và sâu rộng nhất, do đó thể hiện cấp độ hội nhập kinh tế toàn cầu."
+  },
+  {
+    "q": "Thỏa thuận kinh tế mà các bên chỉ cam kết giảm thuế cho một danh mục hàng hóa nhất định, chưa xóa bỏ hoàn toàn hàng rào thuế quan thuộc mức độ liên kết nào?",
+    "options": [
+      "Thỏa thuận thương mại ưu đãi (PTA)",
+      "Khu vực mậu dịch tự do (FTA)",
+      "Liên minh thuế quan (Customs Union)",
+      "Thị trường chung (Common Market)"
+    ],
+    "answer": 0,
+    "exp": "Thỏa thuận thương mại ưu đãi (PTA) là mức độ liên kết thấp nhất, chỉ ưu đãi giảm thuế cho một số danh mục hàng hóa nhất định chứ chưa xóa bỏ hoàn toàn hàng rào thuế quan."
+  },
+  {
+    "q": "Khối các nước xóa bỏ hầu hết thuế quan nội bộ nhưng mỗi nước vẫn độc lập duy trì chính sách thuế riêng với các nước ngoài khối; đây là mô hình nào?",
+    "options": [
+      "Liên minh thuế quan (Customs Union)",
+      "Khu vực mậu dịch tự do (FTA)",
+      "Thị trường chung (Common Market)",
+      "Liên minh kinh tế – tiền tệ"
+    ],
+    "answer": 1,
+    "exp": "Khu vực mậu dịch tự do (FTA) có đặc trưng là miễn giảm hầu hết thuế quan nội khối nhưng các nước thành viên vẫn độc lập tự chủ mức thuế riêng với các nước ngoài khối."
+  },
+  {
+    "q": "Khi các nước thành viên bãi bỏ thuế quan nội bộ và cùng ban hành một biểu thuế nhập khẩu chung áp dụng cho mọi nước ngoài khối, khối đó đạt mức độ nào?",
+    "options": [
+      "Thỏa thuận thương mại ưu đãi (PTA)",
+      "Khu vực mậu dịch tự do (FTA)",
+      "Liên minh thuế quan (Customs Union)",
+      "Hợp tác song phương có điều kiện"
+    ],
+    "answer": 2,
+    "exp": "Liên minh thuế quan (Customs Union) tiến bộ hơn FTA ở chỗ: ngoài bãi bỏ thuế nội bộ, các thành viên thống nhất áp dụng một biểu thuế quan chung đối với mọi nước bên ngoài."
+  },
+  {
+    "q": "Khối liên kết cho phép hàng hóa lưu thông tự do, đồng thời người lao động và dòng vốn được tự do di chuyển qua biên giới giữa các nước thành viên là mô hình gì?",
+    "options": [
+      "Thị trường chung (Common Market)",
+      "Thỏa thuận thương mại ưu đãi (PTA)",
+      "Khu vực mậu dịch tự do (FTA)",
+      "Liên minh thuế quan sơ cấp"
+    ],
+    "answer": 0,
+    "exp": "Thị trường chung (Common Market) cho phép không chỉ hàng hóa mà cả các yếu tố sản xuất (dòng vốn và sức lao động) được tự do di chuyển qua biên giới giữa các nước thành viên."
+  },
+  {
+    "q": "Khối các quốc gia thuộc khu vực đồng tiền chung châu Âu (Eurozone) cùng thực hiện một chính sách kinh tế chung và dùng đồng Euro thể hiện mức độ liên kết nào?",
+    "options": [
+      "Khu vực mậu dịch tự do (FTA)",
+      "Liên minh thuế quan (Customs Union)",
+      "Thị trường chung cơ bản",
+      "Liên minh kinh tế – tiền tệ"
+    ],
+    "answer": 3,
+    "exp": "Liên minh kinh tế – tiền tệ là mức độ liên kết kinh tế cao nhất, các nước thành viên cùng thực hiện một chính sách kinh tế chung và sử dụng một đồng tiền chung duy nhất."
+  },
+  {
+    "q": "Việc các doanh nghiệp Việt Nam đẩy mạnh xuất khẩu gạo, thủy sản và nhập khẩu máy móc, dây chuyền công nghệ cao phục vụ sản xuất thuộc hình thức kinh tế đối ngoại nào?",
+    "options": [
+      "Thương mại quốc tế",
+      "Đầu tư gián tiếp ra nước ngoài",
+      "Hợp tác quốc tế phi lợi nhuận",
+      "Dịch vụ kiều hối quốc tế"
+    ],
+    "answer": 0,
+    "exp": "Thương mại quốc tế là hoạt động trao đổi hàng hóa và dịch vụ qua biên giới quốc gia, thể hiện qua các hoạt động xuất khẩu (gạo, thủy sản) và nhập khẩu (máy móc, công nghệ)."
+  },
+  {
+    "q": "Năm 2022, kim ngạch xuất khẩu hàng hóa của nước ta đạt 371,3 tỉ USD trong khi nhập khẩu đạt 358,9 tỉ USD; trạng thái cán cân thương mại này gọi là gì?",
+    "options": [
+      "Nhập siêu (Cán cân thương mại thâm hụt)",
+      "Xuất siêu (Cán cân thương mại thặng dư)",
+      "Cân bằng thương mại tuyệt đối",
+      "Khủng hoảng cán cân vãng lai"
+    ],
+    "answer": 1,
+    "exp": "Khi giá trị kim ngạch xuất khẩu lớn hơn nhập khẩu (371,3 tỉ USD > 358,9 tỉ USD), trạng thái cán cân thương mại được gọi là xuất siêu (thặng dư thương mại)."
+  },
+  {
+    "q": "Tỷ trọng hàng công nghiệp chế biến, chế tạo trong xuất khẩu của Việt Nam tăng từ 53,6% (2010) lên 85,2% (2022); điều này phản ánh vai trò của hội nhập đối với chỉ tiêu nào?",
+    "options": [
+      "Gia tăng chỉ số lạm phát tiền tệ",
+      "Mở rộng diện tích đất sản xuất nông nghiệp",
+      "Chuyển dịch cơ cấu kinh tế theo hướng hiện đại",
+      "Gia tăng tỷ lệ thất nghiệp ở đô thị"
+    ],
+    "answer": 2,
+    "exp": "Tỷ trọng công nghiệp chế biến, chế tạo tăng mạnh phản ánh vai trò tích cực của hội nhập kinh tế quốc tế trong việc thúc đẩy chuyển dịch cơ cấu kinh tế theo hướng hiện đại."
+  },
+  {
+    "q": "Doanh nghiệp nước ngoài bỏ vốn xây dựng nhà máy, trực tiếp tuyển dụng nhân công và quản lý điều hành sản xuất tại Việt Nam là hình thức đầu tư nào?",
+    "options": [
+      "Đầu tư trực tiếp nước ngoài (FDI)",
+      "Đầu tư gián tiếp nước ngoài (FPI)",
+      "Viện trợ phát triển chính thức (ODA)",
+      "Tín dụng thương mại ngắn hạn"
+    ],
+    "answer": 0,
+    "exp": "Đầu tư trực tiếp nước ngoài (FDI) là hình thức nhà đầu tư nước ngoài bỏ vốn và trực tiếp tham gia quản lý, điều hành hoạt động sản xuất kinh doanh tại nước tiếp nhận đầu tư."
+  },
+  {
+    "q": "Các nhà đầu tư nước ngoài chuyển tiền mua cổ phiếu, trái phiếu trên sàn chứng khoán Việt Nam để hưởng lợi tức mà không trực tiếp điều hành doanh nghiệp là hình thức nào?",
+    "options": [
+      "Đầu tư trực tiếp nước ngoài (FDI)",
+      "Hợp đồng hợp tác kinh doanh (BCC)",
+      "Đầu tư gián tiếp nước ngoài (FPI)",
+      "Viện trợ không hoàn lại (ODA)"
+    ],
+    "answer": 2,
+    "exp": "Đầu tư gián tiếp nước ngoài (FPI - Foreign Portfolio Investment) là việc nhà đầu tư nước ngoài mua cổ phiếu, trái phiếu hoặc góp vốn để hưởng lợi tức mà không trực tiếp tham gia quản lý."
+  },
+  {
+    "q": "Nguồn vốn vay ưu đãi lãi suất thấp hoặc viện trợ không hoàn lại từ các chính phủ và tổ chức quốc tế để hỗ trợ xóa đói giảm nghèo, làm cầu đường được gọi là gì?",
+    "options": [
+      "Vốn đầu tư trực tiếp FDI",
+      "Vốn ODA (Hỗ trợ phát triển chính thức)",
+      "Vốn đầu tư chứng khoán FPI",
+      "Vay thương mại lãi suất thị trường"
+    ],
+    "answer": 1,
+    "exp": "Vốn ODA (Official Development Assistance) là nguồn vốn hỗ trợ phát triển chính thức từ các chính phủ và tổ chức quốc tế dành cho nước đang phát triển với lãi suất ưu đãi hoặc viện trợ không hoàn lại."
+  },
+  {
+    "q": "Doanh thu 495.000 tỉ đồng từ việc đón 3,66 triệu lượt du khách quốc tế đến lưu trú, trải nghiệm tại Việt Nam năm 2022 thuộc hình thức kinh tế đối ngoại nào?",
+    "options": [
+      "Dịch vụ thu ngoại tệ",
+      "Đầu tư trực tiếp FDI",
+      "Xuất khẩu hàng hóa thô",
+      "Viện trợ nhân đạo quốc tế"
+    ],
+    "answer": 0,
+    "exp": "Du lịch quốc tế là hoạt động cung cấp dịch vụ cho du khách nước ngoài tiêu tiền ngoại tệ tại Việt Nam, thuộc hình thức dịch vụ thu ngoại tệ trong kinh tế đối ngoại."
+  },
+  {
+    "q": "Nguồn ngoại tệ hơn 3 tỉ USD mỗi năm do lao động Việt Nam ở nước ngoài tích lũy gửi về cho gia đình được xếp vào nhóm hoạt động kinh tế đối ngoại nào?",
+    "options": [
+      "Đầu tư chứng khoán quốc tế",
+      "Nhập siêu hàng tiêu dùng",
+      "Kiều hối (Dịch vụ thu ngoại tệ / xuất khẩu lao động)",
+      "Thương mại tự do song phương"
+    ],
+    "answer": 2,
+    "exp": "Kiều hối do người lao động Việt Nam ở nước ngoài gửi về nước là bộ phận quan trọng thuộc nhóm hoạt động dịch vụ thu ngoại tệ, gắn liền với xuất khẩu lao động."
+  }
+];
+
+    const LESSONS_DATA = {
+      1: {
+        id: 1,
+        title: "Bài 1: Tăng trưởng và phát triển kinh tế",
+        shortTitle: "Bài 1: Tăng trưởng & Phát triển KT",
+        codePrefix: "B1",
+        commentExcellent: "Xuất sắc! Em đã nắm rất vững toàn bộ khái niệm, chỉ tiêu và bản chất phát triển bền vững.",
+        commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kĩ hơn giữa cơ cấu ngành và các chỉ số tiến bộ xã hội.",
+        commentReview: "Em cần đọc lại SGK Bài 1, chú ý kỹ phần phân biệt GDP/GNI và các chỉ tiêu phát triển kinh tế nhé!",
+        questions: questionsBank_Bai1
+      },
+      2: {
+        id: 2,
+        title: "Bài 2: Hội nhập kinh tế quốc tế",
+        shortTitle: "Bài 2: Hội nhập kinh tế quốc tế",
+        codePrefix: "B2",
+        commentExcellent: "Xuất sắc! Em đã nắm rất vững các cấp độ, nguyên tắc và tác động của hội nhập kinh tế quốc tế.",
+        commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kỹ hơn giữa các cấp độ hội nhập (song phương, khu vực, toàn cầu).",
+        commentReview: "Em cần đọc lại SGK Bài 2, chú ý các tổ chức quốc tế (WTO, ASEAN, APEC) và các cấp độ hội nhập nhé!",
+        questions: questionsBank_Bai2
+      }
+    };
+
+    let currentLesson = LESSONS_DATA[2];
+
+    function onLessonChange() {
+      const lessonSelect = document.getElementById('selected-lesson');
+      const lessonId = parseInt(lessonSelect ? lessonSelect.value : '2', 10) || 2;
+      currentLesson = LESSONS_DATA[lessonId] || LESSONS_DATA[2];
+      const headerTitle = document.getElementById('header-lesson-title');
+      if (headerTitle) headerTitle.innerText = currentLesson.title;
+      const certTopic = document.getElementById('cert-topic');
+      if (certTopic) certTopic.innerText = currentLesson.shortTitle;
+    }
+
+    // Đọc tham số ?bai=1 hoặc ?bai=2 từ URL nếu có
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const baiParam = urlParams.get('bai');
+      const lessonSelect = document.getElementById('selected-lesson');
+      if (baiParam && lessonSelect) {
+        if (baiParam === '1') lessonSelect.value = '1';
+        else if (baiParam === '2') lessonSelect.value = '2';
+      }
+      onLessonChange();
+    });
+
+    let currentIndex = 0;
+    let score = 0;
+    let studentInfo = { name: '', class: '' };
+    let timerInterval = null;
+    let secondsElapsed = 0;
+    let userAnswersLog = [];
+
+    // Helper: Định dạng thời gian
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60).toString().padStart(2, '0');
+      const s = (secs % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function startTimer() {
+      secondsElapsed = 0;
+      clearInterval(timerInterval);
+      document.getElementById('header-timer').classList.remove('hidden');
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const timeStr = formatTime(secondsElapsed);
+        document.getElementById('quiz-timer').innerText = `⏱️ ${timeStr}`;
+        document.getElementById('header-timer').innerText = `⏱️ ${timeStr}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function onClassChange() {
+      const classSelect = document.getElementById('student-class');
+      const classOther = document.getElementById('student-class-other');
+      const datalist = document.getElementById('student-names-list');
+      const nameInput = document.getElementById('student-name');
+      const hint = document.getElementById('class-hint');
+
+      const val = classSelect.value;
+      datalist.innerHTML = '';
+      nameInput.value = '';
+
+      if (val === 'Khác') {
+        classOther.classList.remove('hidden');
+        classOther.focus();
+        if (hint) hint.innerHTML = '💡 Em nhập tên lớp của mình và điền đầy đủ họ và tên bên dưới.';
+      } else {
+        classOther.classList.add('hidden');
+        if (val && typeof CLASS_ROSTERS !== 'undefined' && CLASS_ROSTERS[val]) {
+          CLASS_ROSTERS[val].forEach(st => {
+            const opt = document.createElement('option');
+            opt.value = st.name;
+            opt.label = `${st.stt}. ${st.name}`;
+            datalist.appendChild(opt);
+          });
+          if (hint) hint.innerHTML = `✅ Đã kết nối danh sách <b>${CLASS_ROSTERS[val].length}</b> học sinh lớp <b>${val}</b>. Nhập chữ cái đầu hoặc bấm vào ô họ tên để chọn nhanh!`;
+          nameInput.focus();
+        } else {
+          if (hint) hint.innerHTML = '💡 Em chọn lớp trước, hệ thống sẽ tự động hiện danh sách họ tên để chọn nhanh và không bị sai sót.';
+        }
+      }
+    }
+
+    function startQuiz() {
+      const classSelect = document.getElementById('student-class');
+      let sClass = classSelect ? classSelect.value.trim() : '';
+      if (sClass === 'Khác') {
+        sClass = (document.getElementById('student-class-other')?.value || '').trim();
+      }
+      const name = document.getElementById('student-name').value.trim();
+      const shuffleOptions = document.getElementById('shuffle-options-check').checked;
+
+      if (!sClass) {
+        alert("Vui lòng chọn hoặc nhập Lớp của em để bắt đầu!");
+        if (classSelect) classSelect.focus();
+        return;
+      }
+
+      if (!name) {
+        alert("Vui lòng chọn hoặc nhập đầy đủ Họ và tên học sinh để bắt đầu!");
+        document.getElementById('student-name').focus();
+        return;
+      }
+
+      studentInfo.name = name;
+      studentInfo.class = sClass;
+
+      const rawBank = [...questionsBank].sort(() => Math.random() - 0.5);
+      currentQuiz = rawBank.map(item => {
+        if (!shuffleOptions) {
+          return {
+            ...item,
+            renderOptions: [...item.options],
+            correctIndex: item.answer
+          };
+        }
+        const mappedOptions = item.options.map((text, idx) => ({
+          text,
+          isCorrect: idx === item.answer
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          ...item,
+          renderOptions: mappedOptions.map(o => o.text),
+          correctIndex: mappedOptions.findIndex(o => o.isCorrect)
+        };
+      });
+
+      currentIndex = 0;
+      score = 0;
+      userAnswersLog = [];
+
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+
+      startTimer();
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const qData = currentQuiz[currentIndex];
+      document.getElementById('question-number').innerText = `Câu hỏi ${currentIndex + 1}/${currentQuiz.length}`;
+      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+      const progressPercent = ((currentIndex + 1) / currentQuiz.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+      document.getElementById('question-text').innerText = qData.q;
+
+      document.getElementById('feedback-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      qData.renderOptions.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 transition flex items-center justify-between text-sm active:scale-[0.99]";
+        btn.innerHTML = `<span><b class="mr-2 text-slate-400">${String.fromCharCode(65 + idx)}.</b> ${opt}</span>`;
+        btn.onclick = () => selectOption(idx, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedIdx, btnElement) {
+      const qData = currentQuiz[currentIndex];
+      const buttons = document.getElementById('options-container').getElementsByTagName('button');
+      for (let btn of buttons) { btn.disabled = true; }
+
+      const feedbackBox = document.getElementById('feedback-box');
+      const feedbackStatus = document.getElementById('feedback-status');
+      const feedbackExplanation = document.getElementById('feedback-explanation');
+      const isCorrect = (selectedIdx === qData.correctIndex);
+
+      userAnswersLog.push({
+        question: qData.q,
+        options: qData.renderOptions,
+        selectedIdx: selectedIdx,
+        correctIdx: qData.correctIndex,
+        isCorrect: isCorrect,
+        explanation: qData.exp
+      });
+
+      if (isCorrect) {
+        score++;
+        btnElement.classList.remove('border-slate-300', 'bg-white');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
+        feedbackStatus.innerHTML = "✓ Chính xác!";
+      } else {
+        btnElement.classList.remove('border-slate-300', 'bg-white');
+        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
+        buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white');
+        buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
+        feedbackStatus.innerHTML = "✕ Chưa chính xác!";
+      }
+
+      feedbackExplanation.innerText = qData.exp;
+      feedbackBox.classList.remove('hidden');
+      document.getElementById('next-btn').classList.remove('hidden');
+      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < currentQuiz.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      stopTimer();
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const finalScore10 = ((score / currentQuiz.length) * 10).toFixed(1);
+      const percent = Math.round((score / currentQuiz.length) * 100);
+      const timeElapsedStr = formatTime(secondsElapsed);
+
+      document.getElementById('res-name').innerText = studentInfo.name;
+      document.getElementById('res-class').innerText = `Lớp: ${studentInfo.class}`;
+      document.getElementById('res-score').innerText = `${finalScore10} / 10`;
+      document.getElementById('res-correct').innerText = `${score}/${currentQuiz.length}`;
+      document.getElementById('res-percent').innerText = `${percent}%`;
+      document.getElementById('res-time').innerText = timeElapsedStr;
+
+      const now = new Date();
+      const dateFormatted = `${now.toLocaleDateString('vi-VN')} ${now.toLocaleTimeString('vi-VN')}`;
+      document.getElementById('res-timestamp').innerText = dateFormatted;
+
+      let comment = "";
+      let badge = "🎖️";
+
+      if (score >= 18) {
+        badge = "🏆";
+        comment = currentLesson.commentExcellent;
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+      } else if (score >= 14) {
+        badge = "🌟";
+        comment = currentLesson.commentGood;
+      } else {
+        badge = "📖";
+        comment = currentLesson.commentReview;
+      }
+
+      document.getElementById('cert-badge').innerText = badge;
+      document.getElementById('res-comment').innerText = comment;
+
+      renderReviewList('all');
+
+      // TẠO MÃ NỘP BÀI ĐỘC NHẤT (GẮN MÃ BÀI HỌC)
+      const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
+      const randomPart = Math.floor(1000 + Math.random() * 9000);
+      const prefix = currentLesson ? currentLesson.codePrefix : 'B2';
+      const subCode = `#${cleanClass}-${prefix}-${randomPart}`;
+      document.getElementById('res-sub-code').innerText = subCode;
+
+      // TỰ ĐỘNG LƯU BÀI NỘP LÊN HỆ THỐNG ĐÁM MÂY CỦA GIÁO VIÊN
+      saveSubmission({
+        id: Date.now(),
+        subCode: subCode,
+        name: studentInfo.name,
+        className: studentInfo.class,
+        lesson: currentLesson ? currentLesson.title : "Bài 2",
+        score: finalScore10,
+        correctCount: `${score}/${currentQuiz.length}`,
+        timeElapsed: timeElapsedStr,
+        timestamp: dateFormatted
+      });
+    }
+
+    let lastSubmissionRecord = null;
+
+    // LƯU KẾT QUẢ VỀ GOOGLE SHEETS VÀ LOCALSTORAGE (TỰ ĐỘNG LƯU VÀO SỔ ĐIỂM GOOGLE)
+    async function saveSubmission(record, retries = 3) {
+      lastSubmissionRecord = record;
+      const statusEl = document.getElementById('cloud-sync-status');
+      const codeBox = document.getElementById('submission-code-box');
+      const subCode = record.subCode || ('#' + (record.className || '12') + '-' + (currentLesson ? currentLesson.codePrefix : 'B2') + '-' + Math.floor(1000 + Math.random() * 9000));
+      record.subCode = subCode;
+
+      if (document.getElementById('display-sub-code')) {
+        document.getElementById('display-sub-code').innerText = subCode;
+      }
+      if (codeBox) codeBox.classList.remove('hidden');
+
+      if (statusEl) {
+        statusEl.className = "my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center";
+        statusEl.innerHTML = `<div class="flex items-center justify-center gap-1.5 font-bold text-sm"><span class="animate-spin">⏳</span> Đang lưu kết quả lên sổ điểm của cô...</div><div class="text-[11px] text-slate-500 mt-1">Mã nộp bài của em: <b>${subCode}</b></div>`;
+      }
+
+      // 1. Lưu backup tại LocalStorage trên máy học sinh
+      try {
+        let localList = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
+        if (!localList.some(item => item.id === record.id)) {
+          localList.push(record);
+          localStorage.setItem('ktpl12_submissions', JSON.stringify(localList));
+        }
+      } catch(e) {}
+
+      // 2. Gửi lưu trực tiếp vào Google Sheet của cô giáo
+      let success = false;
+      const payload = JSON.stringify(record);
+
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: payload
+          });
+          success = true;
+          break;
+        } catch (err) {
+          console.warn("Lần nộp " + attempt + " gặp sự cố:", err);
+          await new Promise(r => setTimeout(r, 600));
+        }
+      }
+
+      if (statusEl) {
+        if (success) {
+          statusEl.className = "my-3 p-3 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-emerald-800 text-xs font-medium text-center";
+          statusEl.innerHTML = `
+            <div class="flex items-center justify-center gap-1.5 font-bold text-sm text-emerald-700 mb-1">
+              <span>✅</span> ĐÃ NỘP BÀI THÀNH CÔNG VỀ GOOGLE SHEET!
+            </div>
+            <div class="text-xs text-emerald-900">Mã xác nhận nộp bài: <b class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800 font-bold">${subCode}</b></div>
+            <div class="text-[11px] text-emerald-600 mt-1">Hệ thống đã ghi nhận điểm số của em vào sổ điểm Google Sheet của cô giáo.</div>
+          `;
+        } else {
+          statusEl.className = "my-3 p-3 rounded-xl bg-amber-50 border-2 border-amber-400 text-amber-800 text-xs font-medium text-center";
+          statusEl.innerHTML = `
+            <div class="font-bold text-sm text-amber-800 mb-1">⚠️ Chưa kết nối được máy chủ giáo viên!</div>
+            <div class="text-slate-600 text-xs mb-2">Đừng lo, kết quả đã lưu trong máy. Em hãy bấm nút dưới đây để thử nộp lại:</div>
+            <div class="flex justify-center gap-2">
+              <button onclick="retrySaveSubmission()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">🔄 Bấm Thử Nộp Lại</button>
+              <button onclick="shareToZalo()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow">📲 Gửi Zalo Cho Cô</button>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function retrySaveSubmission() {
+      if (lastSubmissionRecord) {
+        saveSubmission(lastSubmissionRecord, 3);
+      }
+    }
+
+    function copySubmissionCode() {
+      const code = document.getElementById('display-sub-code').innerText;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(() => {
+          alert("Đã sao chép Mã nộp bài: " + code);
+        }).catch(() => {
+          prompt("Mã nộp bài của em là:", code);
+        });
+      } else {
+        prompt("Mã nộp bài của em là:", code);
+      }
+    }
+
+    function shareToZalo() {
+      if (!lastSubmissionRecord) return;
+      const text = `Em [${lastSubmissionRecord.name}] - Lớp [${lastSubmissionRecord.className}] đã hoàn thành bài luyện tập KTPL 12 (Bài 1).\nĐiểm: ${lastSubmissionRecord.score}/10 (${lastSubmissionRecord.correctCount} câu).\nThời gian làm: ${lastSubmissionRecord.timeElapsed}.\nMã nộp bài: ${lastSubmissionRecord.subCode}`;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Đã sao chép nội dung báo điểm! Hãy mở Zalo và dán vào nhóm lớp gửi cô nhé:\n\n" + text);
+        }).catch(() => {
+          prompt("Hãy sao chép nội dung này gửi vào Zalo lớp:", text);
+        });
+      } else {
+        prompt("Hãy sao chép nội dung này gửi vào Zalo lớp:", text);
+      }
+    }
+
+    function restartQuiz() {
+      stopTimer();
+      document.getElementById('header-timer').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('start-screen').classList.remove('hidden');
+      document.getElementById('review-section').classList.add('hidden');
+    }
+
+    // TẢI ẢNH PHIẾU ĐIỂM
+    function downloadCertificate() {
+      const card = document.getElementById('certificate');
+      html2canvas(card, { scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        const cleanName = studentInfo.name.replace(/[^a-zA-Z0-9]/g, '_');
+        link.download = `PhieuDiem_KTPL12_${cleanName}_${studentInfo.class}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    function toggleReviewSection() {
+      const rev = document.getElementById('review-section');
+      rev.classList.toggle('hidden');
+      if (!rev.classList.contains('hidden')) {
+        rev.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function filterReview(mode) {
+      document.getElementById('tab-all').className = mode === 'all' 
+        ? "px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-medium review-tab" 
+        : "px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-medium review-tab";
+      document.getElementById('tab-wrong').className = mode === 'wrong' 
+        ? "px-2.5 py-1 rounded-lg bg-rose-600 text-white font-medium review-tab" 
+        : "px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-medium review-tab";
+      renderReviewList(mode);
+    }
+
+    function renderReviewList(filter) {
+      const container = document.getElementById('review-list');
+      container.innerHTML = '';
+      const items = userAnswersLog.filter(item => {
+        if (filter === 'wrong') return !item.isCorrect;
+        return true;
+      });
+
+      if (items.length === 0) {
+        container.innerHTML = `<div class="p-4 bg-slate-50 text-slate-500 rounded-xl text-center text-xs">Không có câu hỏi nào trong mục này!</div>`;
+        return;
+      }
+
+      items.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = `p-3.5 rounded-xl border text-xs ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'}`;
+        div.innerHTML = `
+          <div class="font-semibold text-slate-800 mb-1 flex items-center justify-between">
+            <span>Câu: ${item.question}</span>
+            <span class="${item.isCorrect ? 'text-emerald-600' : 'text-rose-600'} font-bold">
+              ${item.isCorrect ? '✓ Đúng' : '✕ Sai'}
+            </span>
+          </div>
+          <div class="text-slate-600 mt-1">
+            <div>Bạn chọn: <b>${item.options[item.selectedIdx]}</b></div>
+            ${!item.isCorrect ? `<div class="text-emerald-700 font-medium">Đáp án đúng: <b>${item.options[item.correctIdx]}</b></div>` : ''}
+          </div>
+          <div class="mt-2 text-[11px] text-slate-500 bg-white/80 p-2 rounded border border-slate-200">
+            💡 <b>Giải thích:</b> ${item.explanation}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // ==========================================
+    // KHU VỰC QUẢN LÝ DÀNH CHO GIÁO VIÊN (DASHBOARD)
+    // ==========================================
+    let allSubmissions = [];
+
+    function getTeacherPin() {
+      return localStorage.getItem('ktpl12_teacher_pin') || '123456';
+    }
+
+    function openTeacherLogin() {
+      window.location.href = 'giaovien.html';
+    }
+
+    function closeTeacherLogin() {
+      document.getElementById('teacher-login-modal')?.classList.add('hidden');
+    }
+
+    function submitTeacherLogin() {
+      window.location.href = 'giaovien.html';
+    }
+
+    function openTeacherDashboard() {
+      document.getElementById('teacher-dashboard-modal').classList.remove('hidden');
+      loadDashboardData();
+    }
+
+    function closeTeacherDashboard() {
+      document.getElementById('teacher-dashboard-modal').classList.add('hidden');
+    }
+
+    function changePinPrompt() {
+      const currentPin = getTeacherPin();
+      const oldPin = prompt("Nhập mã PIN hiện tại:");
+      if (oldPin !== currentPin) {
+        alert("Mã PIN hiện tại không đúng!");
+        return;
+      }
+      const newPin = prompt("Nhập mã PIN mới (ít nhất 4 chữ số):");
+      if (newPin && newPin.trim().length >= 4) {
+        localStorage.setItem('ktpl12_teacher_pin', newPin.trim());
+        alert("Đổi mã PIN giáo viên thành công!");
+      } else {
+        alert("Mã PIN không hợp lệ!");
+      }
+    }
+
+    async function loadDashboardData() {
+      const loading = document.getElementById('table-loading');
+      const emptyMsg = document.getElementById('table-empty-msg');
+      const tbody = document.getElementById('dashboard-table-body');
+      if (loading) loading.classList.remove('hidden');
+      if (emptyMsg) emptyMsg.classList.add('hidden');
+      if (tbody) tbody.innerHTML = '';
+
+      let list = [];
+      try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?_t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.submissions && Array.isArray(data.submissions)) {
+            list = data.submissions;
+          }
+        }
+      } catch (e) {
+        console.warn("Lỗi tải danh sách bài nộp từ Google:", e);
+      }
+
+      // Tích hợp toàn bộ bài nộp đã làm của học sinh
+      const INITIAL_STUDENTS = [
+        { id: 1789462524000, subCode: "#12A-5755", name: "Hữu Khánh", className: "12A", score: "8.0", correctCount: "16/20", timeElapsed: "01:53", timestamp: "15/09/2026 15:55:24" },
+        { id: 1789461951675, subCode: "#12A7-9504", name: "Đỗ Ngọc Ngân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "02:12", timestamp: "15/09/2026 15:45:51" },
+        { id: 1789461730796, subCode: "#12A7-7726", name: "Đỗ Ngọc Ngân", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "03:34", timestamp: "15/09/2026 15:42:10" },
+        { id: 1789459750634, subCode: "#12A7-8127", name: "Huỳnh Thị Mỹ Hồng", className: "12A7", score: "6.5", correctCount: "13/20", timeElapsed: "05:29", timestamp: "15/09/2026 15:09:10" },
+        { id: 1789459478747, subCode: "#12A7-9729", name: "Nguyễn Thanh Ngân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "04:33", timestamp: "15/09/2026 15:04:38" },
+        { id: 1789459373842, subCode: "#12A7-5661", name: "Nguyễn Thảo My", className: "12A7", score: "7.0", correctCount: "14/20", timeElapsed: "07:27", timestamp: "15/09/2026 15:02:53" },
+        { id: 1789459253266, subCode: "#12A7-8270", name: "Ngô Bảo Khang", className: "12A7", score: "8.5", correctCount: "17/20", timeElapsed: "02:44", timestamp: "15/09/2026 15:00:53" },
+        { id: 1789459180472, subCode: "#12A7-1272", name: "Phạm Nguyễn Thùy Dương", className: "12A7", score: "6.5", correctCount: "13/20", timeElapsed: "07:56", timestamp: "15/09/2026 14:59:40" },
+        { id: 1789459063952, subCode: "#12A7-9526", name: "Nguyễn Thanh Ngân", className: "12A7", score: "7.0", correctCount: "14/20", timeElapsed: "06:00", timestamp: "15/09/2026 14:57:43" },
+        { id: 1789459020680, subCode: "#12A7-5259", name: "Đặng Phùng Hy", className: "12A7", score: "9.5", correctCount: "19/20", timeElapsed: "05:13", timestamp: "15/09/2026 14:57:00" },
+        { id: 1789458472752, subCode: "#12A-6721", name: "Học Sinh May Mắn", className: "12A", score: "9.5", correctCount: "19/20", timeElapsed: "01:39", timestamp: "15/09/2026 14:47:52" },
+        { id: 1789457566000, subCode: "#12C4-8756", name: "Trương Thùy Linh", className: "12C4", score: "7.0", correctCount: "14/20", timeElapsed: "01:56", timestamp: "15/09/2026 14:32:46" },
+        { id: 1789456078000, subCode: "#12A-5368", name: "Kiều Trương", className: "12A", score: "6.5", correctCount: "13/20", timeElapsed: "02:19", timestamp: "15/09/2026 14:07:58" },
+        { id: 1789455700000, subCode: "#12A-0551", name: "Lương Tèo", className: "12A", score: "7.5", correctCount: "15/20", timeElapsed: "02:41", timestamp: "15/09/2026 14:01:40" },
+        { id: 1789397829199, subCode: "#12A7-4481", name: "Nguyễn Hoàng Thảo Quyên", className: "12A7", score: "8.5", correctCount: "17/20", timeElapsed: "05:50", timestamp: "14/09/2026 21:57:09" },
+        { id: 1789397822457, subCode: "#12A7-9912", name: "Phạm Thanh Xuân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "03:04", timestamp: "14/09/2026 21:57:02" },
+        { id: 1789397607192, subCode: "#12A7-3312", name: "Nguyễn Đình Hiếu", className: "12A7", score: "5.5", correctCount: "11/20", timeElapsed: "05:36", timestamp: "14/09/2026 21:53:27" },
+        { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" }
+      ];
+      INITIAL_STUDENTS.forEach(item => {
+        if (!list.some(s => s.subCode === item.subCode || (s.name === item.name && s.timestamp === item.timestamp))) {
+          list.push(item);
+        }
+      });
+
+      // Tích hợp dữ liệu từ LocalStorage để không mất kết quả nào
+      try {
+        const local = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
+        local.forEach(item => {
+          if (!list.some(s => s.subCode === item.subCode || (s.name === item.name && s.timestamp === item.timestamp))) {
+            list.push(item);
+          }
+        });
+      } catch(e) {}
+
+      // Sắp xếp bài mới nhất lên đầu
+      list.sort((a, b) => (b.id || 0) - (a.id || 0));
+
+      allSubmissions = list;
+      populateClassFilter();
+      applyFilters();
+      if (loading) loading.classList.add('hidden');
+    }
+
+    function refreshDashboardData() {
+      const icon = document.getElementById('refresh-icon');
+      icon.classList.add('animate-spin');
+      loadDashboardData().then(() => {
+        setTimeout(() => icon.classList.remove('animate-spin'), 600);
+      });
+    }
+
+    function populateClassFilter() {
+      const select = document.getElementById('filter-class');
+      const currentVal = select.value;
+      const classNames = [...new Set(allSubmissions.map(s => s.className).filter(Boolean))].sort();
+
+      select.innerHTML = '<option value="ALL">Tất cả các lớp</option>';
+      classNames.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.innerText = `Lớp ${c}`;
+        select.appendChild(opt);
+      });
+
+      if (classNames.includes(currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('filter-search').value.toLowerCase().trim();
+      const selectedClass = document.getElementById('filter-class').value;
+
+      const filtered = allSubmissions.filter(item => {
+        const matchName = !search || (item.name && item.name.toLowerCase().includes(search));
+        const matchClass = (selectedClass === 'ALL') || (item.className === selectedClass);
+        return matchName && matchClass;
+      });
+
+      updateStatistics(filtered);
+      renderTableRows(filtered);
+    }
+
+    function updateStatistics(items) {
+      document.getElementById('stat-total').innerText = items.length;
+      if (items.length === 0) {
+        document.getElementById('stat-avg').innerText = '0.0';
+        document.getElementById('stat-max').innerText = '0';
+        document.getElementById('stat-pass').innerText = '0%';
+        return;
+      }
+
+      const scores = items.map(i => parseFloat(i.score) || 0);
+      const sum = scores.reduce((a, b) => a + b, 0);
+      const avg = (sum / scores.length).toFixed(1);
+      const max = Math.max(...scores).toFixed(1);
+      const passCount = scores.filter(s => s >= 5.0).length;
+      const passRate = Math.round((passCount / scores.length) * 100);
+
+      document.getElementById('stat-avg').innerText = avg;
+      document.getElementById('stat-max').innerText = max;
+      document.getElementById('stat-pass').innerText = `${passRate}%`;
+    }
+
+    function renderTableRows(items) {
+      const tbody = document.getElementById('dashboard-table-body');
+      const emptyMsg = document.getElementById('table-empty-msg');
+      tbody.innerHTML = '';
+
+      if (items.length === 0) {
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+      emptyMsg.classList.add('hidden');
+
+      // Sắp xếp mới nhất lên đầu
+      const sorted = [...items].reverse();
+
+      sorted.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition";
+
+        const numScore = parseFloat(item.score) || 0;
+        let scoreBadgeClass = "bg-emerald-100 text-emerald-800";
+        if (numScore < 5.0) scoreBadgeClass = "bg-rose-100 text-rose-800";
+        else if (numScore < 8.0) scoreBadgeClass = "bg-blue-100 text-blue-800";
+
+        const subCodeDisplay = item.subCode || ('#' + (item.id ? item.id.toString().slice(-6) : '-'));
+
+        tr.innerHTML = `
+          <td class="py-3 px-3 text-center text-slate-400 font-mono">${index + 1}</td>
+          <td class="py-3 px-3 font-semibold text-slate-800">${item.name}</td>
+          <td class="py-3 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${item.className}</span></td>
+          <td class="py-3 px-2 text-center font-mono text-[11px] text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded font-bold">${subCodeDisplay}</td>
+          <td class="py-3 px-2 text-center">
+            <span class="px-2.5 py-0.5 rounded-full font-bold text-xs ${scoreBadgeClass}">${item.score}</span>
+          </td>
+          <td class="py-3 px-2 text-center font-medium">${item.correctCount || '-'}</td>
+          <td class="py-3 px-2 text-center font-mono text-slate-500">${item.timeElapsed || '-'}</td>
+          <td class="py-3 px-3 text-right text-slate-400 text-[11px]">${item.timestamp || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // XUẤT RA FILE EXCEL (.CSV CÓ BOM UTF-8)
+    function exportToExcel() {
+      if (allSubmissions.length === 0) {
+        alert("Chưa có dữ liệu bài nộp để xuất!");
+        return;
+      }
+
+      const headers = ["STT", "Họ và tên", "Lớp", "Mã nộp bài", "Điểm số (/10)", "Số câu đúng", "Thời gian làm", "Ngày giờ nộp"];
+      const rows = allSubmissions.map((item, idx) => [
+        idx + 1,
+        `"${(item.name || '').replace(/"/g, '""')}"`,
+        `"${item.className || ''}"`,
+        `"${item.subCode || ('#' + (item.id ? item.id.toString().slice(-6) : ''))}"`,
+        item.score,
+        `"${item.correctCount || ''}"`,
+        `"${item.timeElapsed || ''}"`,
+        `"${item.timestamp || ''}"`
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const now = new Date();
+      const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
+      link.href = URL.createObjectURL(blob);
+      link.download = `Bang_Diem_KTPL12_Bai1_${dateStr}.csv`;
+      link.click();
+    }
+
+    // XÓA TẤT CẢ BÀI NỘP
+    async function clearAllData() {
+      const pin = prompt("Nhập mã PIN giáo viên để xác nhận xóa toàn bộ danh sách:");
+      if (pin !== getTeacherPin()) {
+        alert("Mã PIN không chính xác!");
+        return;
+      }
+      if (!confirm("Thầy/cô có chắc chắn muốn xóa toàn bộ danh sách bài nộp hiện tại không? Hành động này không thể hoàn tác.")) {
+        return;
+      }
+      localStorage.removeItem('ktpl12_submissions');
+      allSubmissions = [];
+      applyFilters();
+      alert("Đã xóa danh sách bài nộp trên trình duyệt thành công! (Dữ liệu gốc trên Google Sheet vẫn được bảo toàn an toàn).");
+    }
+  </script>
 </body>
 </html>
