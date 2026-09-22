@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Luyện Tập KTPL 12 - Bài 1: Tăng Trưởng & Phát Triển Kinh Tế</title>
+  <title>Luyện Tập KTPL 12 - Bài 2: Hội Nhập Kinh Tế Quốc Tế</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -42,7 +42,7 @@
     <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
       <div>
         <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">KTPL 12 • Kết nối tri thức</span>
-        <h1 class="text-base md:text-lg font-bold mt-0.5">Bài 1: Tăng trưởng và phát triển kinh tế</h1>
+        <h1 class="text-base md:text-lg font-bold mt-0.5">Bài 2: Hội nhập kinh tế quốc tế</h1>
       </div>
       <div class="flex items-center gap-2">
         <a href="index.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Quay lại Cổng Chọn Bài Học">
@@ -67,7 +67,7 @@
         <span>Hệ thống nộp bài trực tuyến: ĐÃ KẾT NỐI 🟢</span>
       </div>
       <h2 class="text-2xl font-bold text-slate-800">Luyện Tập Trắc Nghiệm Phản Xạ</h2>
-      <p class="text-slate-500 text-sm mt-2 mb-6">20 câu trắc nghiệm bám sát nội dung SGK KTPL 12 Kết nối tri thức. Kết quả và điểm số sẽ được tự động lưu về bảng điểm của giáo viên.</p>
+      <p class="text-slate-500 text-sm mt-2 mb-6">20 câu trắc nghiệm bám sát nội dung SGK KTPL 12 (Bài 2: Hội nhập kinh tế quốc tế - KNTT). Kết quả và điểm số sẽ được tự động lưu về bảng điểm của giáo viên.</p>
       
       <div class="space-y-4 max-w-sm mx-auto text-left">
         <div>
@@ -357,126 +357,226 @@
     // DỮ LIỆU 20 CÂU HỎI CHUẨN SGK KTPL 12 (BÀI 1)
     const questionsBank = [
       {
-        q: "Sự gia tăng về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định được gọi là gì?",
-        options: ["Tăng trưởng kinh tế", "Phát triển kinh tế", "Lạm phát kinh tế", "Khủng hoảng kinh tế"],
-        answer: 0,
-        exp: "Theo SGK trang 7: Tăng trưởng kinh tế là sự tăng lên về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định."
+            "q": "Quá trình một quốc gia thực hiện gắn kết nền kinh tế của mình với nền kinh tế các quốc gia khác trong khu vực và trên thế giới dựa trên cơ sở cùng có lợi và tuân thủ các quy định chung được gọi là",
+            "options": [
+                  "Hội nhập kinh tế quốc tế",
+                  "Tăng trưởng kinh tế",
+                  "Phát triển kinh tế",
+                  "Chuyển dịch cơ cấu ngành"
+            ],
+            "answer": 0,
+            "exp": "Theo SGK KTPL 12 trang 17: Hội nhập kinh tế quốc tế là quá trình một quốc gia thực hiện gắn kết nền kinh tế của mình với nền kinh tế các quốc gia khác trong khu vực và trên thế giới dựa trên cơ sở cùng có lợi và tuân thủ các quy định chung."
       },
       {
-        q: "Chỉ tiêu đo lường giá trị bằng tiền của tất cả hàng hoá, dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định là gì?",
-        options: ["GNI", "GDP", "HDI", "Hệ số Gini"],
-        answer: 1,
-        exp: "Theo SGK trang 7: Tổng sản phẩm quốc nội (GDP) là giá trị bằng tiền của tất cả hàng hoá và dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định."
+            "q": "Việc gia nhập Tổ chức Thương mại thế giới (WTO) vào năm 2007 thể hiện Việt Nam tham gia cấp độ hội nhập kinh tế nào dưới đây?",
+            "options": [
+                  "Hội nhập khu vực",
+                  "Hội nhập song phương",
+                  "Hội nhập toàn cầu",
+                  "Hội nhập bán phần"
+            ],
+            "answer": 2,
+            "exp": "WTO là tổ chức thương mại quy mô toàn thế giới, do đó việc Việt Nam trở thành thành viên thứ 150 của WTO là biểu hiện của cấp độ hội nhập kinh tế toàn cầu."
       },
       {
-        q: "Chỉ tiêu đo lường tổng thu nhập từ hàng hoá, dịch vụ cuối cùng do công dân của quốc gia tạo ra (cả ở trong và ngoài lãnh thổ) là gì?",
-        options: ["GDP", "GNI", "FDI", "ODA"],
-        answer: 1,
-        exp: "Theo SGK trang 8: Tổng thu nhập quốc dân (GNI) là thước đo thu nhập do công dân quốc gia tạo ra cả ở trong và ngoài lãnh thổ."
+            "q": "Ngày 28/7/1995, Việt Nam chính thức trở thành thành viên của Hiệp hội các quốc gia Đông Nam Á (ASEAN). Đây là biểu hiện của cấp độ hội nhập nào?",
+            "options": [
+                  "Hội nhập song phương",
+                  "Hội nhập khu vực",
+                  "Hội nhập toàn cầu",
+                  "Hội nhập đa phương toàn cầu"
+            ],
+            "answer": 1,
+            "exp": "ASEAN là tổ chức liên kết giữa các quốc gia trong khu vực Đông Nam Á (cùng vị trí địa lí), do đó đây là hình thức hội nhập kinh tế khu vực."
       },
       {
-        q: "Để so sánh mức sống và mức thu nhập thực tế giữa người dân các quốc gia với nhau, người ta dùng chỉ tiêu nào?",
-        options: ["Tổng GDP", "GNI bình quân đầu người", "Tỉ lệ thất nghiệp", "Quy mô vốn đầu tư"],
-        answer: 1,
-        exp: "Theo SGK trang 9: GNI/người được dùng làm thước đo so sánh kết quả tăng trưởng, mức thu nhập và mức sống của người dân giữa các quốc gia."
+            "q": "Hiệp định Thương mại song phương giữa Việt Nam và Hoa Kỳ (BTA) ký kết năm 2000 thuộc cấp độ hội nhập kinh tế nào?",
+            "options": [
+                  "Hội nhập song phương",
+                  "Hội nhập khu vực",
+                  "Hội nhập toàn cầu",
+                  "Hội nhập đa phương"
+            ],
+            "answer": 0,
+            "exp": "Hội nhập song phương là sự hợp tác, thỏa thuận kinh tế được ký kết giữa hai quốc gia hoặc hai vùng lãnh thổ (ở đây là Việt Nam và Hoa Kỳ)."
       },
       {
-        q: "Doanh thu của doanh nghiệp 100% vốn đầu tư nước ngoài (FDI) sản xuất trên lãnh thổ Việt Nam được tính vào chỉ tiêu nào của nước ta?",
-        options: ["Chỉ tính vào GNI", "Tính vào GDP của Việt Nam", "Không tính vào GDP", "Tính vào kiều hối"],
-        answer: 1,
-        exp: "GDP tính toàn bộ sản phẩm cuối cùng làm ra trên lãnh thổ Việt Nam, bất kể người tạo ra là công dân trong nước hay doanh nghiệp nước ngoài."
+            "q": "Nội dung nào sau đây KHÔNG phản ánh đúng sự cần thiết của hội nhập kinh tế quốc tế đối với mỗi quốc gia?",
+            "options": [
+                  "Giúp mỗi quốc gia mở rộng thị trường tiêu thụ hàng hóa",
+                  "Giúp thu hút vốn đầu tư, công nghệ và kinh nghiệm quản lý",
+                  "Buộc các quốc gia phải hi sinh độc lập, chủ quyền dân tộc",
+                  "Tạo thêm nhiều cơ hội việc làm và nâng cao mức sống nhân dân"
+            ],
+            "answer": 2,
+            "exp": "Hội nhập kinh tế quốc tế diễn ra trên nguyên tắc tôn trọng độc lập, chủ quyền, bình đẳng và cùng có lợi; tuyệt đối không phải hi sinh độc lập, chủ quyền dân tộc."
       },
       {
-        q: "Khoản kiều hối do công dân Việt Nam đi lao động ở nước ngoài gửi về nước được tính vào chỉ tiêu nào của Việt Nam?",
-        options: ["GNI", "GDP", "CPI", "FDI"],
-        answer: 0,
-        exp: "GNI tính tổng thu nhập do công dân quốc gia tạo ra (bao gồm cả thu nhập chuyển từ ngoài lãnh thổ về nước)."
+            "q": "Hình thức hợp tác giữa các quốc gia trong một khu vực địa lý trên cơ sở sự tương đồng về văn hóa, xã hội hoặc có chung mục tiêu phát triển là",
+            "options": [
+                  "Hợp tác toàn cầu",
+                  "Hợp tác khu vực",
+                  "Hợp tác song phương",
+                  "Hợp tác nội bộ"
+            ],
+            "answer": 1,
+            "exp": "Theo SGK KTPL 12: Hội nhập kinh tế khu vực là hình thức hợp tác giữa các quốc gia trong một khu vực trên cơ sở sự tương đồng về địa lí, văn hoá, xã hội hoặc chung mục tiêu phát triển."
       },
       {
-        q: "Khi so sánh tốc độ tăng trưởng kinh tế giữa các năm, người ta phải tính theo giá năm gốc nhằm loại trừ yếu tố nào?",
-        options: ["Lạm phát (biến động giá cả)", "Tỉ lệ tăng dân số", "Thuế xuất nhập khẩu", "Diện tích đất đai"],
-        answer: 0,
-        exp: "Theo SGK trang 7: Do có sự biến động của giá cả (lạm phát) nên khi so sánh cần tính GDP của năm hiện tại theo giá của năm gốc."
+            "q": "Hoạt động đầu tư quốc tế được chia thành hai hình thức chủ yếu nào dưới đây?",
+            "options": [
+                  "Đầu tư trực tiếp (FDI) và đầu tư gián tiếp (FII)",
+                  "Đầu tư ngắn hạn và đầu tư từ thiện",
+                  "Đầu tư trong nước và đầu tư nhà nước",
+                  "Đầu tư thương mại và đầu tư tư nhân"
+            ],
+            "answer": 0,
+            "exp": "Theo SGK: Đầu tư quốc tế bao gồm đầu tư trực tiếp nước ngoài (FDI - trực tiếp xây dựng nhà máy, điều hành sản xuất) và đầu tư gián tiếp nước ngoài (FII - mua cổ phiếu, trái phiếu, quỹ đầu tư)."
       },
       {
-        q: "Trong mối quan hệ với phát triển kinh tế, tăng trưởng kinh tế đóng vai trò là",
-        options: ["mục tiêu cao nhất", "điều kiện tiền đề cần thiết", "kết quả sau cùng", "yếu tố duy nhất quyết định"],
-        answer: 1,
-        exp: "Theo SGK trang 13: Tăng trưởng kinh tế là sự thay đổi về lượng, là điều kiện tiền đề cho phát triển kinh tế."
+            "q": "Hoạt động nào sau đây thuộc hình thức dịch vụ thu ngoại tệ trong quan hệ kinh tế quốc tế?",
+            "options": [
+                  "Khách du lịch quốc tế đến Việt Nam tham quan, nghỉ dưỡng",
+                  "Doanh nghiệp Việt Nam nhập khẩu máy móc từ Đức",
+                  "Nông dân bán lúa gạo cho thương lái trong nước",
+                  "Người tiêu dùng mua ô tô nhập khẩu tại đại lý"
+            ],
+            "answer": 0,
+            "exp": "Dịch vụ thu ngoại tệ bao gồm du lịch quốc tế, vận tải quốc tế, xuất khẩu lao động, bảo hiểm quốc tế... Khách quốc tế đến Việt Nam tiêu tiền ngoại tệ sẽ đem lại nguồn thu ngoại tệ cho đất nước."
       },
       {
-        q: "Sự tăng trưởng kinh tế gắn liền với chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội được gọi là",
-        options: ["tăng trưởng kinh tế", "phát triển kinh tế", "mở rộng thị trường", "hội nhập quốc tế"],
-        answer: 1,
-        exp: "Theo SGK trang 13: Phát triển kinh tế là sự tăng trưởng kinh tế gắn liền với sự chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội."
+            "q": "Xét theo trình độ liên kết từ thấp đến cao, các nấc thang hội nhập kinh tế quốc tế diễn ra theo thứ tự nào sau đây?",
+            "options": [
+                  "Thỏa thuận thương mại ưu đãi -> Khu vực mậu dịch tự do -> Liên minh thuế quan -> Thị trường chung -> Liên minh kinh tế - tiền tệ",
+                  "Thị trường chung -> Khu vực mậu dịch tự do -> Liên minh thuế quan -> Thỏa thuận ưu đãi",
+                  "Liên minh kinh tế - tiền tệ -> Thị trường chung -> Khu vực mậu dịch tự do -> Thỏa thuận ưu đãi",
+                  "Khu vực mậu dịch tự do -> Thỏa thuận ưu đãi -> Thị trường chung -> Liên minh thuế quan"
+            ],
+            "answer": 0,
+            "exp": "Các cấp độ liên kết kinh tế từ thấp đến cao: 1. Thỏa thuận thương mại ưu đãi (PTA) -> 2. Khu vực mậu dịch tự do (FTA) -> 3. Liên minh thuế quan (CU) -> 4. Thị trường chung -> 5. Liên minh kinh tế - tiền tệ."
       },
       {
-        q: "Trong ba loại cơ cấu kinh tế (ngành, vùng, thành phần kinh tế), cơ cấu nào giữ vai trò quan trọng nhất?",
-        options: ["Cơ cấu vùng kinh tế", "Cơ cấu ngành kinh tế", "Cơ cấu thành phần kinh tế", "Cơ cấu vốn đầu tư"],
-        answer: 1,
-        exp: "Theo SGK trang 11: Trong cơ cấu kinh tế, cơ cấu ngành kinh tế (công nghiệp - nông nghiệp - dịch vụ) giữ vai trò quan trọng nhất."
+            "q": "Việc Liên minh châu Âu (EU) áp dụng chung một mức thuế đối với hàng hóa nhập khẩu từ bên ngoài và tự do lưu chuyển hàng hóa giữa các nước thành viên là biểu hiện của",
+            "options": [
+                  "Thỏa thuận thương mại ưu đãi",
+                  "Liên minh thuế quan và thị trường chung",
+                  "Khu vực mậu dịch tự do đơn phương",
+                  "Hợp tác song phương có điều kiện"
+            ],
+            "answer": 1,
+            "exp": "Liên minh châu Âu (EU) đã phát triển lên cấp độ liên minh thuế quan, thị trường chung và liên minh kinh tế - tiền tệ (sử dụng đồng tiền chung Euro)."
       },
       {
-        q: "Sự chuyển dịch cơ cấu ngành kinh tế theo hướng tích cực thể hiện ở chỉ tiêu nào sau đây?",
-        options: ["Tỉ trọng công nghiệp, dịch vụ tăng; tỉ trọng nông nghiệp giảm", "Tỉ trọng nông nghiệp tăng vọt", "Tỉ trọng tất cả các ngành đều giảm", "Chỉ phát triển nông nghiệp thuần túy"],
-        answer: 0,
-        exp: "Theo SGK trang 11, 13: Chuyển dịch tích cực thể hiện ở tỉ trọng công nghiệp, dịch vụ tăng lên, tỉ trọng nông nghiệp giảm đi nhưng giá trị tuyệt đối các ngành đều tăng."
+            "q": "Hiệp định Đối tác Toàn diện và Tiến bộ xuyên Thái Bình Dương (CPTPP) và Hiệp định EVFTA thuộc loại hình hiệp định nào sau đây?",
+            "options": [
+                  "Hiệp định thương mại tự do (FTA) thế hệ mới",
+                  "Thỏa thuận viện trợ không hoàn lại",
+                  "Hiệp định song phương đơn thuần",
+                  "Hiệp ước phân chia thị trường khép kín"
+            ],
+            "answer": 0,
+            "exp": "CPTPP và EVFTA là các Hiệp định thương mại tự do (FTA) thế hệ mới, với phạm vi cam kết sâu rộng không chỉ về cắt giảm thuế quan mà cả về lao động, môi trường, sở hữu trí tuệ..."
       },
       {
-        q: "Chỉ số phát triển con người (HDI) là thước đo tổng hợp phản ánh sự tiến bộ con người qua 3 tiêu chí nào?",
-        options: ["Tuổi thọ, giáo dục và thu nhập", "Dân số, việc làm và tiền tệ", "Xuất khẩu, nhập khẩu và tỉ giá", "Đô thị hóa, rừng tự nhiên và điện sinh hoạt"],
-        answer: 0,
-        exp: "Theo SGK trang 11-12: HDI đo lường qua Tuổi thọ trung bình, Chỉ số giáo dục và Chỉ số thu nhập (GDP/người, GNI/người)."
+            "q": "Một trong những tác động tích cực to lớn nhất của hội nhập kinh tế quốc tế đối với các doanh nghiệp Việt Nam là gì?",
+            "options": [
+                  "Loại bỏ hoàn toàn mọi đối thủ cạnh tranh trên thị trường",
+                  "Mở rộng thị trường xuất khẩu, tiếp cận nguồn vốn và công nghệ tiên tiến",
+                  "Được chính phủ bảo hộ vô điều kiện trước hàng ngoại nhập",
+                  "Không phải tuân thủ các tiêu chuẩn chất lượng khắt khe"
+            ],
+            "answer": 1,
+            "exp": "Hội nhập giúp mở rộng thị trường xuất khẩu rộng lớn, tạo cơ hội cho doanh nghiệp trong nước tiếp cận máy móc, công nghệ hiện đại và nguồn vốn quốc tế."
       },
       {
-        q: "Chỉ tiêu đo lường tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản trong cuộc sống gọi là",
-        options: ["tỉ lệ thất nghiệp", "tỉ lệ hộ nghèo đa chiều", "chỉ số giá tiêu dùng", "hệ số bất bình đẳng"],
-        answer: 1,
-        exp: "Theo SGK trang 12: Tỉ lệ hộ nghèo đa chiều tính bằng tỉ lệ hộ nghèo trong tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản."
+            "q": "Bên cạnh những cơ hội to lớn, hội nhập kinh tế quốc tế cũng đặt ra thách thức chủ yếu nào cho các doanh nghiệp trong nước?",
+            "options": [
+                  "Áp lực cạnh tranh gay gắt từ hàng hóa và dịch vụ nước ngoài",
+                  "Không có cơ hội xuất khẩu hàng hóa ra thị trường thế giới",
+                  "Bị cấm áp dụng khoa học công nghệ mới vào sản xuất",
+                  "Nhu cầu tiêu dùng trong nước bị triệt tiêu hoàn toàn"
+            ],
+            "answer": 0,
+            "exp": "Khi mở cửa thị trường, hàng hóa nước ngoài với mẫu mã đẹp, giá thành cạnh tranh sẽ tràn vào, tạo áp lực cạnh tranh vô cùng gay gắt đối với các doanh nghiệp trong nước."
       },
       {
-        q: "Hệ số bất bình đẳng trong phân phối thu nhập (hệ số Gini) nhận giá trị trong khoảng nào?",
-        options: ["Từ -1 đến 1", "Từ 0 đến 1", "Từ 1 đến 10", "Từ 0% đến 100%"],
-        answer: 1,
-        exp: "Theo SGK trang 12: Hệ số Gini nhận giá trị từ 0 đến 1, trong đó 0 là bình đẳng tuyệt đối, 1 là bất bình đẳng tuyệt đối."
+            "q": "Nguyên tắc cơ bản hàng đầu trong đường lối hội nhập kinh tế quốc tế của Đảng và Nhà nước ta là gì?",
+            "options": [
+                  "Dựa dẫm vào các nước lớn có tiềm lực kinh tế mạnh",
+                  "Độc lập, tự chủ, bình đẳng, cùng có lợi, giữ vững định hướng XHCN",
+                  "Ưu tiên tuyệt đối cho doanh nghiệp nước ngoài khai thác tài nguyên",
+                  "Khép kín nền kinh tế để bảo vệ các ngành sản xuất trong nước"
+            ],
+            "answer": 1,
+            "exp": "Đảng và Nhà nước ta nhất quán chủ trương: Hội nhập kinh tế quốc tế dựa trên cơ sở giữ vững độc lập, tự chủ, bình đẳng, cùng có lợi và bảo đảm định hướng xã hội chủ nghĩa."
       },
       {
-        q: "Khi hệ số Gini có xu hướng giảm dần, điều đó chứng tỏ điều gì trong xã hội?",
-        options: ["Bất bình đẳng thu nhập gia tăng", "Khoảng cách giàu nghèo có xu hướng thu hẹp lại", "Nền kinh tế suy thoái", "Dân số tăng nhanh"],
-        answer: 1,
-        exp: "Hệ số Gini càng thấp (càng gần 0) thì sự phân phối thu nhập càng bình đẳng, khoảng cách giàu nghèo càng thu hẹp."
+            "q": "Nội dung nào sau đây phản ánh phương châm ngoại giao và hội nhập kinh tế của Việt Nam hiện nay?",
+            "options": [
+                  "Việt Nam là bạn, là đối tác tin cậy và là thành viên có trách nhiệm của cộng đồng quốc tế",
+                  "Chỉ mở rộng quan hệ kinh tế với các quốc gia láng giềng",
+                  "Từ chối tham gia các tổ chức tài chính và thương mại toàn cầu",
+                  "Chỉ tiếp nhận đầu tư trực tiếp nước ngoài, không giao thương thương mại"
+            ],
+            "answer": 0,
+            "exp": "Đại hội Đảng đã khẳng định: Việt Nam là bạn, là đối tác tin cậy và là thành viên tích cực, có trách nhiệm trong cộng đồng quốc tế, đa phương hóa, đa dạng hóa quan hệ."
       },
       {
-        q: "Quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: kinh tế, xã hội và bảo vệ môi trường được gọi là",
-        options: ["kinh tế thị trường", "phát triển bền vững", "tăng trưởng nhanh", "hội nhập toàn cầu"],
-        answer: 1,
-        exp: "Theo SGK trang 15: Phát triển bền vững là quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: phát triển kinh tế, phát triển xã hội và bảo vệ môi trường."
+            "q": "Khi hội nhập kinh tế quốc tế sâu rộng, nguy cơ nào sau đây có thể xảy ra nếu chúng ta không có chiến lược phát triển bền vững?",
+            "options": [
+                  "Nguy cơ trở thành bãi thải công nghệ lạc hậu và ô nhiễm môi trường",
+                  "Thừa nguồn nhân lực chất lượng cao trong mọi lĩnh vực",
+                  "Thu hẹp hoàn toàn khoảng cách giàu nghèo mà không cần can thiệp",
+                  "Giá cả hàng hóa tiêu dùng tăng cao không kiểm soát"
+            ],
+            "answer": 0,
+            "exp": "Nếu quản lý lỏng lẻo, các doanh nghiệp nước ngoài có thể chuyển giao công nghệ cũ, gây ô nhiễm môi trường hoặc biến nước tiếp nhận thành nơi tiêu thụ rác thải công nghiệp."
       },
       {
-        q: "Đảng và Nhà nước ta luôn khẳng định quan điểm nhất quán nào về bảo vệ môi trường trong phát triển kinh tế?",
-        options: ["Ưu tiên tăng trưởng, xử lý môi trường sau", "Không đánh đổi môi trường lấy tăng trưởng kinh tế bằng mọi giá", "Đóng cửa tất cả các nhà máy", "Chỉ bảo vệ môi trường tại các thành phố lớn"],
-        answer: 1,
-        exp: "Theo SGK trang 15: Đảng và Nhà nước ta luôn chủ trương duy trì tăng trưởng bền vững, không đánh đổi tăng trưởng kinh tế bằng mọi giá."
+            "q": "Tập đoàn Samsung (Hàn Quốc) xây dựng tổ hợp sản xuất thiết bị di động quy mô hàng tỷ USD tại Bắc Ninh và Thái Nguyên là ví dụ điển hình của hình thức nào?",
+            "options": [
+                  "Đầu tư trực tiếp nước ngoài (FDI)",
+                  "Đầu tư gián tiếp qua thị trường chứng khoán (FII)",
+                  "Hợp tác văn hóa phi lợi nhuận",
+                  "Viện trợ nhân đạo quốc tế (ODA)"
+            ],
+            "answer": 0,
+            "exp": "Samsung trực tiếp bỏ vốn xây dựng nhà máy, lắp đặt dây chuyền và trực tiếp quản lý vận hành sản xuất tại Việt Nam, đây chính là hình thức đầu tư trực tiếp nước ngoài (FDI)."
       },
       {
-        q: "Yếu tố nào sau đây phản ánh mặt chất lượng của sự phát triển kinh tế?",
-        options: ["Sự gia tăng đơn thuần quy mô GDP", "Sự tiến bộ xã hội và phân phối công bằng", "Mức tăng kim ngạch xuất khẩu thô", "Tốc độ in thêm tiền mặt"],
-        answer: 1,
-        exp: "Tăng trưởng chỉ phản ánh mặt lượng; sự tiến bộ xã hội, công bằng và bảo vệ môi trường phản ánh mặt chất của phát triển kinh tế."
+            "q": "Việc Việt Nam xuất khẩu cà phê, hạt điều, dệt may và thủy sản sang thị trường các nước EU, Mỹ, Nhật Bản thuộc hình thức hội nhập nào?",
+            "options": [
+                  "Thương mại quốc tế",
+                  "Hợp tác quốc tế về khoa học",
+                  "Dịch vụ thu ngoại tệ đơn phương",
+                  "Đầu tư gián tiếp ra nước ngoài"
+            ],
+            "answer": 0,
+            "exp": "Thương mại quốc tế là quá trình trao đổi hàng hoá và dịch vụ qua biên giới quốc gia giữa các nước, thể hiện rõ qua các hoạt động xuất khẩu và nhập khẩu."
       },
       {
-        q: "Nếu một nền kinh tế có GDP tăng trưởng rất cao nhưng môi trường bị hủy hoại và khoảng cách giàu nghèo ngày càng sâu sắc, thì đó là",
-        options: ["phát triển bền vững", "tăng trưởng kinh tế không hợp lí", "kinh tế tri thức hiện đại", "tiến bộ xã hội"],
-        answer: 1,
-        exp: "Theo SGK trang 15: Tăng trưởng không hợp lí là tăng trưởng không gắn với phát triển xã hội và bảo vệ môi trường, tạo ra sự bất ổn xã hội."
+            "q": "Để đáp ứng yêu cầu của hội nhập kinh tế quốc tế, trách nhiệm quan trọng hàng đầu của học sinh THPT hiện nay là gì?",
+            "options": [
+                  "Tập trung kinh doanh buôn bán ngay để kiếm ngoại tệ",
+                  "Tích cực học tập, rèn luyện ngoại ngữ, tin học và trau dồi kỹ năng sống",
+                  "Sùng bái lối sống phương Tây và quay lưng với văn hóa truyền thống",
+                  "Chỉ học các môn tự nhiên, không cần quan tâm đến pháp luật và xã hội"
+            ],
+            "answer": 1,
+            "exp": "Trách nhiệm của học sinh là nỗ lực học tập, rèn luyện phẩm chất đạo đức, nâng cao trình độ ngoại ngữ, kỹ năng tin học và thích ứng nhanh với môi trường toàn cầu hóa."
       },
       {
-        q: "Điều kiện tiên quyết để một quốc gia đang phát triển như Việt Nam khắc phục tình trạng tụt hậu là gì?",
-        options: ["Tăng cường nhập khẩu hàng tiêu dùng", "Đẩy mạnh tăng trưởng và phát triển kinh tế", "Cắt giảm ngân sách giáo dục", "Hạn chế mở rộng doanh nghiệp"],
-        answer: 1,
-        exp: "Theo SGK trang 10, 14: Tăng trưởng và phát triển kinh tế là điều kiện tiên quyết để khắc phục tình trạng tụt hậu đối với quốc gia đang phát triển như Việt Nam."
+            "q": "Hành vi nào dưới đây của công dân thể hiện sự đóng góp tích cực vào tiến trình hội nhập kinh tế quốc tế của đất nước?",
+            "options": [
+                  "Ưu tiên sử dụng và quảng bá các sản phẩm nông sản chất lượng cao của Việt Nam ra thế giới",
+                  "Sử dụng hàng giả, hàng nhái nhãn mác quốc tế để kiếm lời",
+                  "Lợi dụng chính sách mở cửa để buôn lậu hàng cấm qua biên giới",
+                  "Tiếp tay cho doanh nghiệp xả chất thải nguy hại chưa xử lý ra môi trường"
+            ],
+            "answer": 0,
+            "exp": "Tiêu dùng thông minh, bảo vệ uy tín thương hiệu quốc gia và tự hào quảng bá sản phẩm Việt Nam chất lượng cao ra thế giới là hành động thiết thực ủng hộ hội nhập kinh tế."
       }
-    ];
+];
 
     let currentQuiz = [];
     let currentIndex = 0;
@@ -717,7 +817,7 @@
       // TẠO MÃ NỘP BÀI ĐỘC NHẤT
       const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
       const randomPart = Math.floor(1000 + Math.random() * 9000);
-      const subCode = `#${cleanClass}-${randomPart}`;
+      const subCode = `#${cleanClass}-B2-${randomPart}`;
       document.getElementById('res-sub-code').innerText = subCode;
 
       // TỰ ĐỘNG LƯU BÀI NỘP LÊN HỆ THỐNG ĐÁM MÂY CỦA GIÁO VIÊN
@@ -726,6 +826,7 @@
         subCode: subCode,
         name: studentInfo.name,
         className: studentInfo.class,
+        lesson: "Bài 2",
         score: finalScore10,
         correctCount: `${score}/${currentQuiz.length}`,
         timeElapsed: timeElapsedStr,
@@ -740,7 +841,7 @@
       lastSubmissionRecord = record;
       const statusEl = document.getElementById('cloud-sync-status');
       const codeBox = document.getElementById('submission-code-box');
-      const subCode = record.subCode || ('#' + (record.className || '12') + '-' + Math.floor(1000 + Math.random() * 9000));
+      const subCode = record.subCode || ('#' + (record.className || '12') + '-B2-' + Math.floor(1000 + Math.random() * 9000));
       record.subCode = subCode;
 
       if (document.getElementById('display-sub-code')) {
