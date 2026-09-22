@@ -261,6 +261,25 @@
       </div>
     </div>
 
+    <!-- THANH CHUYỂN ĐỔI CHẾ ĐỘ XEM: SỔ ĐIỂM CHUẨN vs BẢNG ĐÁNH GIÁ TIẾN BỘ & CHUYÊN CẦN -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-3">
+      <div class="inline-flex p-1 bg-slate-200/90 rounded-2xl shadow-inner gap-1">
+        <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white">
+          <span>📋</span> <span>Sổ Điểm Theo STT (Dán vnEdu)</span>
+        </button>
+        <button id="tab-btn-progress" onclick="switchMainViewTab('progress')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700">
+          <span>📈</span> <span>Tổng Kết Lần Làm & Đánh Giá Tiến Bộ</span>
+          <span class="bg-amber-400 text-slate-900 text-[10px] px-2 py-0.5 rounded-full font-black">Mới ⭐</span>
+        </button>
+      </div>
+
+      <div id="progression-actions" class="hidden flex items-center gap-2">
+        <button onclick="exportProgressionReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow transition flex items-center gap-1.5" title="Xuất file báo cáo mức độ thường xuyên và sự tiến bộ của học sinh">
+          <span>📥</span> <span>Xuất Báo Cáo Tiến Bộ & Chuyên Cần (.CSV)</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Bảng danh sách theo dõi học sinh -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
       
@@ -276,18 +295,8 @@
 
       <div class="overflow-x-auto max-h-[620px] overflow-y-auto">
         <table class="w-full text-left border-collapse text-xs">
-          <thead class="bg-slate-100/80 sticky top-0 z-10 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
-            <tr>
-              <th class="py-3 px-3 text-center w-12">STT</th>
-              <th class="py-3 px-2 text-center w-28">Mã định danh</th>
-              <th class="py-3 px-3">Họ và Tên Học Sinh</th>
-              <th class="py-3 px-2 text-center w-20">Lớp</th>
-              <th class="py-3 px-2 text-center w-28">Trạng thái</th>
-              <th class="py-3 px-2 text-center w-24">Điểm (/10)</th>
-              <th class="py-3 px-2 text-center w-24">Số câu đúng</th>
-              <th class="py-3 px-2 text-center w-24">Thời gian</th>
-              <th class="py-3 px-3 text-right w-36">Ngày giờ nộp</th>
-            </tr>
+          <thead id="dashboard-table-head" class="bg-slate-100/80 sticky top-0 z-10 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+            <!-- Render dynamically by JS based on view tab -->
           </thead>
           <tbody id="dashboard-table-body" class="divide-y divide-slate-100">
             <!-- Render tự động -->
@@ -308,6 +317,64 @@
     </div>
 
   </main>
+
+  <!-- MODAL HỒ SƠ CHI TIẾT CÁC LẦN LÀM BÀI & TIẾN BỘ CỦA HỌC SINH -->
+  <div id="student-history-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <div class="bg-white w-full max-w-2xl rounded-2xl p-5 md:p-6 shadow-2xl border border-slate-100 text-left max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold">🎓</div>
+          <div>
+            <h3 id="modal-student-name" class="font-bold text-slate-800 text-base">Hồ Sơ Học Tập Học Sinh</h3>
+            <div id="modal-student-meta" class="text-xs text-slate-500">Lớp: 12A7 • Mã định danh: -</div>
+          </div>
+        </div>
+        <button onclick="closeStudentHistoryModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold p-1">✕</button>
+      </div>
+
+      <!-- Tóm tắt tiến bộ -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 shrink-0">
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-center">
+          <div class="text-[10px] uppercase font-bold text-slate-400">Tổng số lần làm</div>
+          <div id="modal-stat-count" class="text-xl font-black text-indigo-600 mt-0.5">0</div>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-center">
+          <div class="text-[10px] uppercase font-bold text-slate-400">Điểm lần đầu</div>
+          <div id="modal-stat-first" class="text-xl font-black text-slate-700 mt-0.5">-</div>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-center">
+          <div class="text-[10px] uppercase font-bold text-slate-400">Điểm cao nhất</div>
+          <div id="modal-stat-best" class="text-xl font-black text-emerald-600 mt-0.5">-</div>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-center">
+          <div class="text-[10px] uppercase font-bold text-slate-400">Độ tiến bộ</div>
+          <div id="modal-stat-delta" class="text-xl font-black text-blue-600 mt-0.5">-</div>
+        </div>
+      </div>
+
+      <!-- Nhận xét sư phạm -->
+      <div id="modal-pedagogical-eval" class="p-3 bg-indigo-50/60 border border-indigo-200 rounded-xl text-xs text-indigo-900 mb-4 shrink-0">
+        <!-- Đánh giá tự động -->
+      </div>
+
+      <!-- Danh sách từng lần làm bài -->
+      <div class="flex-grow overflow-y-auto pr-1">
+        <div class="text-xs font-bold text-slate-700 uppercase mb-2 flex items-center justify-between">
+          <span>Chi tiết từng lần nộp bài:</span>
+          <span class="text-[11px] text-slate-400 font-normal">Xếp từ lần mới nhất đến lần đầu</span>
+        </div>
+        <div id="modal-attempts-timeline" class="space-y-2.5">
+          <!-- Render timeline cards by JS -->
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end shrink-0">
+        <button onclick="closeStudentHistoryModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+          Đóng cửa sổ
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL DÁN LINK GOOGLE SHEETS -->
   <div id="sheet-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -367,8 +434,29 @@
       { id: 16, code: 'B16', title: "Bài 16: Nguyên tắc cơ bản của WTO và hợp đồng thương mại quốc tế", short: "Bài 16: Nguyên tắc WTO & HĐTM", fileCode: "Bai16_NguyenTacWTO" }
     ];
 
+    // Chế độ xem hiện tại: 'gradebook' (Sổ điểm chuẩn) hoặc 'progress' (Đánh giá tiến bộ)
+    let currentMainViewTab = 'gradebook';
+
     // Bài học hiện tại đang xem (Mặc định: Bài 1)
     let currentActiveLessonId = 1;
+
+    function switchMainViewTab(tab) {
+      currentMainViewTab = tab;
+      const btnGb = document.getElementById('tab-btn-gradebook');
+      const btnProg = document.getElementById('tab-btn-progress');
+      const progActions = document.getElementById('progression-actions');
+
+      if (tab === 'gradebook') {
+        btnGb.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white";
+        btnProg.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700";
+        if (progActions) progActions.classList.add('hidden');
+      } else {
+        btnProg.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white";
+        btnGb.className = "px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700";
+        if (progActions) progActions.classList.remove('hidden');
+      }
+      applyFilters();
+    }
 
     // CẤU HÌNH GOOGLE APPS SCRIPT / GOOGLE SHEETS
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
@@ -956,7 +1044,41 @@
       document.getElementById('stat-pass').innerText = `Tỉ lệ đạt: ${passRate}%`;
     }
 
+    function renderTableThead() {
+      const thead = document.getElementById('dashboard-table-head');
+      if (!thead) return;
+
+      if (currentMainViewTab === 'gradebook') {
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3 px-3 text-center w-12">STT</th>
+            <th class="py-3 px-2 text-center w-28">Mã định danh</th>
+            <th class="py-3 px-3">Họ và Tên Học Sinh</th>
+            <th class="py-3 px-2 text-center w-20">Lớp</th>
+            <th class="py-3 px-2 text-center w-28">Trạng thái</th>
+            <th class="py-3 px-2 text-center w-24">Điểm (/10)</th>
+            <th class="py-3 px-2 text-center w-24">Số câu đúng</th>
+            <th class="py-3 px-2 text-center w-24">Thời gian</th>
+            <th class="py-3 px-3 text-right w-36">Ngày giờ nộp</th>
+          </tr>`;
+      } else {
+        thead.innerHTML = `
+          <tr>
+            <th class="py-3 px-3 text-center w-12">STT</th>
+            <th class="py-3 px-3">Họ và Tên Học Sinh</th>
+            <th class="py-3 px-2 text-center w-16">Lớp</th>
+            <th class="py-3 px-2 text-center w-24">Số lần làm</th>
+            <th class="py-3 px-3 text-center w-36">Lần đầu ➔ Cao nhất</th>
+            <th class="py-3 px-3 text-center w-40">Mức độ tiến bộ</th>
+            <th class="py-3 px-3">Chuỗi điểm qua các lần</th>
+            <th class="py-3 px-3 text-center w-44">Đánh giá chuyên cần</th>
+            <th class="py-3 px-2 text-center w-20">Thao tác</th>
+          </tr>`;
+      }
+    }
+
     function renderTableRows(items) {
+      renderTableThead();
       const tbody = document.getElementById('dashboard-table-body');
       const emptyMsg = document.getElementById('table-empty-msg');
       tbody.innerHTML = '';
@@ -967,59 +1089,352 @@
       }
       emptyMsg.classList.add('hidden');
 
-      items.forEach((item) => {
-        const tr = document.createElement('tr');
-        
-        if (item.isUnmatched) {
-          tr.className = "hover:bg-amber-100/50 transition bg-amber-50/40 border-l-4 border-amber-500";
-        } else if (item.isDone) {
+      if (currentMainViewTab === 'gradebook') {
+        // CHẾ ĐỘ 1: SỔ ĐIỂM THEO STT (CHUẨN VNEDU)
+        items.forEach((item) => {
+          const tr = document.createElement('tr');
+          if (item.isUnmatched) {
+            tr.className = "hover:bg-amber-100/50 transition bg-amber-50/40 border-l-4 border-amber-500";
+          } else if (item.isDone) {
+            tr.className = "hover:bg-slate-50 transition bg-white";
+          } else {
+            tr.className = "hover:bg-amber-50/40 transition bg-slate-50/50 opacity-80";
+          }
+
+          let statusBadge = '';
+          let scoreBadge = '-';
+
+          if (item.isUnmatched) {
+            scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${item.score}</span>`;
+            statusBadge = `<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-amber-300"><span>⚠️</span> Tự gõ tên</span>`;
+          } else if (item.isDone) {
+            const numScore = parseFloat(item.score) || 0;
+            let scoreBadgeClass = "bg-slate-100 text-slate-800";
+            if (numScore >= 9.0) scoreBadgeClass = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold";
+            else if (numScore >= 8.0) scoreBadgeClass = "bg-teal-100 text-teal-800 border border-teal-300 font-bold";
+            else if (numScore >= 5.0) scoreBadgeClass = "bg-blue-100 text-blue-800 font-bold";
+            else scoreBadgeClass = "bg-rose-100 text-rose-800 font-bold";
+
+            scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${item.score}</span>`;
+
+            const countBadge = item.submissionCount > 1 ? `<span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded font-bold cursor-pointer hover:bg-indigo-200" onclick="event.stopPropagation(); openStudentHistoryModal('${item.name.replace(/'/g, "\\'")}', '${item.className}')" title="Làm ${item.submissionCount} lần - Bấm xem lịch sử">${item.submissionCount}x 🔍</span>` : '';
+            statusBadge = `<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-emerald-300"><span>✅</span> Đã nộp${countBadge}</span>`;
+          } else {
+            statusBadge = `<span class="inline-flex items-center gap-1 bg-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-md text-[11px]"><span>⏳</span> Chưa làm</span>`;
+          }
+
+          const safeItemName = (item.name || '').replace(/'/g, "\\'");
+          const safeItemClass = (item.className || '').replace(/'/g, "\\'");
+          const assignBtn = item.isUnmatched ? `<button onclick="assignUnmatchedSub('${safeItemName}', '${safeItemClass}')" class="ml-1 text-[10px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold border border-indigo-200">🔗 Ghép</button>` : '';
+
+          tr.innerHTML = `
+            <td class="py-2.5 px-3 text-center text-slate-400 font-mono font-bold">${item.stt}</td>
+            <td class="py-2.5 px-2 text-center font-mono text-[11px] text-slate-500">${item.studentId || '-'}</td>
+            <td class="py-2.5 px-3 font-semibold ${item.isDone ? 'text-slate-800 hover:text-indigo-700 cursor-pointer' : 'text-slate-600'}" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">${item.name} ${assignBtn}</td>
+            <td class="py-2.5 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">${item.className}</span></td>
+            <td class="py-2.5 px-2 text-center">${statusBadge}</td>
+            <td class="py-2.5 px-2 text-center">${scoreBadge}</td>
+            <td class="py-2.5 px-2 text-center font-medium text-slate-600">${item.correctCount || '-'}</td>
+            <td class="py-2.5 px-2 text-center font-mono text-slate-500">${item.timeElapsed || '-'}</td>
+            <td class="py-2.5 px-3 text-right text-slate-400 text-[11px]">${item.timestamp || '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        // CHẾ ĐỘ 2: BẢNG TỔNG KẾT TIẾN BỘ & MỨC ĐỘ THƯỜNG XUYÊN
+        items.forEach((item) => {
+          const tr = document.createElement('tr');
           tr.className = "hover:bg-slate-50 transition bg-white";
-        } else {
-          tr.className = "hover:bg-amber-50/40 transition bg-slate-50/50 opacity-80";
-        }
 
-        let statusBadge = '';
-        let scoreBadge = '-';
+          const pInfo = getStudentProgressionInfo(item);
+          const safeItemName = (item.name || '').replace(/'/g, "\\'");
+          const safeItemClass = (item.className || '').replace(/'/g, "\\'");
 
-        if (item.isUnmatched) {
-          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${item.score}</span>`;
-          statusBadge = `<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-amber-300"><span>⚠️</span> Tự gõ tên</span>`;
-        } else if (item.isDone) {
-          const numScore = parseFloat(item.score) || 0;
-          let scoreBadgeClass = "bg-slate-100 text-slate-800";
-          if (numScore >= 9.0) scoreBadgeClass = "bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold";
-          else if (numScore >= 8.0) scoreBadgeClass = "bg-teal-100 text-teal-800 border border-teal-300 font-bold";
-          else if (numScore >= 5.0) scoreBadgeClass = "bg-blue-100 text-blue-800 font-bold";
-          else scoreBadgeClass = "bg-rose-100 text-rose-800 font-bold";
-
-          scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${item.score}</span>`;
-
-          const countBadge = item.submissionCount > 1 ? `<span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1 py-0.2 rounded font-bold" title="Làm ${item.submissionCount} lần">${item.submissionCount}x</span>` : '';
-          statusBadge = `<span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-emerald-300"><span>✅</span> Đã nộp${countBadge}</span>`;
-        } else {
-          statusBadge = `<span class="inline-flex items-center gap-1 bg-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-md text-[11px]"><span>⏳</span> Chưa làm</span>`;
-        }
-
-        const safeItemName = (item.name || '').replace(/'/g, "\\'");
-        const safeItemClass = (item.className || '').replace(/'/g, "\\'");
-        const assignBtn = item.isUnmatched ? `<button onclick="assignUnmatchedSub('${safeItemName}', '${safeItemClass}')" class="ml-1 text-[10px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold border border-indigo-200">🔗 Ghép</button>` : '';
-
-        tr.innerHTML = `
-          <td class="py-2.5 px-3 text-center text-slate-400 font-mono font-bold">${item.stt}</td>
-          <td class="py-2.5 px-2 text-center font-mono text-[11px] text-slate-500">${item.studentId || '-'}</td>
-          <td class="py-2.5 px-3 font-semibold ${item.isDone ? 'text-slate-800' : 'text-slate-600'}">${item.name} ${assignBtn}</td>
-          <td class="py-2.5 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">${item.className}</span></td>
-          <td class="py-2.5 px-2 text-center">${statusBadge}</td>
-          <td class="py-2.5 px-2 text-center">${scoreBadge}</td>
-          <td class="py-2.5 px-2 text-center font-medium text-slate-600">${item.correctCount || '-'}</td>
-          <td class="py-2.5 px-2 text-center font-mono text-slate-500">${item.timeElapsed || '-'}</td>
-          <td class="py-2.5 px-3 text-right text-slate-400 text-[11px]">${item.timestamp || '-'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+          tr.innerHTML = `
+            <td class="py-2.5 px-3 text-center text-slate-400 font-mono font-bold">${item.stt}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800 hover:text-indigo-700 cursor-pointer" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">
+              ${item.name}
+            </td>
+            <td class="py-2.5 px-2 text-center"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold text-[11px]">${item.className}</span></td>
+            <td class="py-2.5 px-2 text-center">${pInfo.attemptsBadge}</td>
+            <td class="py-2.5 px-3 text-center font-mono font-bold">${pInfo.scoreSpan}</td>
+            <td class="py-2.5 px-3 text-center">${pInfo.progressBadge}</td>
+            <td class="py-2.5 px-3">${pInfo.chainHtml}</td>
+            <td class="py-2.5 px-3 text-center">${pInfo.attitudeBadge}</td>
+            <td class="py-2.5 px-2 text-center">
+              <button onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-lg border border-indigo-200 transition flex items-center justify-center gap-1 mx-auto" title="Xem dòng thời gian làm bài chi tiết">
+                <span>🔍</span> <span>Xem</span>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
     }
 
-    // 1. XUẤT FILE EXCEL CHO RIÊNG BÀI HỌC ĐANG CHỌN (16 BÀI TƯƠNG ỨNG 16 FILE)
+    // TÍNH TOÁN CÁC CHỈ SỐ TIẾN BỘ VÀ ĐÁNH GIÁ THÁI ĐỘ CỦA HỌC SINH
+    function getStudentProgressionInfo(student) {
+      const studentNorm = normText(student.name);
+      const studentClean = cleanSubName(student.name);
+
+      let customMappings = {};
+      try { customMappings = JSON.parse(localStorage.getItem('ktpl12_name_mappings') || '{}'); } catch(e) {}
+
+      // Lấy tất cả bài nộp của học sinh này cho bài học đang chọn (hoặc tất cả bài)
+      let candidateSubmissions = allRawSubmissions;
+      if (currentActiveLessonId !== 'ALL') {
+        candidateSubmissions = allRawSubmissions.filter(s => s.lessonId === parseInt(currentActiveLessonId, 10));
+      }
+
+      const subs = candidateSubmissions.filter(sub => {
+        const subNorm = normText(sub.name);
+        const subClean = cleanSubName(sub.name);
+
+        if (customMappings[subNorm] && (normText(customMappings[subNorm]) === studentNorm || customMappings[subNorm] === student.studentId)) return true;
+        if (customMappings[subClean] && (normText(customMappings[subClean]) === studentNorm || customMappings[subClean] === student.studentId)) return true;
+
+        if (!isClassMatch(sub.className, student.className)) return false;
+        if (subClean === studentClean || subNorm === studentNorm) return true;
+        if (subNorm.includes(studentNorm) || subClean.includes(studentClean)) return true;
+        return false;
+      });
+
+      // Sắp xếp các lần làm theo thời gian tăng dần (Lần 1 -> Lần N)
+      subs.sort((a, b) => {
+        const timeA = new Date(a.timestamp).getTime() || a.id || 0;
+        const timeB = new Date(b.timestamp).getTime() || b.id || 0;
+        return timeA - timeB;
+      });
+
+      const count = subs.length;
+
+      if (count === 0) {
+        return {
+          count: 0,
+          attemptsBadge: `<span class="text-slate-400 font-semibold text-xs">0 lần</span>`,
+          scoreSpan: `<span class="text-slate-400">-</span>`,
+          progressBadge: `<span class="text-slate-400 text-xs">Chưa làm bài</span>`,
+          chainHtml: `<span class="text-slate-400 text-xs italic">Chưa có bài nộp nào</span>`,
+          attitudeBadge: `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-500 font-medium px-2 py-0.5 rounded text-[11px]"><span>⏳</span> Chưa tham gia</span>`
+        };
+      }
+
+      const firstSub = subs[0];
+      const bestSub = [...subs].sort((a, b) => parseFloat(b.score) - parseFloat(a.score))[0];
+      const firstScore = parseFloat(firstSub.score) || 0;
+      const bestScore = parseFloat(bestSub.score) || 0;
+      const delta = (bestScore - firstScore).toFixed(1);
+
+      // 1. Badge số lần làm
+      let attemptsClass = "bg-slate-100 text-slate-700";
+      if (count >= 3) attemptsClass = "bg-purple-100 text-purple-800 border border-purple-300 font-black";
+      else if (count === 2) attemptsClass = "bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold";
+      const attemptsBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${attemptsClass}">${count} lần</span>`;
+
+      // 2. Điểm lần đầu ➔ Cao nhất
+      let scoreSpan = '';
+      if (count === 1) {
+        scoreSpan = `<span class="text-slate-700">${firstSub.score}</span>`;
+      } else {
+        scoreSpan = `<span class="text-slate-500 line-through text-xs">${firstSub.score}</span> <span class="text-indigo-400">➔</span> <span class="text-emerald-600 font-black text-sm">${bestSub.score}</span>`;
+      }
+
+      // 3. Mức độ tiến bộ
+      let progressBadge = '';
+      if (count === 1) {
+        if (firstScore >= 9.0) progressBadge = `<span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded text-[11px] border border-emerald-200">💎 Xuất sắc từ đầu</span>`;
+        else if (firstScore >= 7.0) progressBadge = `<span class="text-blue-700 font-semibold bg-blue-50 px-2 py-0.5 rounded text-[11px]">Khá tốt (1 lần)</span>`;
+        else progressBadge = `<span class="text-amber-700 font-semibold bg-amber-50 px-2 py-0.5 rounded text-[11px]">⚠️ Chưa làm lại</span>`;
+      } else {
+        if (delta > 0) {
+          progressBadge = `<span class="text-emerald-700 font-black bg-emerald-100 px-2.5 py-0.5 rounded-full text-[11px] border border-emerald-300">🚀 +${delta} điểm</span>`;
+        } else if (delta === 0 && bestScore >= 9.0) {
+          progressBadge = `<span class="text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded text-[11px]">Duy trì xuất sắc (10đ)</span>`;
+        } else {
+          progressBadge = `<span class="text-slate-600 font-medium bg-slate-100 px-2 py-0.5 rounded text-[11px]">Ổn định (${bestScore}đ)</span>`;
+        }
+      }
+
+      // 4. Chuỗi điểm qua các lần
+      const chainHtml = `<div class="flex flex-wrap items-center gap-1.5">` + subs.map((s, idx) => {
+        const sc = parseFloat(s.score) || 0;
+        let cClass = "bg-slate-100 text-slate-700 border-slate-200";
+        if (sc >= 9.0) cClass = "bg-emerald-50 text-emerald-800 border-emerald-200 font-bold";
+        else if (sc >= 7.0) cClass = "bg-blue-50 text-blue-800 border-blue-200";
+        return `<span class="px-1.5 py-0.5 rounded border text-[11px] ${cClass}" title="Lần ${idx + 1}: ${s.score}đ (${s.correctCount}) lúc ${s.timestamp}">L${idx + 1}: <b>${s.score}đ</b></span>`;
+      }).join('<span class="text-slate-300 text-xs">➔</span>') + `</div>`;
+
+      // 5. Đánh giá thái độ & chuyên cần
+      let attitudeBadge = '';
+      if (count >= 3) {
+        attitudeBadge = `<span class="inline-flex items-center gap-1 bg-purple-100 text-purple-900 font-bold px-2 py-0.5 rounded-md text-[11px] border border-purple-300"><span>⭐⭐⭐</span> Rất chăm chỉ</span>`;
+      } else if (count === 2) {
+        attitudeBadge = `<span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-indigo-200"><span>⭐⭐</span> Có tự giác</span>`;
+      } else {
+        if (firstScore >= 8.5) {
+          attitudeBadge = `<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 font-semibold px-2 py-0.5 rounded-md text-[11px]"><span>⭐</span> Nắm chắc bài</span>`;
+        } else {
+          attitudeBadge = `<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 font-semibold px-2 py-0.5 rounded-md text-[11px]"><span>⚠️</span> Cần rèn thêm</span>`;
+        }
+      }
+
+      return {
+        count,
+        firstScore,
+        bestScore,
+        delta,
+        attemptsBadge,
+        scoreSpan,
+        progressBadge,
+        chainHtml,
+        attitudeBadge,
+        subs
+      };
+    }
+
+    // MỞ MODAL XEM CHI TIẾT DÒNG THỜI GIAN CÁC LẦN LÀM BÀI
+    function openStudentHistoryModal(studentName, className) {
+      const modal = document.getElementById('student-history-modal');
+      const nameEl = document.getElementById('modal-student-name');
+      const metaEl = document.getElementById('modal-student-meta');
+      const statCount = document.getElementById('modal-stat-count');
+      const statFirst = document.getElementById('modal-stat-first');
+      const statBest = document.getElementById('modal-stat-best');
+      const statDelta = document.getElementById('modal-stat-delta');
+      const evalBox = document.getElementById('modal-pedagogical-eval');
+      const timelineBox = document.getElementById('modal-attempts-timeline');
+
+      if (!modal) return;
+
+      const pInfo = getStudentProgressionInfo({ name: studentName, className: className });
+
+      if (nameEl) nameEl.innerText = studentName;
+      if (metaEl) metaEl.innerText = `Lớp: ${className} • Môn Giáo dục Kinh tế & Pháp luật 12`;
+      if (statCount) statCount.innerText = pInfo.count;
+      if (statFirst) statFirst.innerText = (pInfo.count > 0) ? `${pInfo.firstScore} / 10` : '-';
+      if (statBest) statBest.innerText = (pInfo.count > 0) ? `${pInfo.bestScore} / 10` : '-';
+      
+      if (statDelta) {
+        if (pInfo.count <= 1) statDelta.innerText = '0.0';
+        else statDelta.innerText = (parseFloat(pInfo.delta) > 0 ? `+${pInfo.delta}` : pInfo.delta);
+      }
+
+      // Đưa ra nhận xét sư phạm
+      if (evalBox) {
+        if (pInfo.count === 0) {
+          evalBox.innerHTML = `<div class="font-bold text-amber-900">⏳ Học sinh chưa thực hiện bài luyện tập nào</div><div class="text-[11px] text-amber-700 mt-0.5">Cô có thể bấm nút "Nhắc Zalo" ở thanh công cụ để đôn đốc em tham gia nhé.</div>`;
+        } else if (pInfo.count >= 2 && parseFloat(pInfo.delta) > 0) {
+          evalBox.innerHTML = `<div class="font-bold text-emerald-900">🚀 Học sinh có tinh thần tự học rất cao & tiến bộ rõ rệt!</div><div class="text-[11px] text-emerald-700 mt-0.5">Em đã chủ động làm lại bài để cải thiện điểm số (tăng <b>+${pInfo.delta} điểm</b> so với lần đầu). Rất đáng tuyên dương trước lớp!</div>`;
+        } else if (pInfo.bestScore >= 9.0) {
+          evalBox.innerHTML = `<div class="font-bold text-indigo-900">💎 Học sinh nắm bài rất vững chắc và đạt kết quả xuất sắc!</div><div class="text-[11px] text-indigo-700 mt-0.5">Em đạt điểm số cao ngay từ những lần đầu, nắm chắc các khái niệm và câu hỏi tình huống trong SGK.</div>`;
+        } else {
+          evalBox.innerHTML = `<div class="font-bold text-slate-800">💡 Học sinh đã hoàn thành 1 lần làm bài</div><div class="text-[11px] text-slate-600 mt-0.5">Khuyến khích em vào làm lại bài để rèn luyện thêm kỹ năng phản xạ và đạt điểm tối đa nhé.</div>`;
+        }
+      }
+
+      // Render danh sách các lần làm
+      if (timelineBox) {
+        const subs = pInfo.subs || [];
+        if (subs.length === 0) {
+          timelineBox.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">Chưa có lịch sử làm bài.</div>`;
+        } else {
+          // Hiển thị từ mới nhất đến cũ nhất
+          const reversedSubs = [...subs].reverse();
+          timelineBox.innerHTML = reversedSubs.map((s, idx) => {
+            const attemptNum = subs.length - idx;
+            const scoreNum = parseFloat(s.score) || 0;
+            let badgeColor = "bg-slate-100 text-slate-800 border-slate-200";
+            if (scoreNum >= 9.0) badgeColor = "bg-emerald-50 text-emerald-800 border-emerald-300 font-black";
+            else if (scoreNum >= 7.0) badgeColor = "bg-blue-50 text-blue-800 border-blue-300 font-bold";
+
+            return `
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-800 font-bold flex items-center justify-center shrink-0">L${attemptNum}</span>
+                  <div>
+                    <div class="font-bold text-slate-800">Lần làm thứ ${attemptNum} ${attemptNum === 1 ? '(Lần đầu)' : ''}</div>
+                    <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mã: ${s.subCode || '#KT12'} • ${s.timestamp || ''}</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-base font-black px-2.5 py-0.5 rounded-lg border ${badgeColor} inline-block">${s.score} / 10</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Đúng ${s.correctCount} • ⏱️ ${s.timeElapsed || 'Nhanh'}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeStudentHistoryModal() {
+      const modal = document.getElementById('student-history-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // XUẤT BÁO CÁO TIẾN BỘ & CHUYÊN CẦN RA FILE EXCEL (.CSV)
+    function exportProgressionReport() {
+      const selectedClass = document.getElementById('filter-class').value;
+      const { allItems } = buildRosterView();
+
+      if (allItems.length === 0) {
+        alert("Chưa có danh sách học sinh để xuất báo cáo tiến bộ!");
+        return;
+      }
+
+      const classNameStr = selectedClass === 'ALL' ? 'Tat_Ca_3_Lop' : `Lop_${selectedClass}`;
+      const now = new Date();
+      const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
+
+      let lessonTitle = 'TẤT CẢ BÀI HỌC';
+      if (currentActiveLessonId !== 'ALL') {
+        const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+        lessonTitle = lesObj.title.toUpperCase();
+      }
+
+      const headers = [
+        `BÁO CÁO MỨC ĐỘ THƯỜNG XUYÊN & SỰ TIẾN BỘ HỌC TẬP - KTPL 12 - ${lessonTitle} - ${classNameStr}`,
+        "", "", "", "", "", "", "", "", ""
+      ];
+      const colTitles = [
+        "STT", "Mã định danh", "Họ và tên", "Lớp", 
+        "Số lần làm bài", "Điểm lần đầu", "Điểm cao nhất", "Độ tiến bộ (+/-)", 
+        "Chuỗi điểm các lần", "Đánh giá thái độ & chuyên cần"
+      ];
+
+      const rows = allItems.map(item => {
+        const pInfo = getStudentProgressionInfo(item);
+        const subList = pInfo.subs || [];
+        const chainStr = subList.map((s, i) => `L${i+1}: ${s.score}đ (${s.correctCount})`).join(' -> ');
+        const attitudeText = (pInfo.count >= 3) ? "Rất chăm chỉ & Tự giác" :
+                             (pInfo.count === 2) ? "Có tinh thần tiến bộ" :
+                             (pInfo.count === 1 && pInfo.firstScore >= 8.5) ? "Nắm chắc bài" :
+                             (pInfo.count === 1) ? "Cần đôn đốc làm lại" : "Chưa tham gia";
+
+        return [
+          item.stt,
+          `"${item.studentId || ''}"`,
+          `"${(item.name || '').replace(/"/g, '""')}"`,
+          `"${item.className || ''}"`,
+          pInfo.count,
+          pInfo.count > 0 ? `"${pInfo.firstScore}"` : `""`,
+          pInfo.count > 0 ? `"${pInfo.bestScore}"` : `""`,
+          pInfo.count > 1 ? `"+${pInfo.delta}"` : (pInfo.count === 1 ? `"0.0"` : `""`),
+          `"${chainStr}"`,
+          `"${attitudeText}"`
+        ];
+      });
+
+      const csvContent = "\uFEFF" + [headers.join(","), colTitles.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Bao_Cao_Tien_Bo_Chuyen_Can_KTPL12_${classNameStr}_${dateStr}.csv`;
+      link.click();
+    }
+
     function exportToExcelOfficial() {
       const { allItems } = buildRosterView();
       if (allItems.length === 0) {
