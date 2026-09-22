@@ -82,10 +82,18 @@
           <input type="text" id="student-class-other" placeholder="Nhập tên lớp của em..." class="hidden mt-2 w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">2. Họ và tên học sinh *</label>
-          <input type="text" id="student-name" list="student-names-list" placeholder="Chọn hoặc gõ tên của em..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-medium" autocomplete="off">
-          <datalist id="student-names-list"></datalist>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center justify-between">
+            <span>2. Họ và tên học sinh *</span>
+            <button type="button" id="btn-toggle-custom-name" onclick="toggleCustomName()" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold hover:underline">
+              ✍️ Tự gõ tên
+            </button>
+          </label>
+          <select id="student-name-select" onchange="onStudentNameChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
+            <option value="">-- Vui lòng chọn lớp ở trên trước --</option>
+          </select>
+          <input type="text" id="student-name-custom" placeholder="Nhập đầy đủ Họ và tên của em..." class="hidden mt-2 w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
           <div id="class-hint" class="text-[11px] text-slate-500 mt-1.5 leading-snug">💡 Em chọn lớp trước, hệ thống sẽ tự động hiện danh sách họ tên để chọn nhanh và không bị sai sót.</div>
+        </div>
         </div>
         <div class="flex items-center gap-2 pt-1 text-xs text-slate-600">
           <input type="checkbox" id="shuffle-options-check" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
@@ -509,33 +517,83 @@
       clearInterval(timerInterval);
     }
 
+    let isManualNameMode = false;
+
+    function toggleCustomName(forceState) {
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
+      const toggleBtn = document.getElementById('btn-toggle-custom-name');
+
+      if (typeof forceState === 'boolean') {
+        isManualNameMode = forceState;
+      } else {
+        isManualNameMode = !isManualNameMode;
+      }
+
+      if (isManualNameMode) {
+        nameSelect.classList.add('hidden');
+        nameCustom.classList.remove('hidden');
+        nameCustom.focus();
+        if (toggleBtn) toggleBtn.innerText = '📋 Chọn từ danh sách';
+      } else {
+        nameSelect.classList.remove('hidden');
+        nameCustom.classList.add('hidden');
+        if (toggleBtn) toggleBtn.innerText = '✍️ Tự gõ tên';
+      }
+    }
+
+    function onStudentNameChange() {
+      const nameSelect = document.getElementById('student-name-select');
+      if (nameSelect && nameSelect.value === '__custom__') {
+        toggleCustomName(true);
+      }
+    }
+
     function onClassChange() {
       const classSelect = document.getElementById('student-class');
       const classOther = document.getElementById('student-class-other');
-      const datalist = document.getElementById('student-names-list');
-      const nameInput = document.getElementById('student-name');
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
       const hint = document.getElementById('class-hint');
 
       const val = classSelect.value;
-      datalist.innerHTML = '';
-      nameInput.value = '';
+      nameSelect.innerHTML = '';
+      nameCustom.value = '';
 
       if (val === 'Khác') {
         classOther.classList.remove('hidden');
         classOther.focus();
-        if (hint) hint.innerHTML = '💡 Em nhập tên lớp của mình và điền đầy đủ họ và tên bên dưới.';
+        toggleCustomName(true);
+        if (hint) hint.innerHTML = '💡 Em nhập tên lớp của mình và tự gõ đầy đủ họ và tên bên dưới.';
       } else {
         classOther.classList.add('hidden');
+        toggleCustomName(false);
+
         if (val && typeof CLASS_ROSTERS !== 'undefined' && CLASS_ROSTERS[val]) {
+          const defaultOpt = document.createElement('option');
+          defaultOpt.value = '';
+          defaultOpt.innerText = `-- Bấm vào đây để chọn tên (${CLASS_ROSTERS[val].length} học sinh) --`;
+          nameSelect.appendChild(defaultOpt);
+
           CLASS_ROSTERS[val].forEach(st => {
             const opt = document.createElement('option');
             opt.value = st.name;
-            opt.label = `${st.stt}. ${st.name}`;
-            datalist.appendChild(opt);
+            opt.innerText = `${st.stt}. ${st.name}`;
+            nameSelect.appendChild(opt);
           });
-          if (hint) hint.innerHTML = `✅ Đã kết nối danh sách <b>${CLASS_ROSTERS[val].length}</b> học sinh lớp <b>${val}</b>. Nhập chữ cái đầu hoặc bấm vào ô họ tên để chọn nhanh!`;
-          nameInput.focus();
+
+          const customOpt = document.createElement('option');
+          customOpt.value = '__custom__';
+          customOpt.innerText = '✍️ Tự gõ tên khác...';
+          nameSelect.appendChild(customOpt);
+
+          if (hint) hint.innerHTML = `✅ Đã có danh sách <b>${CLASS_ROSTERS[val].length}</b> học sinh lớp <b>${val}</b>. Em bấm vào ô trên để chọn tên của mình!`;
+          nameSelect.focus();
         } else {
+          const defaultOpt = document.createElement('option');
+          defaultOpt.value = '';
+          defaultOpt.innerText = '-- Vui lòng chọn lớp ở trên trước --';
+          nameSelect.appendChild(defaultOpt);
           if (hint) hint.innerHTML = '💡 Em chọn lớp trước, hệ thống sẽ tự động hiện danh sách họ tên để chọn nhanh và không bị sai sót.';
         }
       }
@@ -547,8 +605,22 @@
       if (sClass === 'Khác') {
         sClass = (document.getElementById('student-class-other')?.value || '').trim();
       }
-      const name = document.getElementById('student-name').value.trim();
-      const shuffleOptions = document.getElementById('shuffle-options-check').checked;
+
+      let name = '';
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
+
+      if (isManualNameMode) {
+        name = nameCustom ? nameCustom.value.trim() : '';
+      } else {
+        if (nameSelect && nameSelect.value && nameSelect.value !== '__custom__') {
+          name = nameSelect.value.trim();
+        } else if (nameCustom && nameCustom.value.trim()) {
+          name = nameCustom.value.trim();
+        }
+      }
+
+      const shuffleOptions = document.getElementById('shuffle-options-check')?.checked ?? true;
 
       if (!sClass) {
         alert("Vui lòng chọn hoặc nhập Lớp của em để bắt đầu!");
@@ -557,8 +629,12 @@
       }
 
       if (!name) {
-        alert("Vui lòng chọn hoặc nhập đầy đủ Họ và tên học sinh để bắt đầu!");
-        document.getElementById('student-name').focus();
+        alert("Vui lòng chọn Họ và tên học sinh từ danh sách để bắt đầu!");
+        if (!isManualNameMode && nameSelect) {
+          nameSelect.focus();
+        } else if (nameCustom) {
+          nameCustom.focus();
+        }
         return;
       }
 
@@ -566,6 +642,7 @@
       studentInfo.class = sClass;
 
       const rawBank = [...questionsBank].sort(() => Math.random() - 0.5);
+
       currentQuiz = rawBank.map(item => {
         if (!shuffleOptions) {
           return {
@@ -589,10 +666,12 @@
       currentIndex = 0;
       score = 0;
       userAnswersLog = [];
+      secondsElapsed = 0;
 
       document.getElementById('start-screen').classList.add('hidden');
       document.getElementById('result-screen').classList.add('hidden');
       document.getElementById('quiz-screen').classList.remove('hidden');
+      document.getElementById('header-timer').classList.remove('hidden');
 
       startTimer();
       loadQuestion();
