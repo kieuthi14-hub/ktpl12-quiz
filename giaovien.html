@@ -341,16 +341,12 @@
       { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" }
     ];
 
-    // DANH SÁCH TÊN BÀI LÀM THỬ NGHIỆM ĐƯỢC LỌC BỎ HOÀN TOÀN
+    // DANH SÁCH TÊN BÀI LÀM THỬ NGHIỆM ĐƯỢC LỌC BỎ HOÀN TOÀN (CHỈ KHỚP CHÍNH XÁC)
     const TEST_SUBMISSION_NAMES = [
-      'huu khanh',
-      'luong teo',
-      'kieu truong',
-      'hoc sinh may man',
-      'truong thuy linh',
       'test',
       'thi thu',
-      'lam thu'
+      'lam thu',
+      'hoc sinh may man'
     ];
 
     let allRawSubmissions = [];
@@ -605,11 +601,15 @@
       // Lọc bỏ toàn bộ bài nộp thử nghiệm hoặc đã bị xóa
       list = list.filter(item => {
         const norm = normText(item.name);
-        if (TEST_SUBMISSION_NAMES.some(t => norm === t || norm.includes(t) || t.includes(norm))) {
+        // Chỉ lọc bỏ nếu đúng chính xác từ khóa test (khớp 100%, không so sánh chuỗi con)
+        if (TEST_SUBMISSION_NAMES.some(t => norm === t)) {
           return false;
         }
         const idKey = item.subCode || item.id || item.timestamp;
-        if (deletedKeys.includes(idKey) || deletedKeys.includes(norm)) {
+        if (idKey && deletedKeys.includes(idKey)) {
+          return false;
+        }
+        if (norm && norm !== 'kieu' && deletedKeys.includes(norm)) {
           return false;
         }
         return true;
@@ -797,10 +797,12 @@
         if (matchedSubIds.has(subId)) return false;
 
         // Nếu đang chọn 1 lớp cụ thể (ví dụ 12A7):
+        // Chỉ ẩn nếu bài nộp này ghi rõ là thuộc một lớp khác trong trường (12A5 hoặc 12A9)
         if (selectedClass !== 'ALL') {
           const sc = normClass(sub.className);
           const tc = normClass(selectedClass);
-          if (sc && sc !== tc && sc !== '12A' && !sc.includes(tc)) {
+          const otherClasses = ['12A5', '12A7', '12A9'].filter(c => normClass(c) !== tc);
+          if (otherClasses.some(oc => sc === normClass(oc) || sc.includes(normClass(oc)))) {
             return false;
           }
         }
