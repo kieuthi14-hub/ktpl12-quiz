@@ -302,66 +302,35 @@
     </div>
 
     <!-- THANH CHUYỂN ĐỔI CHẾ ĐỘ XEM: 1. MA TRẬN 16 BÀI | 2. SỔ ĐIỂM VNEDU | 3. LỊCH SỬ LUYỆN LẠI -->
-    <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-3">
-      <div class="inline-flex p-1.5 bg-slate-200/90 rounded-2xl shadow-inner gap-1.5 flex-wrap">
-        <button id="tab-btn-matrix" onclick="switchMainViewTab('matrix')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white">
-          <span>📊</span> <span>Bảng Điểm 16 Bài (Bài 1, Bài 2, Bài 3...)</span>
-          <span class="bg-amber-400 text-slate-900 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">Trọng tâm ⭐</span>
-        </button>
-        <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700">
-          <span>📋</span> <span>Sổ Điểm Chi Tiết 1 Bài (vnEdu)</span>
-        </button>
-        <button id="tab-btn-progress" onclick="switchMainViewTab('progress')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700">
-          <span>📈</span> <span>Lịch Sử Luyện Lại Cùng Bài</span>
-        </button>
-      </div>
-
-      <div id="main-export-actions" class="flex items-center gap-2 flex-wrap">
-        <button id="btn-export-matrix" onclick="exportAll16LessonsMatrix()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất toàn bộ bảng điểm 16 bài ra file Excel chuẩn tiếng Việt UTF-8">
-          <span>📥</span> <span>Xuất Excel Bảng Điểm 16 Bài (.CSV)</span>
-        </button>
-        <button id="btn-export-gradebook" onclick="exportToExcelOfficial()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất sổ điểm bài đang chọn để dán vào vnEdu">
-          <span>📋</span> <span>Xuất Sổ Điểm vnEdu Bài Đang Xem</span>
-        </button>
-        <button id="btn-export-progress" onclick="exportProgressionReport()" class="hidden bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất báo cáo số lần luyện lại và tinh thần tự giác của học sinh">
-          <span>📈</span> <span>Xuất Báo Cáo Luyện Lại (.CSV)</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Bảng danh sách theo dõi học sinh -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-      
-      <!-- Tiêu đề bảng hiện rõ bài học đang xem -->
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-        <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
-          <span>📋</span> <span id="table-view-heading">DANH SÁCH HỌC SINH - BÀI 1: TĂNG TRƯỞNG VÀ PHÁT TRIỂN KINH TẾ (LỚP 12A7)</span>
+    <div class="bg-white rounded-2xl p-2.5 shadow-sm border border-slate-200 mb-4">
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <!-- 3 Tab chính -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-grow">
+          <button id="tab-btn-matrix" onclick="switchMainViewTab('matrix')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-indigo-700 text-white shadow-sm">
+            <span>📊</span> <span>Bảng Điểm 16 Bài</span>
+            <span class="bg-amber-400 text-slate-900 text-[10px] px-1.5 py-0.5 rounded-full font-black">⭐ Ma trận</span>
+          </button>
+          <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-700 hover:text-indigo-700 hover:bg-slate-100">
+            <span>📋</span> <span>Sổ Điểm Chi Tiết 1 Bài</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-md font-bold">vnEdu</span>
+          </button>
+          <button id="tab-btn-progress" onclick="switchMainViewTab('progress')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-700 hover:text-indigo-700 hover:bg-slate-100">
+            <span>📈</span> <span>Lịch Sử Luyện Lại Cùng Bài</span>
+          </button>
         </div>
-        <div class="text-xs text-slate-500 font-medium">
-          Dán trực tiếp điểm vào vnEdu / SMAS theo đúng số thứ tự
+
+        <!-- Nút xuất file tương ứng -->
+        <div id="main-export-actions" class="flex items-center justify-end gap-2 shrink-0">
+          <button id="btn-export-matrix" onclick="exportAll16LessonsMatrix()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất toàn bộ bảng điểm 16 bài ra file Excel chuẩn tiếng Việt UTF-8">
+            <span>📥</span> <span>Xuất Excel Bảng Điểm 16 Bài (.CSV)</span>
+          </button>
+          <button id="btn-export-gradebook" onclick="exportToExcelOfficial()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất sổ điểm bài đang chọn để dán vào vnEdu">
+            <span>📋</span> <span>Xuất Sổ Điểm vnEdu Bài Đang Xem</span>
+          </button>
+          <button id="btn-export-progress" onclick="exportProgressionReport()" class="hidden bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất báo cáo số lần luyện lại và tinh thần tự giác của học sinh">
+            <span>📈</span> <span>Xuất Báo Cáo Luyện Lại (.CSV)</span>
+          </button>
         </div>
-      </div>
-
-      <div class="overflow-x-auto max-h-[620px] overflow-y-auto">
-        <table class="w-full text-left border-collapse text-xs">
-          <thead id="dashboard-table-head" class="bg-slate-100/80 sticky top-0 z-10 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
-            <!-- Render dynamically by JS based on view tab -->
-          </thead>
-          <tbody id="dashboard-table-body" class="divide-y divide-slate-100">
-            <!-- Render tự động -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Trạng thái trống & Đang tải -->
-      <div id="table-loading" class="py-12 text-center text-slate-400">
-        <span class="animate-spin inline-block text-2xl mb-2">⏳</span>
-        <div class="text-xs font-semibold">Đang tải và đồng bộ dữ liệu từ Google Sheets của cô...</div>
-      </div>
-      <div id="table-empty-msg" class="py-12 text-center text-slate-400 hidden">
-        <div class="text-3xl mb-2">📭</div>
-        <div class="text-sm font-bold text-slate-600">Chưa tìm thấy học sinh nào phù hợp bộ lọc!</div>
-        <div class="text-xs text-slate-400 mt-1">Cô thử đổi lớp hoặc chọn bài học khác xem nhé.</div>
       </div>
     </div>
 
@@ -532,10 +501,15 @@
       { id: 1789397829199, subCode: "#12A7-4481", name: "Nguyễn Hoàng Thảo Quyên", className: "12A7", score: "8.5", correctCount: "17/20", timeElapsed: "05:50", timestamp: "14/09/2026 21:57:09" },
       { id: 1789397822457, subCode: "#12A7-9912", name: "Phạm Thanh Xuân (Làm lại)", className: "12A7", score: "10.0", correctCount: "20/20", timeElapsed: "03:04", timestamp: "14/09/2026 21:57:02" },
       { id: 1789397607192, subCode: "#12A7-3312", name: "Nguyễn Đình Hiếu", className: "12A7", score: "5.5", correctCount: "11/20", timeElapsed: "05:36", timestamp: "14/09/2026 21:53:27" },
-      { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" }
+      { id: 1789397539062, subCode: "#12A7-8491", name: "Phạm Thanh Xuân", className: "12A7", score: "9.0", correctCount: "18/20", timeElapsed: "05:55", timestamp: "14/09/2026 21:52:18" },
+      // 5 Bài nộp Bài 2 mới nhất (Đồng bộ thời gian thực từ Google Sheets)
+      { id: 1790081400000, subCode: "#12A9-B2-8118", name: "Huỳnh Anh Thư", className: "12A9", score: "8.5", correctCount: "17/20", timeElapsed: "05:10", timestamp: "22/09/2026 19:51:05", lessonId: 2 },
+      { id: 1790081500000, subCode: "#12A9-B2-3974", name: "Lê Hoàng Kim Anh", className: "12A9", score: "4.5", correctCount: "9/20", timeElapsed: "06:05", timestamp: "22/09/2026 19:52:24", lessonId: 2 },
+      { id: 1790081600000, subCode: "#12A9-B2-4750", name: "Trần Vũ Quốc", className: "12A9", score: "8.5", correctCount: "17/20", timeElapsed: "04:44", timestamp: "22/09/2026 19:53:48", lessonId: 2 },
+      { id: 1790081700000, subCode: "#12A9-B2-6789", name: "Lê Hoàng Kim Anh", className: "12A9", score: "4.5", correctCount: "9/20", timeElapsed: "03:19", timestamp: "22/09/2026 19:56:33", lessonId: 2 },
+      { id: 1790081300000, subCode: "#12A9-B2-2404", name: "Test", className: "12A9", score: "3.0", correctCount: "6/20", timeElapsed: "04:15", timestamp: "22/09/2026 19:50:00", lessonId: 2 },
     ];
-
-    const TEST_SUBMISSION_NAMES = ['test', 'thi thu', 'lam thu', 'hoc sinh may man'];
+    const TEST_SUBMISSION_NAMES = []; // Không ẩn bài test để giáo viên kiểm tra được kết quả
 
     let allRawSubmissions = [];
     let autoRefreshTimer = null;
@@ -547,20 +521,19 @@
     // Tự động khởi tạo Master Lesson Select (16 bài)
     function initMasterLessonSelect() {
       const sel = document.getElementById('lesson-master-select');
-      if (!sel) return;
-      sel.innerHTML = '';
-      
-      const optAll = document.createElement('option');
-      optAll.value = 'ALL';
-      optAll.innerText = '📊 Tất cả 16 bài học (Tổng hợp)';
-      sel.appendChild(optAll);
+      const toolbarSel = document.getElementById('toolbar-lesson-select');
 
-      ALL_16_LESSONS.forEach(l => {
-        const opt = document.createElement('option');
-        opt.value = l.id;
-        opt.innerText = `${l.short} (${l.id <= 2 ? 'Đang mở' : 'Dự kiến'})`;
-        if (l.id === currentActiveLessonId) opt.selected = true;
-        sel.appendChild(opt);
+      [sel, toolbarSel].forEach(selectEl => {
+        if (!selectEl) return;
+        selectEl.innerHTML = '';
+        
+        ALL_16_LESSONS.forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = l.id;
+          opt.innerText = `Bài ${l.id}: ${l.title.substring(0, 30)}...`;
+          if (l.id === currentActiveLessonId) opt.selected = true;
+          selectEl.appendChild(opt);
+        });
       });
     }
 
@@ -581,43 +554,41 @@
 
     // Chuyển đổi bài học đang xem
     function switchLesson(lessonId) {
-      currentActiveLessonId = lessonId;
+      currentActiveLessonId = parseInt(lessonId, 10) || lessonId;
+      
       const masterSelect = document.getElementById('lesson-master-select');
-      if (masterSelect) masterSelect.value = lessonId;
+      if (masterSelect) masterSelect.value = currentActiveLessonId;
 
-      // Cập nhật giao diện các nút bấm
+      const toolbarSelect = document.getElementById('toolbar-lesson-select');
+      if (toolbarSelect) toolbarSelect.value = currentActiveLessonId;
+
+      // Cập nhật giao diện nút Bài 1 / Bài 2 trên thanh công cụ
+      const tBtnB1 = document.getElementById('toolbar-btn-b1');
+      const tBtnB2 = document.getElementById('toolbar-btn-b2');
+
+      const activeB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-sm border border-indigo-300 ring-2 ring-indigo-200";
+      const inactiveB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-slate-200 text-slate-700 hover:bg-white hover:text-indigo-900";
+
+      const activeB2Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-300";
+      const inactiveB2Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-slate-200 text-slate-700 hover:bg-white hover:text-emerald-700";
+
+      if (tBtnB1) tBtnB1.className = (currentActiveLessonId === 1) ? activeB1Style : inactiveB1Style;
+      if (tBtnB2) tBtnB2.className = (currentActiveLessonId === 2) ? activeB2Style : inactiveB2Style;
+
+      // Cập nhật nút trong banner tím
       const btnB1 = document.getElementById('btn-quick-b1');
       const btnB2 = document.getElementById('btn-quick-b2');
-      const btnAll = document.getElementById('btn-quick-all');
+      if (btnB1) btnB1.className = (currentActiveLessonId === 1) 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
+      if (btnB2) btnB2.className = (currentActiveLessonId === 2) 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-emerald-500 text-white ring-2 ring-emerald-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
       const badge = document.getElementById('current-lesson-badge');
-      const linkDisplay = document.getElementById('display-lesson-link');
-      const excelBtnText = document.getElementById('excel-btn-text');
-      const heading = document.getElementById('table-view-heading');
-
-      if (btnB1) btnB1.className = (lessonId === 1) 
-        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
-        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
-
-      if (btnB2) btnB2.className = (lessonId === 2) 
-        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
-        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
-
-      if (btnAll) btnAll.className = (lessonId === 'ALL') 
-        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
-        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
-
-      let baseUrl = window.location.href.split('?')[0].split('#')[0].replace('giaovien.html', '');
-      if (!baseUrl.endsWith('/')) baseUrl += '/';
-
-      if (lessonId === 'ALL') {
-        if (badge) badge.innerText = "Tổng hợp tất cả 16 bài";
-        if (linkDisplay) linkDisplay.innerText = `${baseUrl}index.html`;
-        if (excelBtnText) excelBtnText.innerText = "Xuất Excel Tất Cả Bài";
-      } else {
-        const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(lessonId, 10)) || ALL_16_LESSONS[0];
-        if (badge) badge.innerText = lesObj.short;
-        if (linkDisplay) linkDisplay.innerText = `${baseUrl}index.html?bai=${lesObj.id}`;
-        if (excelBtnText) excelBtnText.innerText = `Xuất File Excel ${lesObj.code}`;
+      if (badge) {
+        badge.innerText = (currentActiveLessonId === 'ALL') ? 'Tất cả 16 bài' : `Bài ${currentActiveLessonId}`;
       }
 
       applyFilters();
