@@ -11,10 +11,14 @@ Trang web trắc nghiệm phản xạ trực tuyến môn **Giáo dục Kinh t�
 - **Xem lại bài làm**: Lọc và hiển thị lại các câu làm đúng / làm sai kèm lời giải chi tiết.
 
 ## 🚀 Đường dẫn truy cập trực tuyến
-- **Dành cho Học sinh làm bài (Link trực tiếp chống lưu cache)**:
-  👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/ktpl.html** (hoặc `bai1.html` / `index.html`)
-- **Dành cho Giáo viên xem & xuất điểm**:
-  👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/giaovien.html** *(Mã PIN mặc định: `123456`)*
+- **Cổng làm bài chung cho Học sinh (Tự chọn bài 1, bài 2 hoặc bài 3)**:
+  👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/index.html**
+- **Link trực tiếp từng bài học**:
+  - 📘 Bài 1: Tăng trưởng và phát triển kinh tế: `index.html?bai=1` hoặc `bai1.html`
+  - 📗 Bài 2: Hội nhập kinh tế quốc tế: `index.html?bai=2` hoặc `bai2.html`
+  - 📙 Bài 3: Bảo hiểm: `index.html?bai=3` hoặc `bai3.html`
+- **Dành cho Giáo viên xem sổ điểm, theo dõi ma trận 16 bài & xuất điểm**:
+  👉 **https://kieuthi14-hub.github.io/ktpl12-quiz/giaovien.html** *(Mã PIN bảo mật giáo viên)*
 
 ## 🔐 Tính năng Quản lý Giáo viên (Teacher Dashboard)
 - **Đồng bộ thời gian thực (Atomic Merge Cloud)**: Bài làm của học sinh tự động lưu tức thì vào đám mây, không lo nghẽn mạng hay bị ghi đè bài của nhau.

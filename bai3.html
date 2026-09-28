@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Luyện Tập Trắc Nghiệm KTPL 12 - Kết Nối Tri Thức</title>
+  <title>Luyện Tập KTPL 12 - Bài 3: Bảo Hiểm</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -42,7 +42,7 @@
     <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
       <div>
         <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">KTPL 12 • Kết nối tri thức</span>
-        <h1 id="header-lesson-title" class="text-base md:text-lg font-bold mt-0.5">Bài 3: Bảo hiểm</h1>
+        <h1 class="text-base md:text-lg font-bold mt-0.5">Bài 3: Bảo hiểm</h1>
       </div>
       <div class="flex items-center gap-2">
         <a href="index.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Quay lại Cổng Chọn Bài Học">
@@ -65,22 +65,11 @@
         <span>Hệ thống nộp bài trực tuyến: ĐÃ KẾT NỐI 🟢</span>
       </div>
       <h2 class="text-2xl font-bold text-slate-800">Luyện Tập Trắc Nghiệm Phản Xạ</h2>
-      <p class="text-slate-500 text-sm mt-2 mb-6">Hệ thống trắc nghiệm phản xạ KTPL 12 Kết nối tri thức. Em chỉ cần chọn bài học, chọn lớp và tên là bắt đầu làm bài. Điểm số sẽ tự động lưu về bảng điểm của cô giáo.</p>
+      <p class="text-slate-500 text-sm mt-2 mb-6">20 câu trắc nghiệm bám sát nội dung SGK KTPL 12 (Bài 3: Bảo hiểm - KNTT). Kết quả và điểm số sẽ được tự động lưu về bảng điểm của giáo viên.</p>
       
       <div class="space-y-4 max-w-sm mx-auto text-left">
         <div>
-          <label class="block text-xs font-bold text-indigo-900 uppercase mb-1 flex items-center justify-between">
-            <span>1. Chọn Bài học muốn làm *</span>
-            <span class="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">3 Bài Học</span>
-          </label>
-          <select id="selected-lesson" onchange="onLessonChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-indigo-50/50 font-bold text-indigo-950 transition shadow-sm">
-            <option value="3" selected>📙 Bài 3: Bảo hiểm (20 câu - Mới nhất)</option>
-            <option value="2">📗 Bài 2: Hội nhập kinh tế quốc tế (20 câu)</option>
-            <option value="1">📘 Bài 1: Tăng trưởng &amp; phát triển kinh tế (20 câu)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">2. Chọn Lớp của em *</label>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">1. Chọn Lớp của em *</label>
           <select id="student-class" onchange="onClassChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
             <option value="">-- Bấm vào đây để chọn lớp --</option>
             <option value="12A5">Lớp 12A5 (48 học sinh)</option>
@@ -92,7 +81,7 @@
         </div>
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center justify-between">
-            <span>3. Họ và tên học sinh *</span>
+            <span>2. Họ và tên học sinh *</span>
             <button type="button" id="btn-toggle-custom-name" onclick="toggleCustomName()" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold hover:underline">
               ✍️ Tự gõ tên
             </button>
@@ -102,6 +91,7 @@
           </select>
           <input type="text" id="student-name-custom" placeholder="Nhập đầy đủ Họ và tên của em..." class="hidden mt-2 w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
           <div id="class-hint" class="text-[11px] text-slate-500 mt-1.5 leading-snug">💡 Em chọn lớp trước, hệ thống sẽ tự động hiện danh sách họ tên để chọn nhanh và không bị sai sót.</div>
+        </div>
         </div>
         <div class="flex items-center gap-2 pt-1 text-xs text-slate-600">
           <input type="checkbox" id="shuffle-options-check" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
@@ -207,7 +197,7 @@
         </div>
 
         <div class="mt-3 text-[11px] text-slate-400 flex justify-between items-center border-t border-indigo-100 pt-2">
-          <span id="cert-topic" class="font-semibold text-indigo-700">Bài 3: Bảo hiểm</span>
+          <span>Hệ thống ôn tập KTPL 12</span>
           <span id="res-timestamp">15/09/2026 14:00</span>
         </div>
       </div>
@@ -375,453 +365,7 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
 
     // DỮ LIỆU 20 CÂU HỎI CHUẨN SGK KTPL 12 (BÀI 1)
-    
-    const questionsBank_Bai1 = [
-  {
-    "q": "Sự gia tăng về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định được gọi là gì?",
-    "options": [
-      "Tăng trưởng kinh tế",
-      "Phát triển kinh tế",
-      "Lạm phát kinh tế",
-      "Khủng hoảng kinh tế"
-    ],
-    "answer": 0,
-    "exp": "Theo SGK trang 7: Tăng trưởng kinh tế là sự tăng lên về thu nhập hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra trong một thời kì nhất định."
-  },
-  {
-    "q": "Chỉ tiêu đo lường giá trị bằng tiền của tất cả hàng hoá, dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định là gì?",
-    "options": [
-      "GNI",
-      "GDP",
-      "HDI",
-      "Hệ số Gini"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 7: Tổng sản phẩm quốc nội (GDP) là giá trị bằng tiền của tất cả hàng hoá và dịch vụ cuối cùng được sản xuất ra trên lãnh thổ một nước trong một thời gian nhất định."
-  },
-  {
-    "q": "Chỉ tiêu đo lường tổng thu nhập từ hàng hoá, dịch vụ cuối cùng do công dân của quốc gia tạo ra (cả ở trong và ngoài lãnh thổ) là gì?",
-    "options": [
-      "GDP",
-      "GNI",
-      "FDI",
-      "ODA"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 8: Tổng thu nhập quốc dân (GNI) là thước đo thu nhập do công dân quốc gia tạo ra cả ở trong và ngoài lãnh thổ."
-  },
-  {
-    "q": "Để so sánh mức sống và mức thu nhập thực tế giữa người dân các quốc gia với nhau, người ta dùng chỉ tiêu nào?",
-    "options": [
-      "Tổng GDP",
-      "GNI bình quân đầu người",
-      "Tỉ lệ thất nghiệp",
-      "Quy mô vốn đầu tư"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 9: GNI/người được dùng làm thước đo so sánh kết quả tăng trưởng, mức thu nhập và mức sống của người dân giữa các quốc gia."
-  },
-  {
-    "q": "Doanh thu của doanh nghiệp 100% vốn đầu tư nước ngoài (FDI) sản xuất trên lãnh thổ Việt Nam được tính vào chỉ tiêu nào của nước ta?",
-    "options": [
-      "Chỉ tính vào GNI",
-      "Tính vào GDP của Việt Nam",
-      "Không tính vào GDP",
-      "Tính vào kiều hối"
-    ],
-    "answer": 1,
-    "exp": "GDP tính toàn bộ sản phẩm cuối cùng làm ra trên lãnh thổ Việt Nam, bất kể người tạo ra là công dân trong nước hay doanh nghiệp nước ngoài."
-  },
-  {
-    "q": "Khoản kiều hối do công dân Việt Nam đi lao động ở nước ngoài gửi về nước được tính vào chỉ tiêu nào của Việt Nam?",
-    "options": [
-      "GNI",
-      "GDP",
-      "CPI",
-      "FDI"
-    ],
-    "answer": 0,
-    "exp": "GNI tính tổng thu nhập do công dân quốc gia tạo ra (bao gồm cả thu nhập chuyển từ ngoài lãnh thổ về nước)."
-  },
-  {
-    "q": "Khi so sánh tốc độ tăng trưởng kinh tế giữa các năm, người ta phải tính theo giá năm gốc nhằm loại trừ yếu tố nào?",
-    "options": [
-      "Lạm phát (biến động giá cả)",
-      "Tỉ lệ tăng dân số",
-      "Thuế xuất nhập khẩu",
-      "Diện tích đất đai"
-    ],
-    "answer": 0,
-    "exp": "Theo SGK trang 7: Do có sự biến động của giá cả (lạm phát) nên khi so sánh cần tính GDP của năm hiện tại theo giá của năm gốc."
-  },
-  {
-    "q": "Trong mối quan hệ với phát triển kinh tế, tăng trưởng kinh tế đóng vai trò là",
-    "options": [
-      "mục tiêu cao nhất",
-      "điều kiện tiền đề cần thiết",
-      "kết quả sau cùng",
-      "yếu tố duy nhất quyết định"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 13: Tăng trưởng kinh tế là sự thay đổi về lượng, là điều kiện tiền đề cho phát triển kinh tế."
-  },
-  {
-    "q": "Sự tăng trưởng kinh tế gắn liền với chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội được gọi là",
-    "options": [
-      "tăng trưởng kinh tế",
-      "phát triển kinh tế",
-      "mở rộng thị trường",
-      "hội nhập quốc tế"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 13: Phát triển kinh tế là sự tăng trưởng kinh tế gắn liền với sự chuyển dịch cơ cấu kinh tế và đảm bảo tiến bộ xã hội."
-  },
-  {
-    "q": "Trong ba loại cơ cấu kinh tế (ngành, vùng, thành phần kinh tế), cơ cấu nào giữ vai trò quan trọng nhất?",
-    "options": [
-      "Cơ cấu vùng kinh tế",
-      "Cơ cấu ngành kinh tế",
-      "Cơ cấu thành phần kinh tế",
-      "Cơ cấu vốn đầu tư"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 11: Trong cơ cấu kinh tế, cơ cấu ngành kinh tế (công nghiệp - nông nghiệp - dịch vụ) giữ vai trò quan trọng nhất."
-  },
-  {
-    "q": "Sự chuyển dịch cơ cấu ngành kinh tế theo hướng tích cực thể hiện ở chỉ tiêu nào sau đây?",
-    "options": [
-      "Tỉ trọng công nghiệp, dịch vụ tăng; tỉ trọng nông nghiệp giảm",
-      "Tỉ trọng nông nghiệp tăng vọt",
-      "Tỉ trọng tất cả các ngành đều giảm",
-      "Chỉ phát triển nông nghiệp thuần túy"
-    ],
-    "answer": 0,
-    "exp": "Theo SGK trang 11, 13: Chuyển dịch tích cực thể hiện ở tỉ trọng công nghiệp, dịch vụ tăng lên, tỉ trọng nông nghiệp giảm đi nhưng giá trị tuyệt đối các ngành đều tăng."
-  },
-  {
-    "q": "Chỉ số phát triển con người (HDI) là thước đo tổng hợp phản ánh sự tiến bộ con người qua 3 tiêu chí nào?",
-    "options": [
-      "Tuổi thọ, giáo dục và thu nhập",
-      "Dân số, việc làm và tiền tệ",
-      "Xuất khẩu, nhập khẩu và tỉ giá",
-      "Đô thị hóa, rừng tự nhiên và điện sinh hoạt"
-    ],
-    "answer": 0,
-    "exp": "Theo SGK trang 11-12: HDI đo lường qua Tuổi thọ trung bình, Chỉ số giáo dục và Chỉ số thu nhập (GDP/người, GNI/người)."
-  },
-  {
-    "q": "Chỉ tiêu đo lường tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản trong cuộc sống gọi là",
-    "options": [
-      "tỉ lệ thất nghiệp",
-      "tỉ lệ hộ nghèo đa chiều",
-      "chỉ số giá tiêu dùng",
-      "hệ số bất bình đẳng"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 12: Tỉ lệ hộ nghèo đa chiều tính bằng tỉ lệ hộ nghèo trong tình trạng con người không được đáp ứng ở mức tối thiểu các nhu cầu cơ bản."
-  },
-  {
-    "q": "Hệ số bất bình đẳng trong phân phối thu nhập (hệ số Gini) nhận giá trị trong khoảng nào?",
-    "options": [
-      "Từ -1 đến 1",
-      "Từ 0 đến 1",
-      "Từ 1 đến 10",
-      "Từ 0% đến 100%"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 12: Hệ số Gini nhận giá trị từ 0 đến 1, trong đó 0 là bình đẳng tuyệt đối, 1 là bất bình đẳng tuyệt đối."
-  },
-  {
-    "q": "Khi hệ số Gini có xu hướng giảm dần, điều đó chứng tỏ điều gì trong xã hội?",
-    "options": [
-      "Bất bình đẳng thu nhập gia tăng",
-      "Khoảng cách giàu nghèo có xu hướng thu hẹp lại",
-      "Nền kinh tế suy thoái",
-      "Dân số tăng nhanh"
-    ],
-    "answer": 1,
-    "exp": "Hệ số Gini càng thấp (càng gần 0) thì sự phân phối thu nhập càng bình đẳng, khoảng cách giàu nghèo càng thu hẹp."
-  },
-  {
-    "q": "Quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: kinh tế, xã hội và bảo vệ môi trường được gọi là",
-    "options": [
-      "kinh tế thị trường",
-      "phát triển bền vững",
-      "tăng trưởng nhanh",
-      "hội nhập toàn cầu"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 15: Phát triển bền vững là quá trình phát triển có sự kết hợp hợp lí, hài hoà giữa ba mặt: phát triển kinh tế, phát triển xã hội và bảo vệ môi trường."
-  },
-  {
-    "q": "Đảng và Nhà nước ta luôn khẳng định quan điểm nhất quán nào về bảo vệ môi trường trong phát triển kinh tế?",
-    "options": [
-      "Ưu tiên tăng trưởng, xử lý môi trường sau",
-      "Không đánh đổi môi trường lấy tăng trưởng kinh tế bằng mọi giá",
-      "Đóng cửa tất cả các nhà máy",
-      "Chỉ bảo vệ môi trường tại các thành phố lớn"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 15: Đảng và Nhà nước ta luôn chủ trương duy trì tăng trưởng bền vững, không đánh đổi tăng trưởng kinh tế bằng mọi giá."
-  },
-  {
-    "q": "Yếu tố nào sau đây phản ánh mặt chất lượng của sự phát triển kinh tế?",
-    "options": [
-      "Sự gia tăng đơn thuần quy mô GDP",
-      "Sự tiến bộ xã hội và phân phối công bằng",
-      "Mức tăng kim ngạch xuất khẩu thô",
-      "Tốc độ in thêm tiền mặt"
-    ],
-    "answer": 1,
-    "exp": "Tăng trưởng chỉ phản ánh mặt lượng; sự tiến bộ xã hội, công bằng và bảo vệ môi trường phản ánh mặt chất của phát triển kinh tế."
-  },
-  {
-    "q": "Nếu một nền kinh tế có GDP tăng trưởng rất cao nhưng môi trường bị hủy hoại và khoảng cách giàu nghèo ngày càng sâu sắc, thì đó là",
-    "options": [
-      "phát triển bền vững",
-      "tăng trưởng kinh tế không hợp lí",
-      "kinh tế tri thức hiện đại",
-      "tiến bộ xã hội"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 15: Tăng trưởng không hợp lí là tăng trưởng không gắn với phát triển xã hội và bảo vệ môi trường, tạo ra sự bất ổn xã hội."
-  },
-  {
-    "q": "Điều kiện tiên quyết để một quốc gia đang phát triển như Việt Nam khắc phục tình trạng tụt hậu là gì?",
-    "options": [
-      "Tăng cường nhập khẩu hàng tiêu dùng",
-      "Đẩy mạnh tăng trưởng và phát triển kinh tế",
-      "Cắt giảm ngân sách giáo dục",
-      "Hạn chế mở rộng doanh nghiệp"
-    ],
-    "answer": 1,
-    "exp": "Theo SGK trang 10, 14: Tăng trưởng và phát triển kinh tế là điều kiện tiên quyết để khắc phục tình trạng tụt hậu đối với quốc gia đang phát triển như Việt Nam."
-  }
-];
-    const questionsBank_Bai2 = [
-  {
-    "q": "Trong đàm phán thương mại, một quốc gia chỉ đòi đối tác miễn thuế cho mình nhưng kiên quyết áp thuế cao bảo hộ hàng nội địa đã vi phạm nguyên tắc cơ bản nào của hội nhập kinh tế quốc tế?",
-    "options": [
-      "Bảo hộ tuyệt đối sản xuất trong nước",
-      "Chia sẻ lợi ích và cùng có lợi",
-      "Tôn trọng quyền tự do định đoạt đơn phương",
-      "Ưu tiên phát triển công nghiệp nặng"
-    ],
-    "answer": 1,
-    "exp": "Theo nguyên tắc hội nhập kinh tế quốc tế: Các bên phải chia sẻ lợi ích, bình đẳng và cùng có lợi; không được vụ lợi đơn phương hoặc chỉ đòi quyền lợi riêng cho mình."
-  },
-  {
-    "q": "Khoa học – kỹ thuật phát triển thúc đẩy phân công lao động vượt biên giới, khiến các nền kinh tế gắn kết và phụ thuộc lẫn nhau đã tạo nên xu thế khách quan nào?",
-    "options": [
-      "Xu thế khép kín nền kinh tế",
-      "Xu thế biệt lập thị trường khu vực",
-      "Xu thế toàn cầu hóa kinh tế",
-      "Xu thế độc quyền tư nhân quốc tế"
-    ],
-    "answer": 2,
-    "exp": "Phân công lao động quốc tế ngày càng sâu sắc và sự phát triển mạnh mẽ của khoa học – kỹ thuật là động lực cốt lõi tạo nên xu thế tất yếu khách quan: Toàn cầu hóa kinh tế."
-  },
-  {
-    "q": "Việc Việt Nam gia nhập chuỗi cung ứng toàn cầu, thu hút công nghệ cao để không bị bỏ lại phía sau trước Cách mạng công nghiệp 4.0 nhằm đạt mục tiêu chiến lược nào?",
-    "options": [
-      "Rút ngắn khoảng cách phát triển, khắc phục nguy cơ tụt hậu",
-      "Thâu tóm toàn bộ thị trường công nghệ thế giới",
-      "Loại bỏ hoàn toàn các ngành kinh tế truyền thống",
-      "Tự cung tự cấp mọi mặt hàng công nghiệp chế tạo"
-    ],
-    "answer": 0,
-    "exp": "Hội nhập kinh tế giúp quốc gia tận dụng thời cơ, tiếp thu công nghệ tiên tiến để rút ngắn khoảng cách phát triển và khắc phục nguy cơ tụt hậu so với các nước phát triển."
-  },
-  {
-    "q": "Khi các tập đoàn đa quốc gia mở rộng đầu tư nhà máy quy mô lớn tại Việt Nam, thị trường lao động trong nước trực tiếp nhận được lợi ích kinh tế – xã hội cốt lõi nào?",
-    "options": [
-      "Xóa bỏ hoàn toàn tình trạng chuyển dịch lao động",
-      "Tạo việc làm và nâng cao thu nhập cho người lao động",
-      "Miễn thuế thu nhập cá nhân vĩnh viễn cho công nhân",
-      "Người lao động không cần qua đào tạo nghề chuyên môn"
-    ],
-    "answer": 1,
-    "exp": "Việc các tập đoàn đa quốc gia mở rộng đầu tư xây dựng nhà máy giúp tạo thêm hàng triệu việc làm mới, nâng cao thu nhập và cải thiện đời sống cho người lao động."
-  },
-  {
-    "q": "Hiệp định Thương mại giữa Việt Nam và Hoa Kỳ (BTA) có đặc trưng là dễ thỏa thuận vì chỉ có 2 bên tham gia; đây là biểu hiện của cấp độ hội nhập nào?",
-    "options": [
-      "Hội nhập kinh tế khu vực",
-      "Hội nhập kinh tế toàn cầu",
-      "Hội nhập kinh tế song phương",
-      "Hội nhập kinh tế đa phương"
-    ],
-    "answer": 2,
-    "exp": "Hội nhập song phương là sự hợp tác, thỏa thuận kinh tế giữa 2 quốc gia hoặc vùng lãnh thổ (ở đây là Việt Nam và Hoa Kỳ), có ưu điểm là dễ thỏa thuận ưu đãi riêng."
-  },
-  {
-    "q": "Việc Việt Nam cùng 9 nước ASEAN và 5 đối tác ngoài khối ký kết Hiệp định Đối tác Kinh tế Toàn diện Khu vực (RCEP) phản ánh cấp độ hội nhập nào?",
-    "options": [
-      "Hội nhập kinh tế khu vực",
-      "Hội nhập kinh tế song phương",
-      "Hội nhập kinh tế toàn cầu",
-      "Hội nhập kinh tế bán phần"
-    ],
-    "answer": 0,
-    "exp": "RCEP là hiệp định thương mại giữa các quốc gia trong khu vực Đông Nam Á và các đối tác trong cùng khu vực địa lý, thể hiện cấp độ hội nhập kinh tế khu vực."
-  },
-  {
-    "q": "Năm 2007, việc Việt Nam gia nhập WTO và tham gia các cơ chế của Quỹ Tiền tệ Quốc tế (IMF) thể hiện cấp độ hội nhập nào?",
-    "options": [
-      "Hội nhập kinh tế song phương",
-      "Hội nhập kinh tế khu vực",
-      "Hội nhập kinh tế nội khối",
-      "Hội nhập kinh tế toàn cầu"
-    ],
-    "answer": 3,
-    "exp": "WTO và IMF là các tổ chức quốc tế quy mô toàn cầu rộng lớn và sâu rộng nhất, do đó thể hiện cấp độ hội nhập kinh tế toàn cầu."
-  },
-  {
-    "q": "Thỏa thuận kinh tế mà các bên chỉ cam kết giảm thuế cho một danh mục hàng hóa nhất định, chưa xóa bỏ hoàn toàn hàng rào thuế quan thuộc mức độ liên kết nào?",
-    "options": [
-      "Thỏa thuận thương mại ưu đãi (PTA)",
-      "Khu vực mậu dịch tự do (FTA)",
-      "Liên minh thuế quan (Customs Union)",
-      "Thị trường chung (Common Market)"
-    ],
-    "answer": 0,
-    "exp": "Thỏa thuận thương mại ưu đãi (PTA) là mức độ liên kết thấp nhất, chỉ ưu đãi giảm thuế cho một số danh mục hàng hóa nhất định chứ chưa xóa bỏ hoàn toàn hàng rào thuế quan."
-  },
-  {
-    "q": "Khối các nước xóa bỏ hầu hết thuế quan nội bộ nhưng mỗi nước vẫn độc lập duy trì chính sách thuế riêng với các nước ngoài khối; đây là mô hình nào?",
-    "options": [
-      "Liên minh thuế quan (Customs Union)",
-      "Khu vực mậu dịch tự do (FTA)",
-      "Thị trường chung (Common Market)",
-      "Liên minh kinh tế – tiền tệ"
-    ],
-    "answer": 1,
-    "exp": "Khu vực mậu dịch tự do (FTA) có đặc trưng là miễn giảm hầu hết thuế quan nội khối nhưng các nước thành viên vẫn độc lập tự chủ mức thuế riêng với các nước ngoài khối."
-  },
-  {
-    "q": "Khi các nước thành viên bãi bỏ thuế quan nội bộ và cùng ban hành một biểu thuế nhập khẩu chung áp dụng cho mọi nước ngoài khối, khối đó đạt mức độ nào?",
-    "options": [
-      "Thỏa thuận thương mại ưu đãi (PTA)",
-      "Khu vực mậu dịch tự do (FTA)",
-      "Liên minh thuế quan (Customs Union)",
-      "Hợp tác song phương có điều kiện"
-    ],
-    "answer": 2,
-    "exp": "Liên minh thuế quan (Customs Union) tiến bộ hơn FTA ở chỗ: ngoài bãi bỏ thuế nội bộ, các thành viên thống nhất áp dụng một biểu thuế quan chung đối với mọi nước bên ngoài."
-  },
-  {
-    "q": "Khối liên kết cho phép hàng hóa lưu thông tự do, đồng thời người lao động và dòng vốn được tự do di chuyển qua biên giới giữa các nước thành viên là mô hình gì?",
-    "options": [
-      "Thị trường chung (Common Market)",
-      "Thỏa thuận thương mại ưu đãi (PTA)",
-      "Khu vực mậu dịch tự do (FTA)",
-      "Liên minh thuế quan sơ cấp"
-    ],
-    "answer": 0,
-    "exp": "Thị trường chung (Common Market) cho phép không chỉ hàng hóa mà cả các yếu tố sản xuất (dòng vốn và sức lao động) được tự do di chuyển qua biên giới giữa các nước thành viên."
-  },
-  {
-    "q": "Khối các quốc gia thuộc khu vực đồng tiền chung châu Âu (Eurozone) cùng thực hiện một chính sách kinh tế chung và dùng đồng Euro thể hiện mức độ liên kết nào?",
-    "options": [
-      "Khu vực mậu dịch tự do (FTA)",
-      "Liên minh thuế quan (Customs Union)",
-      "Thị trường chung cơ bản",
-      "Liên minh kinh tế – tiền tệ"
-    ],
-    "answer": 3,
-    "exp": "Liên minh kinh tế – tiền tệ là mức độ liên kết kinh tế cao nhất, các nước thành viên cùng thực hiện một chính sách kinh tế chung và sử dụng một đồng tiền chung duy nhất."
-  },
-  {
-    "q": "Việc các doanh nghiệp Việt Nam đẩy mạnh xuất khẩu gạo, thủy sản và nhập khẩu máy móc, dây chuyền công nghệ cao phục vụ sản xuất thuộc hình thức kinh tế đối ngoại nào?",
-    "options": [
-      "Thương mại quốc tế",
-      "Đầu tư gián tiếp ra nước ngoài",
-      "Hợp tác quốc tế phi lợi nhuận",
-      "Dịch vụ kiều hối quốc tế"
-    ],
-    "answer": 0,
-    "exp": "Thương mại quốc tế là hoạt động trao đổi hàng hóa và dịch vụ qua biên giới quốc gia, thể hiện qua các hoạt động xuất khẩu (gạo, thủy sản) và nhập khẩu (máy móc, công nghệ)."
-  },
-  {
-    "q": "Năm 2022, kim ngạch xuất khẩu hàng hóa của nước ta đạt 371,3 tỉ USD trong khi nhập khẩu đạt 358,9 tỉ USD; trạng thái cán cân thương mại này gọi là gì?",
-    "options": [
-      "Nhập siêu (Cán cân thương mại thâm hụt)",
-      "Xuất siêu (Cán cân thương mại thặng dư)",
-      "Cân bằng thương mại tuyệt đối",
-      "Khủng hoảng cán cân vãng lai"
-    ],
-    "answer": 1,
-    "exp": "Khi giá trị kim ngạch xuất khẩu lớn hơn nhập khẩu (371,3 tỉ USD > 358,9 tỉ USD), trạng thái cán cân thương mại được gọi là xuất siêu (thặng dư thương mại)."
-  },
-  {
-    "q": "Tỷ trọng hàng công nghiệp chế biến, chế tạo trong xuất khẩu của Việt Nam tăng từ 53,6% (2010) lên 85,2% (2022); điều này phản ánh vai trò của hội nhập đối với chỉ tiêu nào?",
-    "options": [
-      "Gia tăng chỉ số lạm phát tiền tệ",
-      "Mở rộng diện tích đất sản xuất nông nghiệp",
-      "Chuyển dịch cơ cấu kinh tế theo hướng hiện đại",
-      "Gia tăng tỷ lệ thất nghiệp ở đô thị"
-    ],
-    "answer": 2,
-    "exp": "Tỷ trọng công nghiệp chế biến, chế tạo tăng mạnh phản ánh vai trò tích cực của hội nhập kinh tế quốc tế trong việc thúc đẩy chuyển dịch cơ cấu kinh tế theo hướng hiện đại."
-  },
-  {
-    "q": "Doanh nghiệp nước ngoài bỏ vốn xây dựng nhà máy, trực tiếp tuyển dụng nhân công và quản lý điều hành sản xuất tại Việt Nam là hình thức đầu tư nào?",
-    "options": [
-      "Đầu tư trực tiếp nước ngoài (FDI)",
-      "Đầu tư gián tiếp nước ngoài (FPI)",
-      "Viện trợ phát triển chính thức (ODA)",
-      "Tín dụng thương mại ngắn hạn"
-    ],
-    "answer": 0,
-    "exp": "Đầu tư trực tiếp nước ngoài (FDI) là hình thức nhà đầu tư nước ngoài bỏ vốn và trực tiếp tham gia quản lý, điều hành hoạt động sản xuất kinh doanh tại nước tiếp nhận đầu tư."
-  },
-  {
-    "q": "Các nhà đầu tư nước ngoài chuyển tiền mua cổ phiếu, trái phiếu trên sàn chứng khoán Việt Nam để hưởng lợi tức mà không trực tiếp điều hành doanh nghiệp là hình thức nào?",
-    "options": [
-      "Đầu tư trực tiếp nước ngoài (FDI)",
-      "Hợp đồng hợp tác kinh doanh (BCC)",
-      "Đầu tư gián tiếp nước ngoài (FPI)",
-      "Viện trợ không hoàn lại (ODA)"
-    ],
-    "answer": 2,
-    "exp": "Đầu tư gián tiếp nước ngoài (FPI - Foreign Portfolio Investment) là việc nhà đầu tư nước ngoài mua cổ phiếu, trái phiếu hoặc góp vốn để hưởng lợi tức mà không trực tiếp tham gia quản lý."
-  },
-  {
-    "q": "Nguồn vốn vay ưu đãi lãi suất thấp hoặc viện trợ không hoàn lại từ các chính phủ và tổ chức quốc tế để hỗ trợ xóa đói giảm nghèo, làm cầu đường được gọi là gì?",
-    "options": [
-      "Vốn đầu tư trực tiếp FDI",
-      "Vốn ODA (Hỗ trợ phát triển chính thức)",
-      "Vốn đầu tư chứng khoán FPI",
-      "Vay thương mại lãi suất thị trường"
-    ],
-    "answer": 1,
-    "exp": "Vốn ODA (Official Development Assistance) là nguồn vốn hỗ trợ phát triển chính thức từ các chính phủ và tổ chức quốc tế dành cho nước đang phát triển với lãi suất ưu đãi hoặc viện trợ không hoàn lại."
-  },
-  {
-    "q": "Doanh thu 495.000 tỉ đồng từ việc đón 3,66 triệu lượt du khách quốc tế đến lưu trú, trải nghiệm tại Việt Nam năm 2022 thuộc hình thức kinh tế đối ngoại nào?",
-    "options": [
-      "Dịch vụ thu ngoại tệ",
-      "Đầu tư trực tiếp FDI",
-      "Xuất khẩu hàng hóa thô",
-      "Viện trợ nhân đạo quốc tế"
-    ],
-    "answer": 0,
-    "exp": "Du lịch quốc tế là hoạt động cung cấp dịch vụ cho du khách nước ngoài tiêu tiền ngoại tệ tại Việt Nam, thuộc hình thức dịch vụ thu ngoại tệ trong kinh tế đối ngoại."
-  },
-  {
-    "q": "Nguồn ngoại tệ hơn 3 tỉ USD mỗi năm do lao động Việt Nam ở nước ngoài tích lũy gửi về cho gia đình được xếp vào nhóm hoạt động kinh tế đối ngoại nào?",
-    "options": [
-      "Đầu tư chứng khoán quốc tế",
-      "Nhập siêu hàng tiêu dùng",
-      "Kiều hối (Dịch vụ thu ngoại tệ / xuất khẩu lao động)",
-      "Thương mại tự do song phương"
-    ],
-    "answer": 2,
-    "exp": "Kiều hối do người lao động Việt Nam ở nước ngoài gửi về nước là bộ phận quan trọng thuộc nhóm hoạt động dịch vụ thu ngoại tệ, gắn liền với xuất khẩu lao động."
-  }
-];
-
-const questionsBank_Bai3 = [
+    const questionsBank = [
   {
     "q": "Bảo hiểm là một dịch vụ tài chính, theo đó bên mua bảo hiểm cam kết đóng phí bảo hiểm để",
     "options": [
@@ -1044,64 +588,7 @@ const questionsBank_Bai3 = [
   }
 ];
 
-    const LESSONS_DATA = {
-      1: {
-        id: 1,
-        title: "Bài 1: Tăng trưởng và phát triển kinh tế",
-        shortTitle: "Bài 1: Tăng trưởng & Phát triển KT",
-        codePrefix: "B1",
-        commentExcellent: "Xuất sắc! Em đã nắm rất vững toàn bộ khái niệm, chỉ tiêu và bản chất phát triển bền vững.",
-        commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kĩ hơn giữa cơ cấu ngành và các chỉ số tiến bộ xã hội.",
-        commentReview: "Em cần đọc lại SGK Bài 1, chú ý kỹ phần phân biệt GDP/GNI và các chỉ tiêu phát triển kinh tế nhé!",
-        questions: questionsBank_Bai1
-      },
-      2: {
-        id: 2,
-        title: "Bài 2: Hội nhập kinh tế quốc tế",
-        shortTitle: "Bài 2: Hội nhập kinh tế quốc tế",
-        codePrefix: "B2",
-        commentExcellent: "Xuất sắc! Em đã nắm rất vững các cấp độ, nguyên tắc và tác động của hội nhập kinh tế quốc tế.",
-        commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kỹ hơn giữa các cấp độ hội nhập (song phương, khu vực, toàn cầu).",
-        commentReview: "Em cần đọc lại SGK Bài 2, chú ý các tổ chức quốc tế (WTO, ASEAN, APEC) và các cấp độ hội nhập nhé!",
-        questions: questionsBank_Bai2
-      },
-      3: {
-        id: 3,
-        title: "Bài 3: Bảo hiểm",
-        shortTitle: "Bài 3: Bảo hiểm",
-        codePrefix: "B3",
-        commentExcellent: "Xuất sắc! Em đã nắm rất vững bản chất, các loại hình bảo hiểm (xã hội, y tế, thất nghiệp, thương mại) và vai trò kinh tế - xã hội của bảo hiểm.",
-        commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kĩ hơn giữa bảo hiểm xã hội bắt buộc và tự nguyện, cũng như các chế độ được hưởng.",
-        commentReview: "Em cần đọc lại SGK Bài 3, chú ý các loại hình bảo hiểm và quyền lợi của người tham gia nhé!",
-        questions: questionsBank_Bai3
-      }
-    };
-
-    let currentLesson = LESSONS_DATA[3];
-
-    function onLessonChange() {
-      const lessonSelect = document.getElementById('selected-lesson');
-      const lessonId = parseInt(lessonSelect ? lessonSelect.value : '3', 10) || 3;
-      currentLesson = LESSONS_DATA[lessonId] || LESSONS_DATA[3];
-      const headerTitle = document.getElementById('header-lesson-title');
-      if (headerTitle) headerTitle.innerText = currentLesson.title;
-      const certTopic = document.getElementById('cert-topic');
-      if (certTopic) certTopic.innerText = currentLesson.shortTitle;
-    }
-
-    // Đọc tham số ?bai=1, ?bai=2 hoặc ?bai=3 từ URL nếu có
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const baiParam = urlParams.get('bai');
-      const lessonSelect = document.getElementById('selected-lesson');
-      if (baiParam && lessonSelect) {
-        if (LESSONS_DATA[baiParam]) {
-          lessonSelect.value = baiParam;
-        }
-      }
-      onLessonChange();
-    });
-
+    let currentQuiz = [];
     let currentIndex = 0;
     let score = 0;
     let studentInfo = { name: '', class: '' };
@@ -1215,8 +702,6 @@ const questionsBank_Bai3 = [
     }
 
     function startQuiz() {
-      onLessonChange();
-
       const classSelect = document.getElementById('student-class');
       let sClass = classSelect ? classSelect.value.trim() : '';
       if (sClass === 'Khác') {
@@ -1258,11 +743,7 @@ const questionsBank_Bai3 = [
       studentInfo.name = name;
       studentInfo.class = sClass;
 
-      const rawQuestions = (currentLesson && currentLesson.questions && currentLesson.questions.length > 0)
-        ? currentLesson.questions
-        : questionsBank_Bai2;
-
-      const rawBank = [...rawQuestions].sort(() => Math.random() - 0.5);
+      const rawBank = [...questionsBank].sort(() => Math.random() - 0.5);
 
       currentQuiz = rawBank.map(item => {
         if (!shuffleOptions) {
@@ -1397,16 +878,16 @@ const questionsBank_Bai3 = [
 
       if (score >= 18) {
         badge = "🏆";
-        comment = currentLesson.commentExcellent;
+        comment = "Xuất sắc! Em đã nắm rất vững bản chất, các loại hình bảo hiểm (xã hội, y tế, thất nghiệp, thương mại) và vai trò kinh tế - xã hội của bảo hiểm.";
         if (typeof confetti === 'function') {
           confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
       } else if (score >= 14) {
         badge = "🌟";
-        comment = currentLesson.commentGood;
+        comment = "Khá tốt! Em đã hiểu bài, cần chú ý phân biệt kĩ hơn giữa bảo hiểm xã hội bắt buộc và tự nguyện, cũng như các chế độ được hưởng.";
       } else {
         badge = "📖";
-        comment = currentLesson.commentReview;
+        comment = "Em cần đọc lại SGK Bài 3, chú ý các loại hình bảo hiểm và quyền lợi của người tham gia nhé!";
       }
 
       document.getElementById('cert-badge').innerText = badge;
@@ -1414,11 +895,10 @@ const questionsBank_Bai3 = [
 
       renderReviewList('all');
 
-      // TẠO MÃ NỘP BÀI ĐỘC NHẤT (GẮN MÃ BÀI HỌC)
+      // TẠO MÃ NỘP BÀI ĐỘC NHẤT
       const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
       const randomPart = Math.floor(1000 + Math.random() * 9000);
-      const prefix = currentLesson ? currentLesson.codePrefix : 'B2';
-      const subCode = `#${cleanClass}-${prefix}-${randomPart}`;
+      const subCode = `#${cleanClass}-B3-${randomPart}`;
       document.getElementById('res-sub-code').innerText = subCode;
 
       // TỰ ĐỘNG LƯU BÀI NỘP LÊN HỆ THỐNG ĐÁM MÂY CỦA GIÁO VIÊN
@@ -1427,7 +907,7 @@ const questionsBank_Bai3 = [
         subCode: subCode,
         name: studentInfo.name,
         className: studentInfo.class,
-        lesson: currentLesson ? currentLesson.title : "Bài 2",
+        lesson: "Bài 3: Bảo hiểm",
         score: finalScore10,
         correctCount: `${score}/${currentQuiz.length}`,
         timeElapsed: timeElapsedStr,
@@ -1442,7 +922,7 @@ const questionsBank_Bai3 = [
       lastSubmissionRecord = record;
       const statusEl = document.getElementById('cloud-sync-status');
       const codeBox = document.getElementById('submission-code-box');
-      const subCode = record.subCode || ('#' + (record.className || '12') + '-' + (currentLesson ? currentLesson.codePrefix : 'B2') + '-' + Math.floor(1000 + Math.random() * 9000));
+      const subCode = record.subCode || ('#' + (record.className || '12') + '-B3-' + Math.floor(1000 + Math.random() * 9000));
       record.subCode = subCode;
 
       if (document.getElementById('display-sub-code')) {
@@ -1531,7 +1011,7 @@ const questionsBank_Bai3 = [
 
     function shareToZalo() {
       if (!lastSubmissionRecord) return;
-      const text = `Em [${lastSubmissionRecord.name}] - Lớp [${lastSubmissionRecord.className}] đã hoàn thành bài luyện tập KTPL 12 (${currentLesson ? currentLesson.shortTitle : "Bài học"}).\nĐiểm: ${lastSubmissionRecord.score}/10 (${lastSubmissionRecord.correctCount} câu).\nThời gian làm: ${lastSubmissionRecord.timeElapsed}.\nMã nộp bài: ${lastSubmissionRecord.subCode}`;
+      const text = `Em [${lastSubmissionRecord.name}] - Lớp [${lastSubmissionRecord.className}] đã hoàn thành bài luyện tập KTPL 12 (Bài 3: Bảo hiểm).\nĐiểm: ${lastSubmissionRecord.score}/10 (${lastSubmissionRecord.correctCount} câu).\nThời gian làm: ${lastSubmissionRecord.timeElapsed}.\nMã nộp bài: ${lastSubmissionRecord.subCode}`;
       
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {

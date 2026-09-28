@@ -149,7 +149,12 @@
           
           <button id="btn-quick-b2" onclick="switchLesson(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📗</span> <span>Bài 2: Hội nhập KTQT</span>
-            <span id="badge-count-b2" class="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">2 bài</span>
+            <span id="badge-count-b2" class="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">14 bài</span>
+          </button>
+
+          <button id="btn-quick-b3" onclick="switchLesson(3)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>📙</span> <span>Bài 3: Bảo hiểm</span>
+            <span id="badge-count-b3" class="bg-amber-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
           </button>
 
           <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
@@ -624,6 +629,9 @@
       // Cập nhật nút trong banner tím
       const btnB1 = document.getElementById('btn-quick-b1');
       const btnB2 = document.getElementById('btn-quick-b2');
+      const btnB3 = document.getElementById('btn-quick-b3');
+      const btnAll = document.getElementById('btn-quick-all');
+
       if (btnB1) btnB1.className = (currentActiveLessonId === 1) 
         ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300" 
         : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
@@ -632,9 +640,22 @@
         ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-emerald-500 text-white ring-2 ring-emerald-300" 
         : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
 
+      if (btnB3) btnB3.className = (currentActiveLessonId === 3) 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-500 text-white ring-2 ring-amber-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
+      if (btnAll) btnAll.className = (currentActiveLessonId === 'ALL')
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300"
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
       const badge = document.getElementById('current-lesson-badge');
       if (badge) {
-        badge.innerText = (currentActiveLessonId === 'ALL') ? 'Tất cả 16 bài' : `Bài ${currentActiveLessonId}`;
+        if (currentActiveLessonId === 'ALL') {
+          badge.innerText = 'Tất cả 16 bài';
+        } else {
+          const found = ALL_16_LESSONS.find(l => l.id === currentActiveLessonId);
+          badge.innerText = found ? found.short : `Bài ${currentActiveLessonId}`;
+        }
       }
 
       applyFilters();
@@ -908,10 +929,13 @@
       // Cập nhật số đếm trên các nút chuyển nhanh
       const b1Count = allRawSubmissions.filter(s => s.lessonId === 1).length;
       const b2Count = allRawSubmissions.filter(s => s.lessonId === 2).length;
+      const b3Count = allRawSubmissions.filter(s => s.lessonId === 3).length;
       const badgeB1 = document.getElementById('badge-count-b1');
       const badgeB2 = document.getElementById('badge-count-b2');
+      const badgeB3 = document.getElementById('badge-count-b3');
       if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
       if (badgeB2) badgeB2.innerText = `${b2Count} bài`;
+      if (badgeB3) badgeB3.innerText = `${b3Count} bài`;
 
       applyFilters();
 
