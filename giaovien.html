@@ -185,7 +185,7 @@
     </div>
 
     <!-- Hàng thống kê tổng quan tiến độ của Bài học đang chọn -->
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
         <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Sĩ số danh sách</div>
         <div id="stat-total" class="text-2xl font-black text-indigo-600 mt-0.5">134</div>
@@ -210,6 +210,13 @@
         <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Điểm cao nhất</div>
         <div id="stat-max" class="text-2xl font-black text-teal-600 mt-0.5">0.0</div>
         <div id="stat-pass" class="text-[10px] font-bold text-teal-600 mt-0.5">Tỉ lệ đạt: 0%</div>
+      </div>
+      <div onclick="filterViolationsOnly()" class="bg-white p-3.5 rounded-xl border border-rose-200 hover:border-rose-400 cursor-pointer shadow-sm text-center transition">
+        <div class="text-[11px] font-bold text-rose-700 uppercase tracking-wider flex items-center justify-center gap-1">
+          <span>🚨</span> <span>Vi phạm thi</span>
+        </div>
+        <div id="stat-violations" class="text-2xl font-black text-rose-600 mt-0.5">0</div>
+        <div id="stat-violations-sub" class="text-[10px] font-bold text-rose-500 mt-0.5">0 bạn bị thu sớm</div>
       </div>
     </div>
 
@@ -237,6 +244,7 @@
               <option value="ALL">Tất cả học sinh</option>
               <option value="DONE">✅ Đã nộp bài</option>
               <option value="PENDING">⏳ Chưa nộp bài</option>
+              <option value="VIOLATION">🚨 Vi phạm rời màn hình / Thu sớm</option>
             </select>
           </div>
 
@@ -285,6 +293,30 @@
     </div>
 
     <!-- HỘP CẢNH BÁO BÀI NỘP TỰ GÕ TÊN (CHƯA KHỚP SỔ ĐIỂM) -->
+    <!-- HỘP CẢNH BÁO VI PHẠM THI (THU BÀI SỚM HOẶC RỜI MÀN HÌNH) -->
+    <div id="violation-alert-box" class="mb-4 bg-rose-50 border-2 border-rose-400 rounded-2xl p-4 text-xs shadow-md hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-rose-200">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl animate-bounce">🚨</span>
+          <div>
+            <div class="font-black text-rose-900 text-sm flex items-center gap-2">
+              <span id="violation-alert-title">PHÁT HIỆN HỌC SINH VI PHẠM QUY CHẾ THI</span>
+              <span id="violation-alert-count" class="bg-rose-600 text-white px-2 py-0.5 rounded-full text-xs font-bold">0 bài</span>
+            </div>
+            <div class="text-[11px] text-rose-700 font-medium">Hệ thống giám sát phát hiện các lượt thi bị thu bài sớm do rời màn hình quá 3 lần hoặc có cảnh báo thoát app.</div>
+          </div>
+        </div>
+        <div class="shrink-0">
+          <button onclick="filterViolationsOnly()" class="bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow transition flex items-center gap-1.5">
+            <span>🔍</span> <span>Lọc xem riêng danh sách này</span>
+          </button>
+        </div>
+      </div>
+      <div id="violation-alert-list" class="mt-3 space-y-2">
+        <!-- Render tự động danh sách học sinh vi phạm -->
+      </div>
+    </div>
+
     <div id="unmatched-alert" class="mb-4 bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 text-xs shadow-sm hidden">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-amber-200">
         <div class="flex items-center gap-2">
@@ -1132,6 +1164,19 @@
 
       renderUnmatchedSection(unmatchedSubs);
 
+      // Thu thập tất cả các bài có dấu hiệu vi phạm để cảnh báo
+      const violationList = candidateSubmissions.filter(s => {
+        const sw = parseInt(s.tabSwitchCount, 10) || 0;
+        return s.isViolation || sw > 0;
+      });
+      renderViolationSection(violationList);
+
+      const forcedCount = violationList.filter(s => s.isViolation || (parseInt(s.tabSwitchCount, 10) >= 3)).length;
+      const statViolations = document.getElementById('stat-violations');
+      const statViolationsSub = document.getElementById('stat-violations-sub');
+      if (statViolations) statViolations.innerText = violationList.length;
+      if (statViolationsSub) statViolationsSub.innerText = `${forcedCount} bạn bị thu sớm`;
+
       const allCombined = [...viewItems, ...unmatchedSubs];
 
       const filtered = allCombined.filter(item => {
@@ -1142,6 +1187,16 @@
         }
         if (statusFilter === 'DONE' && !isDoneCheck) return false;
         if (statusFilter === 'PENDING' && isDoneCheck) return false;
+        if (statusFilter === 'VIOLATION') {
+          const swCount = parseInt(item.tabSwitchCount, 10) || 0;
+          if (currentMainViewTab === 'matrix') {
+            const p = getStudent16LessonsProgress(item);
+            const hasViolInAny = Object.values(p.lessonResults).some(r => r.hasDone && (r.isViolation || (r.tabSwitchCount && r.tabSwitchCount > 0)));
+            if (!hasViolInAny && !item.isViolation && swCount === 0) return false;
+          } else {
+            if (!item.isViolation && swCount === 0) return false;
+          }
+        }
         if (search) {
           const n = normText(item.name);
           const c = normText(item.className);
@@ -1154,6 +1209,58 @@
       return { allItems: viewItems, filtered };
     }
 
+    
+    function filterViolationsOnly() {
+      const statusSelect = document.getElementById('filter-status');
+      if (statusSelect) {
+        statusSelect.value = 'VIOLATION';
+        applyFilters();
+      }
+    }
+
+    function renderViolationSection(violations) {
+      const box = document.getElementById('violation-alert-box');
+      const listEl = document.getElementById('violation-alert-list');
+      const countEl = document.getElementById('violation-alert-count');
+      if (!box || !listEl) return;
+
+      if (!violations || violations.length === 0) {
+        box.classList.add('hidden');
+        listEl.innerHTML = '';
+        return;
+      }
+
+      box.classList.remove('hidden');
+      if (countEl) countEl.innerText = `${violations.length} bài`;
+
+      listEl.innerHTML = violations.map(item => {
+        const swCount = parseInt(item.tabSwitchCount, 10) || 0;
+        const isForced = item.isViolation || swCount >= 3;
+        const badge = isForced
+          ? `<span class="bg-rose-600 text-white font-black px-2 py-0.5 rounded text-[11px] border border-rose-700">🚫 BỊ THU BÀI SỚM (${swCount} lần rời màn hình)</span>`
+          : `<span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[11px]">⚠️ Cảnh báo rời màn hình (${swCount} lần)</span>`;
+        
+        const lesObj = ALL_16_LESSONS.find(l => l.id === item.lessonId);
+        const lesName = lesObj ? `Bài ${lesObj.id}: ${lesObj.short}` : `Bài ${item.lessonId || '?'}`;
+
+        return `
+          <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-rose-300 shadow-sm hover:shadow transition">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="font-black text-rose-950 text-xs">${item.name}</span>
+              <span class="bg-indigo-50 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded">Lớp: ${item.className}</span>
+              <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2 py-0.5 rounded">${lesName}</span>
+              ${badge}
+              <span class="text-rose-700 font-bold text-xs">Điểm: ${item.score} (${item.correctCount || ''})</span>
+              <span class="text-[11px] text-slate-400 font-mono">${item.timestamp}</span>
+            </div>
+            <button onclick="openStudentHistoryModal('${item.name.replace(/'/g, "\\'")}', '${item.className}')" class="bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold text-xs px-3 py-1 rounded-lg border border-rose-300 shadow-sm transition">
+              🔍 Xem chi tiết
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+  
     function renderUnmatchedSection(unmatchedList) {
       const box = document.getElementById('unmatched-alert');
       const listEl = document.getElementById('unmatched-list');
@@ -1169,19 +1276,31 @@
       box.classList.remove('hidden');
       if (titleEl) titleEl.innerText = `Phát hiện ${unmatchedList.length} bài nộp tự gõ tên (Chưa khớp sổ điểm)`;
 
-      listEl.innerHTML = unmatchedList.map(item => `
-        <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-amber-200 shadow-sm">
-          <div class="flex items-center gap-3">
+      listEl.innerHTML = unmatchedList.map(item => {
+        const swCount = parseInt(item.tabSwitchCount, 10) || 0;
+        let cheatBadge = '';
+        if (item.isViolation || swCount >= 3) {
+          cheatBadge = `<span class="bg-rose-100 text-rose-800 text-[11px] font-bold px-2 py-0.5 rounded border border-rose-300">🚫 Thu bài sớm (Thoát ${swCount}L)</span>`;
+        } else if (swCount > 0) {
+          cheatBadge = `<span class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2 py-0.5 rounded border border-amber-300">⚠️ Thoát ${swCount} lần</span>`;
+        } else {
+          cheatBadge = `<span class="bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2 py-0.5 rounded border border-emerald-200">🛡️ 0L</span>`;
+        }
+        return `
+        <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border ${item.isViolation ? 'border-rose-400 bg-rose-50/40' : 'border-amber-200'} shadow-sm">
+          <div class="flex items-center gap-2.5 flex-wrap">
             <span class="font-bold text-slate-800 text-xs">${item.name}</span>
             <span class="bg-indigo-50 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded">Lớp: ${item.className}</span>
             <span class="text-emerald-700 font-black text-xs">Điểm: ${item.score} (${item.correctCount})</span>
+            ${cheatBadge}
             <span class="text-[11px] text-slate-400 font-mono">${item.timestamp}</span>
           </div>
           <button onclick="assignUnmatchedSub('${item.name.replace(/'/g, "\\'")}', '${item.className}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3 py-1 rounded-lg shadow transition">
             🔗 Ghép vào học sinh trong sổ
           </button>
         </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function assignUnmatchedSub(subName, subClass) {
@@ -1541,7 +1660,10 @@
               const tooltip = `Bài ${les.id}: ${res.score}đ (${res.correctCount}) lúc ${res.timestamp}${attemptsNote}${cheatNote}`;
 
               return `<td class="py-2 px-1 text-center border-l border-slate-100" title="${tooltip}">
-                <span class="inline-block px-1.5 py-0.5 rounded text-xs font-mono border ${badgeStyle} cursor-pointer hover:scale-110 transition" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">${res.score}</span>
+                <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded text-xs font-mono border ${badgeStyle} cursor-pointer hover:scale-110 transition shadow-sm" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">
+                  ${res.score}
+                  ${(res.isViolation || (res.tabSwitchCount && res.tabSwitchCount >= 3)) ? `<span class="ml-0.5 px-1 py-0.2 bg-rose-600 text-white rounded text-[9px] font-bold">🚫3L</span>` : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? `<span class="ml-0.5 px-0.5 py-0.2 bg-amber-500 text-white rounded text-[9px] font-bold">⚠️${res.tabSwitchCount}</span>` : '')}
+                </span>
               </td>`;
             } else {
               return `<td class="py-2 px-1 text-center border-l border-slate-100 text-slate-300 font-mono text-xs select-none">-</td>`;
@@ -1633,7 +1755,7 @@
 
           if (item.isUnmatched) {
             scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${item.score}</span>`;
-            statusBadge = `<span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-amber-300"><span>⚠️</span> Tự gõ tên</span>`;
+            statusBadge = `<div><span class="inline-flex items-center gap-1 bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-amber-300"><span>⚠️</span> Tự gõ tên</span>${cheatBadge}</div>`;
           } else if (item.isDone) {
             const numScore = parseFloat(item.score) || 0;
             let scoreBadgeClass = "bg-slate-100 text-slate-800";
