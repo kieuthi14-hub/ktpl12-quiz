@@ -627,10 +627,16 @@
     function handleTabLeave() {
       if (!quizInProgress || isAutoSubmitted) return;
       const now = Date.now();
-      if (now - lastTabLeaveTimestamp < 2500) return;
+      // Debounce 800ms lọc trùng lặp giữa visibilitychange và blur
+      if (now - lastTabLeaveTimestamp < 800) return;
       lastTabLeaveTimestamp = now;
 
       tabSwitchCount++;
+      console.warn("⚠️ Phát hiện rời màn hình lần:", tabSwitchCount);
+
+      if (navigator.vibrate) {
+        try { navigator.vibrate([200, 100, 200]); } catch(e) {}
+      }
 
       if (tabSwitchCount >= MAX_TAB_SWITCH) {
         isAutoSubmitted = true;
@@ -642,38 +648,68 @@
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) handleTabLeave();
+      if (document.hidden) {
+        handleTabLeave();
+      }
     });
 
     window.addEventListener('blur', () => {
       handleTabLeave();
     });
 
+    window.addEventListener('pagehide', () => {
+      handleTabLeave();
+    });
+
+    window.addEventListener('beforeunload', (e) => {
+      if (quizInProgress && !isAutoSubmitted) {
+        e.preventDefault();
+        e.returnValue = 'Bài thi đang diễn ra! Nếu rời đi bài thi của em sẽ bị mất hoặc tính vi phạm.';
+        return e.returnValue;
+      }
+    });
+
     function showViolationModal(count) {
       const modal = document.getElementById('violation-modal');
       const badge = document.getElementById('violation-count-badge');
       if (badge) badge.innerText = `Lần ${count} / ${MAX_TAB_SWITCH}`;
-      if (modal) modal.classList.remove('hidden');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
     }
 
     function acknowledgeViolation() {
+      lastTabLeaveTimestamp = Date.now();
       const modal = document.getElementById('violation-modal');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
 
     function triggerAutoSubmitViolation() {
       const ackModal = document.getElementById('violation-modal');
-      if (ackModal) ackModal.classList.add('hidden');
+      if (ackModal) {
+        ackModal.classList.add('hidden');
+        ackModal.style.display = 'none';
+      }
 
       const submitModal = document.getElementById('auto-submit-modal');
-      if (submitModal) submitModal.classList.remove('hidden');
+      if (submitModal) {
+        submitModal.classList.remove('hidden');
+        submitModal.style.display = 'flex';
+      }
 
       showResults(true, "Bị thu bài sớm: Rời màn hình 3 lần");
     }
 
     function dismissAutoSubmitModal() {
       const submitModal = document.getElementById('auto-submit-modal');
-      if (submitModal) submitModal.classList.add('hidden');
+      if (submitModal) {
+        submitModal.classList.add('hidden');
+        submitModal.style.display = 'none';
+      }
     }
 
     document.addEventListener('contextmenu', e => {
@@ -691,9 +727,6 @@
     });
 
     function startQuiz() {
-      tabSwitchCount = 0;
-      isAutoSubmitted = false;
-      quizInProgress = true;
       const classSelect = document.getElementById('student-class');
       let sClass = classSelect ? classSelect.value.trim() : '';
       if (sClass === 'Khác') {
@@ -766,6 +799,11 @@
       document.getElementById('result-screen').classList.add('hidden');
       document.getElementById('quiz-screen').classList.remove('hidden');
       document.getElementById('header-timer').classList.remove('hidden');
+
+      tabSwitchCount = 0;
+      isAutoSubmitted = false;
+      quizInProgress = true;
+      lastTabLeaveTimestamp = 0;
 
       startTimer();
       loadQuestion();
@@ -1385,7 +1423,7 @@
   </script>
 
   <!-- MODAL 1: CẢNH BÁO VI PHẠM THOÁT MÀN HÌNH (LẦN 1, 2) -->
-  <div id="violation-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+  <div id="violation-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-500 max-w-md w-full p-6 text-center animate-bounce-short">
       <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner">
         ⚠️
@@ -1414,7 +1452,7 @@
   </div>
 
   <!-- MODAL 2: THÔNG BÁO TỰ ĐỘNG THU BÀI DO VI PHẠM 3 LẦN -->
-  <div id="auto-submit-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+  <div id="auto-submit-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-600 max-w-md w-full p-6 text-center">
       <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-3">
         🚫
