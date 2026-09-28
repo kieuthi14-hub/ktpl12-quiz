@@ -99,13 +99,22 @@
         </div>
       </div>
 
-      <button onclick="startQuiz()" class="mt-6 w-full max-w-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-95">
+      <!-- Cảnh báo quy chế thi chống gian lận -->
+      <div class="mt-5 max-w-sm mx-auto p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-300 text-left flex items-start gap-2.5 shadow-sm">
+        <span class="text-xl leading-none">🛡️</span>
+        <div class="text-xs text-amber-900 leading-relaxed">
+          <strong class="font-black text-amber-950 uppercase tracking-tight block mb-0.5">Quy chế thi chống gian lận (Phương án 2):</strong>
+          Hệ thống tự động giám sát chuyển tab/thoát ứng dụng. Nếu rời màn hình quá <strong>3 lần</strong>, bài làm sẽ <strong>tự động bị khóa và thu bài ngay lập tức</strong>!
+        </div>
+      </div>
+
+      <button onclick="startQuiz()" class="mt-4 w-full max-w-sm bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-95">
         Bắt đầu làm bài 🚀
       </button>
     </div>
 
     <!-- 2. MÀN HÌNH LÀM BÀI -->
-    <div id="quiz-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 hidden">
+    <div id="quiz-screen" class="glass-card w-full p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200 select-none hidden" style="-webkit-user-select: none; user-select: none;">
       <!-- Progress & Timer -->
       <div class="mb-5">
         <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-1.5">
@@ -194,6 +203,10 @@
         <div class="p-3 bg-white rounded-xl border border-indigo-100">
           <div class="text-xs font-semibold text-slate-500 uppercase mb-1">Nhận xét của giáo viên:</div>
           <p id="res-comment" class="text-xs md:text-sm font-medium text-slate-700">Xuất sắc! Em đã nắm rất vững bản chất bài học.</p>
+        </div>
+
+        <!-- Nhãn kiểm soát gian lận trên chứng chỉ -->
+        <div id="res-anticheat-status" class="mt-2.5 p-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hidden">
         </div>
 
         <div class="mt-3 text-[11px] text-slate-400 flex justify-between items-center border-t border-indigo-100 pt-2">
@@ -701,7 +714,86 @@
       }
     }
 
+    
+    // ==========================================
+    // HỆ THỐNG GIÁM SÁT CHỐNG GIAN LẬN & RỜI MÀN HÌNH (PHƯƠNG ÁN 2)
+    // ==========================================
+    let tabSwitchCount = 0;
+    const MAX_TAB_SWITCH = 3;
+    let quizInProgress = false;
+    let lastTabLeaveTimestamp = 0;
+    let isAutoSubmitted = false;
+
+    function handleTabLeave() {
+      if (!quizInProgress || isAutoSubmitted) return;
+      const now = Date.now();
+      if (now - lastTabLeaveTimestamp < 2500) return;
+      lastTabLeaveTimestamp = now;
+
+      tabSwitchCount++;
+
+      if (tabSwitchCount >= MAX_TAB_SWITCH) {
+        isAutoSubmitted = true;
+        quizInProgress = false;
+        triggerAutoSubmitViolation();
+      } else {
+        showViolationModal(tabSwitchCount);
+      }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) handleTabLeave();
+    });
+
+    window.addEventListener('blur', () => {
+      handleTabLeave();
+    });
+
+    function showViolationModal(count) {
+      const modal = document.getElementById('violation-modal');
+      const badge = document.getElementById('violation-count-badge');
+      if (badge) badge.innerText = `Lần ${count} / ${MAX_TAB_SWITCH}`;
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function acknowledgeViolation() {
+      const modal = document.getElementById('violation-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function triggerAutoSubmitViolation() {
+      const ackModal = document.getElementById('violation-modal');
+      if (ackModal) ackModal.classList.add('hidden');
+
+      const submitModal = document.getElementById('auto-submit-modal');
+      if (submitModal) submitModal.classList.remove('hidden');
+
+      showResults(true, "Bị thu bài sớm: Rời màn hình 3 lần");
+    }
+
+    function dismissAutoSubmitModal() {
+      const submitModal = document.getElementById('auto-submit-modal');
+      if (submitModal) submitModal.classList.add('hidden');
+    }
+
+    document.addEventListener('contextmenu', e => {
+      if (quizInProgress) e.preventDefault();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!quizInProgress) return;
+      if ((e.ctrlKey || e.metaKey) && ['c', 'C', 'u', 'U', 's', 'S', 'p', 'P', 'a', 'A'].includes(e.key)) {
+        e.preventDefault();
+      }
+      if (e.key === 'F12') {
+        e.preventDefault();
+      }
+    });
+
     function startQuiz() {
+      tabSwitchCount = 0;
+      isAutoSubmitted = false;
+      quizInProgress = true;
       const classSelect = document.getElementById('student-class');
       let sClass = classSelect ? classSelect.value.trim() : '';
       if (sClass === 'Khác') {
@@ -853,7 +945,8 @@
       }
     }
 
-    function showResults() {
+    function showResults(isAutoSubmit = false, violationMsg = "") {
+      quizInProgress = false;
       stopTimer();
       document.getElementById('quiz-screen').classList.add('hidden');
       document.getElementById('result-screen').classList.remove('hidden');
@@ -893,12 +986,31 @@
       document.getElementById('cert-badge').innerText = badge;
       document.getElementById('res-comment').innerText = comment;
 
+            // Cập nhật nhãn giám sát thoát màn hình trên phiếu điểm
+      const antiCheatEl = document.getElementById('res-anticheat-status');
+      if (antiCheatEl) {
+        if (isAutoSubmit || tabSwitchCount >= MAX_TAB_SWITCH) {
+          antiCheatEl.className = "mt-2.5 p-2 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 text-xs font-bold flex items-center justify-center gap-1.5";
+          antiCheatEl.innerHTML = "<span>🚫</span> <span>Vi phạm: Đã rời màn hình 3 lần (Bị thu bài sớm)</span>";
+          antiCheatEl.classList.remove('hidden');
+        } else if (tabSwitchCount > 0) {
+          antiCheatEl.className = "mt-2.5 p-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-800 text-xs font-bold flex items-center justify-center gap-1.5";
+          antiCheatEl.innerHTML = `<span>⚠️</span> <span>Ghi nhận: Đã rời màn hình ${tabSwitchCount} lần</span>`;
+          antiCheatEl.classList.remove('hidden');
+        } else {
+          antiCheatEl.className = "mt-2.5 p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-center gap-1.5";
+          antiCheatEl.innerHTML = "<span>🛡️</span> <span>Giám sát: Làm bài trung thực (0 lần rời màn hình)</span>";
+          antiCheatEl.classList.remove('hidden');
+        }
+      }
+
       renderReviewList('all');
 
       // TẠO MÃ NỘP BÀI ĐỘC NHẤT
       const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
       const randomPart = Math.floor(1000 + Math.random() * 9000);
-      const subCode = `#${cleanClass}-B2-${randomPart}`;
+      const antiSuffix = `-V${tabSwitchCount}${isAutoSubmit || tabSwitchCount >= MAX_TAB_SWITCH ? 'X' : ''}`;
+      const subCode = `#${cleanClass}-B2-${randomPart}${antiSuffix}`;
       document.getElementById('res-sub-code').innerText = subCode;
 
       // TỰ ĐỘNG LƯU BÀI NỘP LÊN HỆ THỐNG ĐÁM MÂY CỦA GIÁO VIÊN
@@ -911,7 +1023,10 @@
         score: finalScore10,
         correctCount: `${score}/${currentQuiz.length}`,
         timeElapsed: timeElapsedStr,
-        timestamp: dateFormatted
+        timestamp: dateFormatted,
+        tabSwitchCount: tabSwitchCount,
+        isViolation: isAutoSubmit || (tabSwitchCount >= MAX_TAB_SWITCH),
+        violationReason: violationMsg || (tabSwitchCount > 0 ? `Thoát màn hình ${tabSwitchCount} lần` : '')
       });
     }
 
@@ -1000,7 +1115,7 @@
       const code = document.getElementById('display-sub-code').innerText;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(code).then(() => {
-          alert("Đã sao chép Mã nộp bài: " + code);
+          alert("Đã sao chép ${cheatNote}\nMã nộp bài: " + code);
         }).catch(() => {
           prompt("Mã nộp bài của em là:", code);
         });
@@ -1011,6 +1126,15 @@
 
     function shareToZalo() {
       if (!lastSubmissionRecord) return;
+      let cheatNote = "";
+      const sc = parseInt(lastSubmissionRecord.tabSwitchCount, 10) || 0;
+      if (lastSubmissionRecord.isViolation || sc >= 3) {
+        cheatNote = "\n⚠️ Giám sát: BỊ THU BÀI SỚM (Rời màn hình 3 lần).";
+      } else if (sc > 0) {
+        cheatNote = `\n⚠️ Giám sát: Rời màn hình ${sc} lần.`;
+      } else {
+        cheatNote = "\n🛡️ Giám sát: Trung thực 100% (0 lần rời màn hình).";
+      }
       const text = `Em [${lastSubmissionRecord.name}] - Lớp [${lastSubmissionRecord.className}] đã hoàn thành bài luyện tập KTPL 12 (Bài 1).\nĐiểm: ${lastSubmissionRecord.score}/10 (${lastSubmissionRecord.correctCount} câu).\nThời gian làm: ${lastSubmissionRecord.timeElapsed}.\nMã nộp bài: ${lastSubmissionRecord.subCode}`;
       
       if (navigator.clipboard) {
@@ -1025,6 +1149,9 @@
     }
 
     function restartQuiz() {
+      quizInProgress = false;
+      tabSwitchCount = 0;
+      isAutoSubmitted = false;
       stopTimer();
       document.getElementById('header-timer').classList.add('hidden');
       document.getElementById('result-screen').classList.add('hidden');
@@ -1357,5 +1484,55 @@
       alert("Đã xóa danh sách bài nộp trên trình duyệt thành công! (Dữ liệu gốc trên Google Sheet vẫn được bảo toàn an toàn).");
     }
   </script>
+
+  <!-- MODAL 1: CẢNH BÁO VI PHẠM THOÁT MÀN HÌNH (LẦN 1, 2) -->
+  <div id="violation-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-500 max-w-md w-full p-6 text-center animate-bounce-short">
+      <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner">
+        ⚠️
+      </div>
+      <h3 class="text-xl font-black text-rose-600 uppercase tracking-tight">Cảnh Báo Vi Phạm Quy Chế Thi!</h3>
+      <p class="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wider">Hệ thống giám sát phản xạ chống gian lận</p>
+      
+      <div class="my-4 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-left space-y-2">
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-bold text-slate-700">Hành vi phát hiện:</span>
+          <span class="font-black text-rose-600 bg-rose-200 px-2 py-0.5 rounded-md text-xs">Thoát màn hình làm bài</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-bold text-slate-700">Số lần vi phạm:</span>
+          <span id="violation-count-badge" class="font-black text-rose-700 text-base">Lần 1 / 3</span>
+        </div>
+        <p class="text-xs text-rose-800 pt-2 border-t border-rose-200 leading-relaxed font-medium">
+          🚨 <strong>CẢNH BÁO QUAN TRỌNG:</strong> Nếu rời màn hình quá <strong>3 lần</strong>, hệ thống sẽ <strong>TỰ ĐỘNG THU BÀI & CHẤM ĐIỂM NGAY LẬP TỨC</strong>. Số lần vi phạm đã được ghi lại và gửi về sổ điểm của Cô Kiều!
+        </p>
+      </div>
+
+      <button id="btn-ack-violation" onclick="acknowledgeViolation()" class="w-full py-3.5 px-6 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm transition shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2">
+        <span>✋</span> <span>Tôi đã hiểu & Cam kết không vi phạm</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: THÔNG BÁO TỰ ĐỘNG THU BÀI DO VI PHẠM 3 LẦN -->
+  <div id="auto-submit-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-600 max-w-md w-full p-6 text-center">
+      <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-3">
+        🚫
+      </div>
+      <h3 class="text-2xl font-black text-rose-700 uppercase tracking-tight">ĐÃ BỊ THU BÀI SỚM!</h3>
+      <p class="text-xs font-bold text-slate-500 mt-1 uppercase">Vi phạm quy chế thi vượt quá 3 lần</p>
+      
+      <div class="my-4 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-sm text-rose-900 leading-relaxed text-left">
+        <p class="font-bold">Em đã rời khỏi màn hình làm bài 3 lần!</p>
+        <p class="text-xs mt-1 text-slate-600">Hệ thống đã tự động khóa bài thi, tính điểm các câu đã làm và chuyển trực tiếp phiếu điểm vi phạm về sổ theo dõi của Cô Kiều.</p>
+      </div>
+
+      <button onclick="dismissAutoSubmitModal()" class="w-full py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm transition shadow-md">
+        Xem kết quả điểm số
+      </button>
+    </div>
+  </div>
+
 </body>
 </html>
