@@ -157,6 +157,11 @@
             <span id="badge-count-b3" class="bg-amber-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
           </button>
 
+          <button id="btn-quick-b4" onclick="switchLesson(4)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>📕</span> <span>Bài 4: An sinh xã hội</span>
+            <span id="badge-count-b4" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
+          </button>
+
           <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📊</span> <span>Tổng Hợp Tất Cả Bài</span>
           </button>
@@ -699,6 +704,7 @@
       const btnB1 = document.getElementById('btn-quick-b1');
       const btnB2 = document.getElementById('btn-quick-b2');
       const btnB3 = document.getElementById('btn-quick-b3');
+      const btnB4 = document.getElementById('btn-quick-b4');
       const btnAll = document.getElementById('btn-quick-all');
 
       if (btnB1) btnB1.className = (currentActiveLessonId === 1) 
@@ -711,6 +717,10 @@
 
       if (btnB3) btnB3.className = (currentActiveLessonId === 3) 
         ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-500 text-white ring-2 ring-amber-300" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
+      if (btnB4) btnB4.className = (currentActiveLessonId === 4) 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-rose-500 text-white ring-2 ring-rose-300" 
         : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
 
       if (btnAll) btnAll.className = (currentActiveLessonId === 'ALL')
@@ -1003,12 +1013,15 @@
       const b1Count = allRawSubmissions.filter(s => s.lessonId === 1).length;
       const b2Count = allRawSubmissions.filter(s => s.lessonId === 2).length;
       const b3Count = allRawSubmissions.filter(s => s.lessonId === 3).length;
+      const b4Count = allRawSubmissions.filter(s => s.lessonId === 4).length;
       const badgeB1 = document.getElementById('badge-count-b1');
       const badgeB2 = document.getElementById('badge-count-b2');
       const badgeB3 = document.getElementById('badge-count-b3');
+      const badgeB4 = document.getElementById('badge-count-b4');
       if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
       if (badgeB2) badgeB2.innerText = `${b2Count} bài`;
       if (badgeB3) badgeB3.innerText = `${b3Count} bài`;
+      if (badgeB4) badgeB4.innerText = `${b4Count} bài`;
 
       applyFilters();
 
