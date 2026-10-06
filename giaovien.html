@@ -235,9 +235,9 @@
           <div class="flex items-center gap-1.5">
             <span class="text-xs font-bold text-slate-600">Lớp:</span>
             <select id="filter-class" onchange="applyFilters()" class="text-xs font-bold px-3 py-2 rounded-xl border border-indigo-300 bg-indigo-50/50 text-indigo-900 focus:ring-2 focus:ring-indigo-500">
-              <option value="ALL">Tất cả 3 lớp (134 HS)</option>
+              <option value="ALL" selected>Tất cả 3 lớp (134 HS)</option>
               <option value="12A5">Lớp 12A5 (48 HS)</option>
-              <option value="12A7" selected>Lớp 12A7 (42 HS)</option>
+              <option value="12A7">Lớp 12A7 (42 HS)</option>
               <option value="12A9">Lớp 12A9 (44 HS)</option>
             </select>
           </div>
@@ -1016,6 +1016,9 @@
       });
 
       list.forEach(item => {
+        item.name = String(item.name || '').trim();
+        item.className = String(item.className || '').trim();
+        item.subCode = String(item.subCode || '').trim();
         item.score = formatCleanScore(item.score, item.correctCount);
         item.lessonId = getLessonOfSubmission(item);
         const ac = getAntiCheatInfo(item);
@@ -1302,7 +1305,7 @@
               <span class="text-rose-700 font-bold text-xs">Điểm: ${item.score} (${item.correctCount || ''})</span>
               <span class="text-[11px] text-slate-400 font-mono">${item.timestamp}</span>
             </div>
-            <button onclick="openStudentHistoryModal('${item.name.replace(/'/g, "\\'")}', '${item.className}')" class="bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold text-xs px-3 py-1 rounded-lg border border-rose-300 shadow-sm transition">
+            <button onclick="openStudentHistoryModal('${String(item.name || '').replace(/'/g, "\\'")}', '${String(item.className || '').replace(/'/g, "\\'")}')" class="bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold text-xs px-3 py-1 rounded-lg border border-rose-300 shadow-sm transition">
               🔍 Xem chi tiết
             </button>
           </div>
@@ -1335,10 +1338,10 @@
         } else {
           cheatBadge = `<span class="bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2 py-0.5 rounded border border-emerald-200">🛡️ 0L</span>`;
         }
-        const safeName = (item.name || '').replace(/'/g, "\\'");
-        const safeClass = (item.className || '').replace(/'/g, "\\'");
-        const safeCode = (item.subCode || '').replace(/'/g, "\\'");
-        const safeId = (item.id || item.timestamp || '').toString().replace(/'/g, "\\'");
+        const safeName = String(item.name || '').replace(/'/g, "\\'");
+        const safeClass = String(item.className || '').replace(/'/g, "\\'");
+        const safeCode = String(item.subCode || '').replace(/'/g, "\\'");
+        const safeId = String(item.id || item.timestamp || '').replace(/'/g, "\\'");
 
         return `
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 bg-white rounded-xl border ${item.isViolation ? 'border-rose-400 bg-rose-50/40' : 'border-amber-200'} shadow-sm">
@@ -1724,8 +1727,8 @@
           tr.className = "hover:bg-indigo-50/40 transition bg-white border-b border-slate-100";
 
           const pInfo = getStudent16LessonsProgress(item);
-          const safeItemName = (item.name || '').replace(/'/g, "\\'");
-          const safeItemClass = (item.className || '').replace(/'/g, "\\'");
+          const safeItemName = String(item.name || '').replace(/'/g, "\\'");
+          const safeItemClass = String(item.className || '').replace(/'/g, "\\'");
 
           // Render 16 ô điểm tương ứng 16 bài
           const lessonCells = ALL_16_LESSONS.map(les => {
@@ -1836,6 +1839,13 @@
 
           let statusBadge = '';
           let scoreBadge = '-';
+          let cheatBadge = '';
+          const swCount = parseInt(item.tabSwitchCount, 10) || 0;
+          if (item.isViolation || swCount >= 3) {
+            cheatBadge = `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 bg-rose-100 text-rose-800 font-bold px-1.5 py-0.5 rounded text-[10px] border border-rose-300" title="Đã thoát màn hình ${swCount} lần - Bị thu bài sớm"><span>🚫</span> Thoát ${swCount}L (Thu sớm)</span></div>`;
+          } else if (swCount > 0) {
+            cheatBadge = `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded text-[10px] border border-amber-300" title="Ghi nhận thoát màn hình ${swCount} lần"><span>⚠️</span> Thoát ${swCount} lần</span></div>`;
+          }
 
           if (item.isUnmatched) {
             scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold">${item.score}</span>`;
@@ -1850,23 +1860,15 @@
 
             scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs ${scoreBadgeClass}">${item.score}</span>`;
 
-            const countBadge = item.submissionCount > 1 ? `<span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded font-bold cursor-pointer hover:bg-indigo-200" onclick="event.stopPropagation(); openStudentHistoryModal('${item.name.replace(/'/g, "\\'")}', '${item.className}')" title="Làm ${item.submissionCount} lần - Bấm xem lịch sử">${item.submissionCount}x 🔍</span>` : '';
-
-            let cheatBadge = '';
-            const swCount = parseInt(item.tabSwitchCount, 10) || 0;
-            if (item.isViolation || swCount >= 3) {
-              cheatBadge = `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 bg-rose-100 text-rose-800 font-bold px-1.5 py-0.5 rounded text-[10px] border border-rose-300" title="Đã thoát màn hình ${swCount} lần - Bị thu bài sớm"><span>🚫</span> Thoát ${swCount}L (Thu sớm)</span></div>`;
-            } else if (swCount > 0) {
-              cheatBadge = `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded text-[10px] border border-amber-300" title="Ghi nhận thoát màn hình ${swCount} lần"><span>⚠️</span> Thoát ${swCount} lần</span></div>`;
-            }
+            const countBadge = item.submissionCount > 1 ? `<span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded font-bold cursor-pointer hover:bg-indigo-200" onclick="event.stopPropagation(); openStudentHistoryModal('${String(item.name || '').replace(/'/g, "\\'")}', '${String(item.className || '').replace(/'/g, "\\'")}')" title="Làm ${item.submissionCount} lần - Bấm xem lịch sử">${item.submissionCount}x 🔍</span>` : '';
 
             statusBadge = `<div><span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md text-[11px] border border-emerald-300"><span>✅</span> Đã nộp${countBadge}</span>${cheatBadge}</div>`;
           } else {
             statusBadge = `<span class="inline-flex items-center gap-1 bg-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-md text-[11px]"><span>⏳</span> Chưa làm</span>`;
           }
 
-          const safeItemName = (item.name || '').replace(/'/g, "\\'");
-          const safeItemClass = (item.className || '').replace(/'/g, "\\'");
+          const safeItemName = String(item.name || '').replace(/'/g, "\\'");
+          const safeItemClass = String(item.className || '').replace(/'/g, "\\'");
           const assignBtn = item.isUnmatched ? `<button onclick="assignUnmatchedSub('${safeItemName}', '${safeItemClass}')" class="ml-1 text-[10px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-bold border border-indigo-200">🔗 Ghép</button>` : '';
 
           tr.innerHTML = `
@@ -1892,8 +1894,8 @@
           tr.className = "hover:bg-slate-50 transition bg-white";
 
           const pInfo = getStudentProgressionInfo(item);
-          const safeItemName = (item.name || '').replace(/'/g, "\\'");
-          const safeItemClass = (item.className || '').replace(/'/g, "\\'");
+          const safeItemName = String(item.name || '').replace(/'/g, "\\'");
+          const safeItemClass = String(item.className || '').replace(/'/g, "\\'");
 
           tr.innerHTML = `
             <td class="py-2.5 px-3 text-center text-slate-400 font-mono font-bold">${item.stt}</td>
@@ -2177,7 +2179,7 @@
         return [
           item.stt,
           `"${item.studentId || ''}"`,
-          `"${(item.name || '').replace(/"/g, '""')}"`,
+          `"${String(item.name || '').replace(/"/g, '""')}"`,
           `"${item.className || ''}"`,
           pInfo.count,
           pInfo.count > 0 ? `"${pInfo.firstScore}"` : `""`,
@@ -2239,7 +2241,7 @@
         return [
           item.stt,
           `"${item.studentId || ''}"`,
-          `"${(item.name || '').replace(/"/g, '""')}"`,
+          `"${String(item.name || '').replace(/"/g, '""')}"`,
           `"${item.className || ''}"`,
           item.isDone ? `"Đã nộp bài"` : `"Chưa nộp bài"`,
           item.isDone ? `"${item.score}"` : `""`,
@@ -2298,13 +2300,13 @@
         return [
           student.stt,
           `"${student.studentId || ''}"`,
-          `"${student.name.replace(/"/g, '""')}"`,
+          `"${String(student.name || '').replace(/"/g, '""')}"`,
           `"${student.className}"`,
           ...scoresBy16Lessons,
           pInfo.completedCount,
           `"${pInfo.avgScore}"`,
-          `"${pInfo.progressText.replace(/"/g, '""')}"`,
-          `"${pInfo.evaluationText.replace(/"/g, '""')}"`
+          `"${String(pInfo.progressText || '').replace(/"/g, '""')}"`,
+          `"${String(pInfo.evaluationText || '').replace(/"/g, '""')}"`
         ];
       });
 
