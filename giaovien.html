@@ -1015,6 +1015,24 @@
         return !TEST_SUBMISSION_NAMES.some(t => norm === t);
       });
 
+      // LỌC BỎ 100% BÀI NỘP MÔN HÓA HỌC (TUYỆT ĐỐI KHÔNG HIỂN THỊ ĐIỂM HÓA TRÊN SỔ KTPL)
+      list = list.filter(item => {
+        const sub = String(item.subject || '').toUpperCase();
+        if (sub === 'HOAHOC12' || sub === 'HOA12' || sub === 'HOA') return false;
+
+        const code = String(item.subCode || '').toUpperCase();
+        if (code.includes('HOA') || code.includes('CHEM')) return false;
+
+        const lesson = String(item.lesson || '').toUpperCase();
+        if (lesson.includes('HÓA') || lesson.includes('ESTER') || lesson.includes('ESTE') ||
+            lesson.includes('LIPID') || lesson.includes('LIPIT') || lesson.includes('XÀ PHÒNG') ||
+            lesson.includes('GLUCOSE') || lesson.includes('AMINE') || lesson.includes('POLYMER')) {
+          return false;
+        }
+
+        return true;
+      });
+
       list.forEach(item => {
         item.name = String(item.name || '').trim();
         item.className = String(item.className || '').trim();
