@@ -162,6 +162,11 @@
             <span id="badge-count-b4" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
           </button>
 
+          <button id="btn-quick-kttx2" onclick="switchLesson('kttx2')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md">
+            <span>⭐</span> <span>KTTX: Đề số 2</span>
+            <span id="badge-count-kttx2" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
+          </button>
+
           <button id="btn-quick-kttx1" onclick="switchLesson('kttx1')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>⭐</span> <span>KTTX: Đề số 1</span>
             <span id="badge-count-kttx1" class="bg-amber-400 text-slate-950 text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
@@ -618,7 +623,7 @@
       return localStorage.getItem('ktpl12_teacher_pin') || '123456';
     }
 
-    // Tự động khởi tạo Master Lesson Select (16 bài)
+    // Tự động khởi tạo Master Lesson Select (16 bài + KTTX)
     function initMasterLessonSelect() {
       const sel = document.getElementById('lesson-master-select');
       const toolbarSel = document.getElementById('toolbar-lesson-select');
@@ -626,6 +631,18 @@
       [sel, toolbarSel].forEach(selectEl => {
         if (!selectEl) return;
         selectEl.innerHTML = '';
+
+        const optKttx2 = document.createElement('option');
+        optKttx2.value = 'kttx2';
+        optKttx2.innerText = '⭐ Đề KTTX số 2 (15 phút)';
+        if (currentActiveLessonId === 'kttx2') optKttx2.selected = true;
+        selectEl.appendChild(optKttx2);
+
+        const optKttx1 = document.createElement('option');
+        optKttx1.value = 'kttx1';
+        optKttx1.innerText = '⭐ Đề KTTX số 1 (15 phút)';
+        if (currentActiveLessonId === 'kttx1') optKttx1.selected = true;
+        selectEl.appendChild(optKttx1);
         
         ALL_16_LESSONS.forEach(l => {
           const opt = document.createElement('option');
@@ -641,6 +658,10 @@
     function getLessonOfSubmission(sub) {
       const code = (sub.subCode || '').toUpperCase();
       const lesson = (sub.lesson || '').toUpperCase();
+
+      if (code.includes('KTTX2') || code.includes('KT2') || lesson.includes('ĐỀ SỐ 2') || lesson.includes('DE SO 2') || lesson.includes('KTTX 2') || lesson.includes('KTTX-2') || lesson.includes('ĐỀ 2')) {
+        return 'kttx2';
+      }
 
       if (code.includes('KTTX') || code.includes('KT1') || lesson.includes('KTTX') || lesson.includes('THƯỜNG XUYÊN')) {
         return 'kttx1';
@@ -695,7 +716,7 @@
     }
 
     function switchLesson(lessonId) {
-      currentActiveLessonId = (lessonId === 'kttx1' || lessonId === 'ALL') ? lessonId : (parseInt(lessonId, 10) || lessonId);
+      currentActiveLessonId = (lessonId === 'kttx2' || lessonId === 'kttx1' || lessonId === 'ALL') ? lessonId : (parseInt(lessonId, 10) || lessonId);
       
       const masterSelect = document.getElementById('lesson-master-select');
       if (masterSelect) masterSelect.value = currentActiveLessonId;
@@ -721,6 +742,7 @@
       const btnB2 = document.getElementById('btn-quick-b2');
       const btnB3 = document.getElementById('btn-quick-b3');
       const btnB4 = document.getElementById('btn-quick-b4');
+      const btnKttx2 = document.getElementById('btn-quick-kttx2');
       const btnKttx1 = document.getElementById('btn-quick-kttx1');
       const btnAll = document.getElementById('btn-quick-all');
 
@@ -740,6 +762,10 @@
         ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-rose-500 text-white ring-2 ring-rose-300" 
         : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
 
+      if (btnKttx2) btnKttx2.className = (currentActiveLessonId === 'kttx2') 
+        ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md" 
+        : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
+
       if (btnKttx1) btnKttx1.className = (currentActiveLessonId === 'kttx1') 
         ? "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md" 
         : "px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white";
@@ -752,6 +778,8 @@
       if (badge) {
         if (currentActiveLessonId === 'ALL') {
           badge.innerText = 'Tất cả 16 bài';
+        } else if (currentActiveLessonId === 'kttx2') {
+          badge.innerText = '⭐ Đề KTTX số 2';
         } else if (currentActiveLessonId === 'kttx1') {
           badge.innerText = '⭐ Đề KTTX số 1';
         } else {
@@ -762,7 +790,13 @@
 
       const displayLink = document.getElementById('display-lesson-link');
       if (displayLink) {
-        displayLink.innerText = `https://kieuthi14-hub.github.io/ktpl12-quiz/?bai=${currentActiveLessonId}`;
+        if (currentActiveLessonId === 'kttx2') {
+          displayLink.innerText = `https://kieuthi14-hub.github.io/ktpl12-quiz/kttx2.html`;
+        } else if (currentActiveLessonId === 'kttx1') {
+          displayLink.innerText = `https://kieuthi14-hub.github.io/ktpl12-quiz/kttx1.html`;
+        } else {
+          displayLink.innerText = `https://kieuthi14-hub.github.io/ktpl12-quiz/?bai=${currentActiveLessonId}`;
+        }
       }
 
       if (window.history && window.history.replaceState) {
@@ -777,6 +811,7 @@
 
     function onMasterLessonChange(val) {
       if (val === 'ALL') switchLesson('ALL');
+      else if (val === 'kttx2' || val === 'kttx1') switchLesson(val);
       else switchLesson(parseInt(val, 10));
     }
 
@@ -1073,21 +1108,24 @@
       const b2Count = allRawSubmissions.filter(s => s.lessonId === 2).length;
       const b3Count = allRawSubmissions.filter(s => s.lessonId === 3).length;
       const b4Count = allRawSubmissions.filter(s => s.lessonId === 4).length;
+      const kttx2Count = allRawSubmissions.filter(s => s.lessonId === 'kttx2').length;
       const kttx1Count = allRawSubmissions.filter(s => s.lessonId === 'kttx1').length;
       const badgeB1 = document.getElementById('badge-count-b1');
       const badgeB2 = document.getElementById('badge-count-b2');
       const badgeB3 = document.getElementById('badge-count-b3');
       const badgeB4 = document.getElementById('badge-count-b4');
+      const badgeKttx2 = document.getElementById('badge-count-kttx2');
       const badgeKttx1 = document.getElementById('badge-count-kttx1');
       if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
       if (badgeB2) badgeB2.innerText = `${b2Count} bài`;
       if (badgeB3) badgeB3.innerText = `${b3Count} bài`;
       if (badgeB4) badgeB4.innerText = `${b4Count} bài`;
+      if (badgeKttx2) badgeKttx2.innerText = `${kttx2Count} bài`;
       if (badgeKttx1) badgeKttx1.innerText = `${kttx1Count} bài`;
 
       const liveStatus = document.getElementById('live-status-text');
       if (liveStatus) {
-        liveStatus.innerHTML = `Đã đồng bộ trực tiếp từ Google Sheets (${allRawSubmissions.length} bài: KTTX1: <b class="text-amber-500">${kttx1Count}</b>, Bài 1: <b>${b1Count}</b>, Bài 2: <b>${b2Count}</b>, Bài 3: <b>${b3Count}</b>, Bài 4: <b class="text-rose-600">${b4Count} bài</b>)`;
+        liveStatus.innerHTML = `Đã đồng bộ trực tiếp từ Google Sheets (${allRawSubmissions.length} bài: KTTX2: <b class="text-amber-500">${kttx2Count}</b>, KTTX1: <b class="text-amber-500">${kttx1Count}</b>, Bài 1: <b>${b1Count}</b>, Bài 2: <b>${b2Count}</b>, Bài 3: <b>${b3Count}</b>, Bài 4: <b class="text-rose-600">${b4Count} bài</b>)`;
       }
 
       applyFilters();
@@ -1153,6 +1191,7 @@
       let candidateSubmissions = allRawSubmissions;
       if (currentActiveLessonId !== 'ALL') {
         candidateSubmissions = allRawSubmissions.filter(s => {
+          if (currentActiveLessonId === 'kttx2') return s.lessonId === 'kttx2';
           if (currentActiveLessonId === 'kttx1') return s.lessonId === 'kttx1';
           return s.lessonId === parseInt(currentActiveLessonId, 10);
         });
