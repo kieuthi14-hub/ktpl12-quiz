@@ -168,7 +168,7 @@
           </button>
 
           <button id="btn-quick-kttx1" onclick="switchLesson('kttx1')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
-            <span>⭐</span> <span>KTTX: Đề số 1</span>
+            <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 1 (Bản 2)</span>
             <span id="badge-count-kttx1" class="bg-amber-400 text-slate-950 text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
           </button>
 
@@ -640,7 +640,7 @@
 
         const optKttx1 = document.createElement('option');
         optKttx1.value = 'kttx1';
-        optKttx1.innerText = '⭐ Đề KTTX số 1 (15 phút)';
+        optKttx1.innerText = '⭐ Ôn tập Giữa HK1 - Đề số 1 (Bản 2)';
         if (currentActiveLessonId === 'kttx1') optKttx1.selected = true;
         selectEl.appendChild(optKttx1);
         
@@ -781,7 +781,7 @@
         } else if (currentActiveLessonId === 'kttx2') {
           badge.innerText = '⭐ Đề KTTX số 2';
         } else if (currentActiveLessonId === 'kttx1') {
-          badge.innerText = '⭐ Đề KTTX số 1';
+          badge.innerText = '⭐ Ôn Giữa Kỳ 1: Đề 1 (Bản 2)';
         } else {
           const found = ALL_16_LESSONS.find(l => l.id === currentActiveLessonId);
           badge.innerText = found ? found.short : `Bài ${currentActiveLessonId}`;
@@ -1542,7 +1542,7 @@
           } else if (currentActiveLessonId === 'kttx2') {
             heading.innerText = `DANH SÁCH HỌC SINH - ĐỀ KTTX SỐ 2 (${classTitle})`;
           } else if (currentActiveLessonId === 'kttx1') {
-            heading.innerText = `DANH SÁCH HỌC SINH - ĐỀ KTTX SỐ 1 (${classTitle})`;
+            heading.innerText = `DANH SÁCH HỌC SINH - ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2) (${classTitle})`;
           } else {
             const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
             heading.innerText = `DANH SÁCH HỌC SINH - ${lesObj.title.toUpperCase()} (${classTitle})`;
@@ -2247,7 +2247,7 @@
       if (currentActiveLessonId === 'kttx2') {
         lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
       } else if (currentActiveLessonId === 'kttx1') {
-        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 1';
+        lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2)';
       } else if (currentActiveLessonId !== 'ALL') {
         const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
         lessonTitle = lesObj.title.toUpperCase();
@@ -2314,8 +2314,8 @@
         lessonFileLabel = 'KTTX2';
         lessonHeaderTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
       } else if (currentActiveLessonId === 'kttx1') {
-        lessonFileLabel = 'KTTX1';
-        lessonHeaderTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 1';
+        lessonFileLabel = 'OnTap_GiuaKy1_De1_Ban2';
+        lessonHeaderTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2)';
       } else if (currentActiveLessonId !== 'ALL') {
         const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
         lessonFileLabel = lesObj.fileCode;
@@ -2458,7 +2458,7 @@
         lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
         lessonUrl = `${baseUrl}kttx2.html`;
       } else if (currentActiveLessonId === 'kttx1') {
-        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 1';
+        lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2)';
         lessonUrl = `${baseUrl}kttx1.html`;
       } else if (currentActiveLessonId !== 'ALL') {
         const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
