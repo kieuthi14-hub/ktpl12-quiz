@@ -1539,6 +1539,10 @@
         } else {
           if (currentActiveLessonId === 'ALL') {
             heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC - ${classTitle}`;
+          } else if (currentActiveLessonId === 'kttx2') {
+            heading.innerText = `DANH SÁCH HỌC SINH - ĐỀ KTTX SỐ 2 (${classTitle})`;
+          } else if (currentActiveLessonId === 'kttx1') {
+            heading.innerText = `DANH SÁCH HỌC SINH - ĐỀ KTTX SỐ 1 (${classTitle})`;
           } else {
             const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
             heading.innerText = `DANH SÁCH HỌC SINH - ${lesObj.title.toUpperCase()} (${classTitle})`;
@@ -2014,7 +2018,11 @@
       // Lấy tất cả bài nộp của học sinh này cho bài học đang chọn (hoặc tất cả bài)
       let candidateSubmissions = allRawSubmissions;
       if (currentActiveLessonId !== 'ALL') {
-        candidateSubmissions = allRawSubmissions.filter(s => s.lessonId === parseInt(currentActiveLessonId, 10));
+        candidateSubmissions = allRawSubmissions.filter(s => {
+          if (currentActiveLessonId === 'kttx2') return s.lessonId === 'kttx2';
+          if (currentActiveLessonId === 'kttx1') return s.lessonId === 'kttx1';
+          return s.lessonId === parseInt(currentActiveLessonId, 10);
+        });
       }
 
       const subs = candidateSubmissions.filter(sub => {
@@ -2236,7 +2244,11 @@
       const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
 
       let lessonTitle = 'TẤT CẢ BÀI HỌC';
-      if (currentActiveLessonId !== 'ALL') {
+      if (currentActiveLessonId === 'kttx2') {
+        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
+      } else if (currentActiveLessonId === 'kttx1') {
+        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 1';
+      } else if (currentActiveLessonId !== 'ALL') {
         const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
         lessonTitle = lesObj.title.toUpperCase();
       }
@@ -2298,7 +2310,13 @@
       let lessonFileLabel = 'TatCaBai';
       let lessonHeaderTitle = 'TẤT CẢ BÀI HỌC';
 
-      if (currentActiveLessonId !== 'ALL') {
+      if (currentActiveLessonId === 'kttx2') {
+        lessonFileLabel = 'KTTX2';
+        lessonHeaderTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
+      } else if (currentActiveLessonId === 'kttx1') {
+        lessonFileLabel = 'KTTX1';
+        lessonHeaderTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 1';
+      } else if (currentActiveLessonId !== 'ALL') {
         const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
         lessonFileLabel = lesObj.fileCode;
         lessonHeaderTitle = lesObj.title.toUpperCase();
@@ -2430,25 +2448,35 @@
       const pending = allItems.filter(i => !i.isDone);
       const done = allItems.filter(i => i.isDone);
 
-      const lesObj = (currentActiveLessonId !== 'ALL') 
-        ? (ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0])
-        : ALL_16_LESSONS[0];
-
-      if (pending.length === 0) {
-        alert(`Chúc mừng cô! Toàn bộ học sinh ${selectedClass === 'ALL' ? 'các lớp' : 'lớp ' + selectedClass} đều đã nộp bài ${lesObj.title} đầy đủ 100%! 🎉`);
-        return;
-      }
-
       let baseUrl = window.location.href.split('?')[0].split('#')[0].replace('giaovien.html', '');
       if (!baseUrl.endsWith('/')) baseUrl += '/';
-      const lessonUrl = `${baseUrl}index.html?bai=${lesObj.id}`;
+
+      let lessonTitle = 'TẤT CẢ BÀI HỌC';
+      let lessonUrl = `${baseUrl}index.html`;
+
+      if (currentActiveLessonId === 'kttx2') {
+        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
+        lessonUrl = `${baseUrl}kttx2.html`;
+      } else if (currentActiveLessonId === 'kttx1') {
+        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 1';
+        lessonUrl = `${baseUrl}kttx1.html`;
+      } else if (currentActiveLessonId !== 'ALL') {
+        const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+        lessonTitle = lesObj.title.toUpperCase();
+        lessonUrl = `${baseUrl}index.html?bai=${lesObj.id}`;
+      }
+
+      if (pending.length === 0) {
+        alert(`Chúc mừng cô! Toàn bộ học sinh ${selectedClass === 'ALL' ? 'các lớp' : 'lớp ' + selectedClass} đều đã nộp bài ${lessonTitle} đầy đủ 100%! 🎉`);
+        return;
+      }
 
       const classNameTitle = selectedClass === 'ALL' ? 'CÁC LỚP 12A5, 12A7, 12A9' : `LỚP ${selectedClass}`;
       const totalStudents = allItems.length;
       const pctDone = Math.round((done.length / totalStudents) * 100);
 
       let message = `📢 THÔNG BÁO TỪ CÔ TRƯƠNG THÙY LINH KIỀU (MÔN GDKT&PL 12)\n`;
-      message += `Bài kiểm tra: ${lesObj.title.toUpperCase()}\n`;
+      message += `Bài kiểm tra: ${lessonTitle}\n`;
       message += `📊 Tiến độ ${classNameTitle}: Đã nộp ${done.length}/${totalStudents} bạn (${pctDone}%) | Còn ${pending.length} bạn CHƯA HOÀN THÀNH:\n\n`;
 
       pending.forEach((s) => {
@@ -2467,7 +2495,7 @@
           btnText.innerText = `✅ Đã chép ${pending.length} bạn!`;
           setTimeout(() => btnText.innerText = oldText, 3500);
         }
-        alert(`Đã đồng bộ mới nhất từ Google Sheets và sao chép danh sách ${pending.length} bạn chưa làm ${lesObj.short} (kèm STT chuẩn danh sách lớp) vào bộ nhớ tạm!\n\nCô chỉ cần mở nhóm Zalo lớp rồi nhấn chuột phải chọn Dán (Paste) hoặc bấm Ctrl + V là gửi được ngay ạ!`);
+        alert(`Đã đồng bộ mới nhất từ Google Sheets và sao chép danh sách ${pending.length} bạn chưa làm ${lessonTitle} (kèm STT chuẩn danh sách lớp) vào bộ nhớ tạm!\n\nCô chỉ cần mở nhóm Zalo lớp rồi nhấn chuột phải chọn Dán (Paste) hoặc bấm Ctrl + V là gửi được ngay ạ!`);
       };
 
       if (navigator.clipboard && navigator.clipboard.writeText) {

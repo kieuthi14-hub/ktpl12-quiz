@@ -123,8 +123,8 @@
       <div class="mb-5">
         <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-1.5">
           <span id="question-number">Câu hỏi 1/14</span>
-          <span id="quiz-timer" class="font-mono bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200">⏱️ 00:00</span>
-          <span id="score-counter" class="text-emerald-700 font-bold">Điểm: 0</span>
+          <span id="quiz-timer" class="font-mono bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200 font-bold">⏱️ 00:00</span>
+          <span class="bg-indigo-50 text-indigo-700 font-bold px-2.5 py-0.5 rounded-full border border-indigo-200 text-[11px]">📝 Đang làm bài thi</span>
         </div>
         <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
           <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-300" style="width: 7%"></div>
@@ -141,15 +141,11 @@
         <!-- Nút đáp án render bằng JS -->
       </div>
 
-      <!-- Feedback (Hiện sau khi trả lời) -->
-      <div id="feedback-box" class="mt-5 p-4 rounded-xl border hidden text-sm">
-        <div id="feedback-status" class="font-bold flex items-center gap-1.5 mb-1"></div>
-        <div id="feedback-explanation" class="text-slate-600 leading-relaxed text-xs md:text-sm"></div>
-      </div>
+      <div id="feedback-box" class="hidden"></div>
 
       <!-- Nút câu tiếp -->
-      <button id="next-btn" onclick="nextQuestion()" class="mt-5 w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition hidden flex items-center justify-center gap-2 shadow text-sm">
-        <span>Câu tiếp theo</span> <span>➡️</span>
+      <button id="next-btn" onclick="nextQuestion()" class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-md transition hidden flex items-center justify-center gap-2 text-sm">
+        <span>Câu tiếp theo</span> <span>➔</span>
       </button>
     </div>
 
@@ -195,19 +191,14 @@
         </button>
       </div>
 
-      <!-- Chi tiết bài làm -->
+      <!-- Khóa bảo mật đáp án chi tiết -->
       <div class="text-left mt-6 pt-5 border-t border-slate-200">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-            <span>📖</span> <span>Xem lại chi tiết bài làm &amp; giải thích</span>
-          </h3>
-          <div class="flex items-center gap-1 text-[11px]">
-            <button onclick="filterReview('all')" id="rev-filter-all" class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold">Tất cả</button>
-            <button onclick="filterReview('wrong')" id="rev-filter-wrong" class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium">Câu sai</button>
-          </div>
-        </div>
-        <div id="review-list" class="space-y-3.5 max-h-[420px] overflow-y-auto custom-scrollbar pr-1">
-          <!-- Render danh sách đáp án -->
+        <div class="p-5 bg-indigo-50/70 rounded-2xl border border-indigo-200 text-center shadow-sm">
+          <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center mx-auto text-2xl mb-2.5 shadow-inner">🔒</div>
+          <h4 class="font-bold text-slate-800 text-sm md:text-base">Đáp Án &amp; Lời Giải Chi Tiết Đang Được Khóa Bảo Mật</h4>
+          <p class="text-xs text-slate-600 mt-1.5 max-w-md mx-auto leading-relaxed">
+            Hệ thống đã tự động chấm điểm chính xác và lưu bài thi của em vào sổ điểm của cô giáo. Để đảm bảo tính công bằng và nghiêm túc, đáp án chi tiết sẽ được cô giáo chữa bài sau khi tất cả học sinh hoàn thành bài kiểm tra.
+          </p>
         </div>
       </div>
     </div>
@@ -705,12 +696,13 @@
     function loadQuestion() {
       const qData = currentQuiz[currentIndex];
       document.getElementById('question-number').innerText = `Câu hỏi ${currentIndex + 1}/${currentQuiz.length}`;
-      document.getElementById('score-counter').innerText = `Điểm: ${Number(score.toFixed(2))}`;
       const progressPercent = ((currentIndex + 1) / currentQuiz.length) * 100;
       document.getElementById('progress-bar').style.width = `${progressPercent}%`;
 
-      document.getElementById('feedback-box').classList.add('hidden');
-      document.getElementById('next-btn').classList.add('hidden');
+      const fbBox = document.getElementById('feedback-box');
+      if (fbBox) fbBox.classList.add('hidden');
+      const nextBtn = document.getElementById('next-btn');
+      if (nextBtn) nextBtn.classList.add('hidden');
 
       const qTextEl = document.getElementById('question-text');
       const container = document.getElementById('options-container');
@@ -742,24 +734,24 @@
                 <b class="text-indigo-600 font-bold mr-1">${item.label})</b> ${item.text}
               </div>
               <div class="flex items-center gap-2 shrink-0 self-end sm:self-center" id="tf-btn-group-${idx}">
-                <button type="button" onclick="setTfChoice(${idx}, true)" id="btn-tf-${idx}-true" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-600 font-bold text-xs hover:border-emerald-400 hover:text-emerald-700 transition">
+                <button type="button" onclick="setTfChoice(${idx}, true)" id="btn-tf-${idx}-true" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 font-bold text-xs hover:border-indigo-400 hover:text-indigo-700 transition">
                   Đúng
                 </button>
-                <button type="button" onclick="setTfChoice(${idx}, false)" id="btn-tf-${idx}-false" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-600 font-bold text-xs hover:border-rose-400 hover:text-rose-700 transition">
+                <button type="button" onclick="setTfChoice(${idx}, false)" id="btn-tf-${idx}-false" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 font-bold text-xs hover:border-indigo-400 hover:text-indigo-700 transition">
                   Sai
                 </button>
               </div>
             </div>
-            <div id="tf-explanation-${idx}" class="hidden text-xs mt-2 pt-2 border-t border-slate-100 text-slate-600"></div>
           `;
           listDiv.appendChild(itemCard);
         });
 
+        const isLastQ = (currentIndex + 1 === currentQuiz.length);
         const submitBtnDiv = document.createElement('div');
         submitBtnDiv.className = "mt-4";
         submitBtnDiv.innerHTML = `
-          <button type="button" id="btn-submit-tf" onclick="submitTfAnswer()" class="w-full py-3.5 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2">
-            <span>✓</span> <span>Xác nhận trả lời câu hỏi</span>
+          <button type="button" id="btn-submit-tf" onclick="submitTfAnswer()" class="w-full py-3.5 px-6 rounded-2xl ${isLastQ ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2">
+            <span>✓</span> <span>${isLastQ ? 'Hoàn thành bài thi &amp; Nộp bài' : 'Xác nhận &amp; Tiếp tục'}</span> <span>➔</span>
           </button>
         `;
 
@@ -784,11 +776,11 @@
       const btnFalse = document.getElementById(`btn-tf-${itemIdx}-false`);
 
       if (val === true) {
-        if (btnTrue) btnTrue.className = "px-4 py-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 text-white font-black text-xs shadow-sm transition";
-        if (btnFalse) btnFalse.className = "px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-400 font-bold text-xs hover:border-rose-400 hover:text-rose-700 transition";
+        if (btnTrue) btnTrue.className = "px-4 py-2 rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white font-black text-xs shadow-sm transition";
+        if (btnFalse) btnFalse.className = "px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-600 font-bold text-xs hover:border-slate-300 transition";
       } else {
-        if (btnFalse) btnFalse.className = "px-4 py-2 rounded-xl border-2 border-rose-600 bg-rose-600 text-white font-black text-xs shadow-sm transition";
-        if (btnTrue) btnTrue.className = "px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-400 font-bold text-xs hover:border-emerald-400 hover:text-emerald-700 transition";
+        if (btnFalse) btnFalse.className = "px-4 py-2 rounded-xl border-2 border-indigo-600 bg-indigo-600 text-white font-black text-xs shadow-sm transition";
+        if (btnTrue) btnTrue.className = "px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-600 font-bold text-xs hover:border-slate-300 transition";
       }
     }
 
@@ -796,12 +788,12 @@
       const qData = currentQuiz[currentIndex];
       const unchosen = qData.items.findIndex((_, idx) => currentTfChoices[idx] === undefined || currentTfChoices[idx] === null);
       if (unchosen !== -1) {
-        alert("Em vui lòng chọn 'Đúng' hoặc 'Sai' cho cả 4 ý a, b, c, d trước khi bấm xác nhận nhé!");
+        alert("Em vui lòng chọn 'Đúng' hoặc 'Sai' cho cả 4 ý a, b, c, d trước khi bấm tiếp tục nhé!");
         return;
       }
 
       const subBtn = document.getElementById('btn-submit-tf');
-      if (subBtn) subBtn.classList.add('hidden');
+      if (subBtn) subBtn.disabled = true;
 
       let correctSubCount = 0;
       const itemLogs = [];
@@ -810,30 +802,6 @@
         const userChoice = currentTfChoices[idx];
         const isCorrect = (userChoice === item.correct);
         if (isCorrect) correctSubCount++;
-
-        const card = document.getElementById(`tf-card-${idx}`);
-        const expEl = document.getElementById(`tf-explanation-${idx}`);
-        const btnGroup = document.getElementById(`tf-btn-group-${idx}`);
-
-        if (btnGroup) {
-          const btns = btnGroup.getElementsByTagName('button');
-          for (let b of btns) b.disabled = true;
-        }
-
-        if (card) {
-          card.className = `p-3.5 rounded-xl border-2 ${isCorrect ? 'border-emerald-400 bg-emerald-50/40' : 'border-rose-400 bg-rose-50/40'} shadow-sm transition`;
-        }
-
-        if (expEl) {
-          expEl.className = `text-xs mt-2 pt-2 border-t border-slate-200 ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}`;
-          expEl.innerHTML = `
-            <div class="font-bold flex items-center gap-1 mb-0.5">
-              ${isCorrect ? '✓ Em trả lời Đúng!' : `✕ Chưa chính xác! (Đáp án chuẩn: <b>${item.correct ? 'ĐÚNG' : 'SAI'}</b>)`}
-            </div>
-            <div class="text-slate-600 font-normal">💡 ${item.exp}</div>
-          `;
-          expEl.classList.remove('hidden');
-        }
 
         itemLogs.push({
           label: item.label,
@@ -858,28 +826,7 @@
         scoreAwarded: qScore
       });
 
-      const feedbackBox = document.getElementById('feedback-box');
-      const feedbackStatus = document.getElementById('feedback-status');
-      const feedbackExplanation = document.getElementById('feedback-explanation');
-
-      if (correctSubCount === 4) {
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
-        feedbackStatus.innerHTML = "✓ Xuất sắc! Em đã trả lời chính xác cả 4/4 ý (+1.0 điểm)!";
-      } else if (correctSubCount > 0) {
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-blue-200 bg-blue-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-blue-700";
-        feedbackStatus.innerHTML = `✓ Em trả lời đúng ${correctSubCount}/4 ý (+${qScore.toFixed(2)} điểm)!`;
-      } else {
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
-        feedbackStatus.innerHTML = "✕ Chưa chính xác! Em hãy xem lời giải thích chi tiết cho từng ý ở trên nhé.";
-      }
-
-      feedbackExplanation.innerText = "Em bấm nút 'Câu tiếp theo' để tiếp tục bài thi.";
-      feedbackBox.classList.remove('hidden');
-      document.getElementById('next-btn').classList.remove('hidden');
-      document.getElementById('score-counter').innerText = `Điểm: ${Number(score.toFixed(2))}`;
+      nextQuestion();
     }
 
     function selectOption(selectedIdx, btnElement) {
@@ -887,10 +834,8 @@
       const buttons = document.getElementById('options-container').getElementsByTagName('button');
       for (let btn of buttons) { btn.disabled = true; }
 
-      const feedbackBox = document.getElementById('feedback-box');
-      const feedbackStatus = document.getElementById('feedback-status');
-      const feedbackExplanation = document.getElementById('feedback-explanation');
       const isCorrect = (selectedIdx === qData.correctIndex);
+      if (isCorrect) score++;
 
       userAnswersLog.push({
         question: qData.q,
@@ -901,27 +846,21 @@
         exp: qData.exp
       });
 
-      if (isCorrect) {
-        score++;
-        btnElement.classList.remove('border-slate-300', 'bg-white');
-        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
-        feedbackStatus.innerHTML = "✓ Chính xác!";
-      } else {
-        btnElement.classList.remove('border-slate-300', 'bg-white');
-        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
-        buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white');
-        buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
-        feedbackStatus.innerHTML = "✕ Chưa chính xác!";
-      }
+      // Đánh dấu phương án học sinh đã chọn (màu xanh tím trang nhã, không tiết lộ Đúng hay Sai)
+      btnElement.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
+      btnElement.classList.add('border-indigo-600', 'bg-indigo-600', 'text-white', 'font-bold', 'shadow-md');
 
-      feedbackExplanation.innerText = qData.exp;
-      feedbackBox.classList.remove('hidden');
-      document.getElementById('next-btn').classList.remove('hidden');
-      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+      const nextBtn = document.getElementById('next-btn');
+      if (nextBtn) {
+        nextBtn.classList.remove('hidden');
+        if (currentIndex + 1 === currentQuiz.length) {
+          nextBtn.innerHTML = `<span>Hoàn thành bài thi &amp; Nộp bài</span> <span>➔</span>`;
+          nextBtn.className = "mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm";
+        } else {
+          nextBtn.innerHTML = `<span>Câu tiếp theo</span> <span>➔</span>`;
+          nextBtn.className = "mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm";
+        }
+      }
     }
 
     function nextQuestion() {
@@ -1054,60 +993,10 @@
     }
 
     function renderReviewList(filterMode) {
-      const container = document.getElementById('review-list');
-      container.innerHTML = '';
-
-      userAnswersLog.forEach((item, idx) => {
-        if (filterMode === 'wrong' && item.isCorrect) return;
-
-        const card = document.createElement('div');
-        card.className = `p-3.5 rounded-2xl border text-xs md:text-sm leading-relaxed ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/20' : 'border-rose-200 bg-rose-50/20'}`;
-
-        if (item.type === 'true_false') {
-          const itemsHtml = item.items.map(it => `
-            <div class="p-2 rounded-lg bg-white border border-slate-100 mt-1">
-              <div class="flex items-center justify-between">
-                <span><b>${it.label})</b> ${it.text}</span>
-                <span class="${it.isCorrect ? 'text-emerald-700' : 'text-rose-600'} font-bold">
-                  Em chọn: ${it.userChoice ? 'Đúng' : 'Sai'} ${it.isCorrect ? '✅' : '❌'}
-                </span>
-              </div>
-              <div class="text-[11px] text-slate-500 mt-0.5">💡 ${it.exp}</div>
-            </div>
-          `).join('');
-
-          card.innerHTML = `
-            <div class="font-bold text-slate-800 flex items-center justify-between mb-1">
-              <span>Câu ${idx + 1}: ${item.question}</span>
-              <span class="${item.isCorrect ? 'text-emerald-700' : 'text-amber-700'} font-bold">Đúng ${item.correctSubCount}/4 ý</span>
-            </div>
-            ${itemsHtml}
-          `;
-        } else {
-          const letters = ['A', 'B', 'C', 'D'];
-          card.innerHTML = `
-            <div class="font-bold text-slate-800 flex items-center justify-between mb-1">
-              <span>Câu ${idx + 1}: ${item.question}</span>
-              <span class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-600'} font-black">${item.isCorrect ? 'ĐÚNG' : 'CHƯA ĐÚNG'}</span>
-            </div>
-            <div class="mt-1 space-y-0.5 text-xs">
-              <div>Em chọn: <b class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-600'}">${letters[item.selectedIdx]}. ${item.options[item.selectedIdx]}</b></div>
-              ${!item.isCorrect ? `<div>Đáp án đúng: <b class="text-emerald-700">${letters[item.correctIdx]}. ${item.options[item.correctIdx]}</b></div>` : ''}
-              <div class="p-2 bg-white rounded-lg border border-slate-100 text-slate-600 text-[11px] mt-1">
-                💡 <b>Giải thích:</b> ${item.exp}
-              </div>
-            </div>
-          `;
-        }
-        container.appendChild(card);
-      });
+      // Bảo mật đề thi: Không công bố đáp án và giải thích trên màn hình kết quả của học sinh
     }
 
-    function filterReview(mode) {
-      document.getElementById('rev-filter-all').className = mode === 'all' ? 'px-2 py-0.5 rounded bg-indigo-600 text-white font-bold' : 'px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium';
-      document.getElementById('rev-filter-wrong').className = mode === 'wrong' ? 'px-2 py-0.5 rounded bg-indigo-600 text-white font-bold' : 'px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium';
-      renderReviewList(mode);
-    }
+    function filterReview(mode) {}
 
     function retryQuiz() {
       if (confirm("Em có muốn làm lại đề kiểm tra này để nâng cao điểm số không?")) {
