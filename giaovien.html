@@ -163,7 +163,7 @@
           </button>
 
           <button id="btn-quick-kttx2" onclick="switchLesson('kttx2')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md">
-            <span>⭐</span> <span>KTTX: Đề số 2</span>
+            <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 2 (Bản 2)</span>
             <span id="badge-count-kttx2" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
           </button>
 
@@ -634,7 +634,7 @@
 
         const optKttx2 = document.createElement('option');
         optKttx2.value = 'kttx2';
-        optKttx2.innerText = '⭐ Đề KTTX số 2 (15 phút)';
+        optKttx2.innerText = '⭐ Ôn tập Giữa HK1 - Đề số 2 (Bản 2)';
         if (currentActiveLessonId === 'kttx2') optKttx2.selected = true;
         selectEl.appendChild(optKttx2);
 
@@ -779,7 +779,7 @@
         if (currentActiveLessonId === 'ALL') {
           badge.innerText = 'Tất cả 16 bài';
         } else if (currentActiveLessonId === 'kttx2') {
-          badge.innerText = '⭐ Đề KTTX số 2';
+          badge.innerText = '⭐ Ôn Giữa Kỳ 1: Đề 2 (Bản 2)';
         } else if (currentActiveLessonId === 'kttx1') {
           badge.innerText = '⭐ Ôn Giữa Kỳ 1: Đề 1 (Bản 2)';
         } else {
@@ -1540,7 +1540,7 @@
           if (currentActiveLessonId === 'ALL') {
             heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC - ${classTitle}`;
           } else if (currentActiveLessonId === 'kttx2') {
-            heading.innerText = `DANH SÁCH HỌC SINH - ĐỀ KTTX SỐ 2 (${classTitle})`;
+            heading.innerText = `DANH SÁCH HỌC SINH - ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2 (BẢN 2) (${classTitle})`;
           } else if (currentActiveLessonId === 'kttx1') {
             heading.innerText = `DANH SÁCH HỌC SINH - ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2) (${classTitle})`;
           } else {
@@ -2245,7 +2245,7 @@
 
       let lessonTitle = 'TẤT CẢ BÀI HỌC';
       if (currentActiveLessonId === 'kttx2') {
-        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
+        lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2 (BẢN 2)';
       } else if (currentActiveLessonId === 'kttx1') {
         lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2)';
       } else if (currentActiveLessonId !== 'ALL') {
@@ -2311,8 +2311,8 @@
       let lessonHeaderTitle = 'TẤT CẢ BÀI HỌC';
 
       if (currentActiveLessonId === 'kttx2') {
-        lessonFileLabel = 'KTTX2';
-        lessonHeaderTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
+        lessonFileLabel = 'OnTap_GiuaKy1_De2_Ban2';
+        lessonHeaderTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2 (BẢN 2)';
       } else if (currentActiveLessonId === 'kttx1') {
         lessonFileLabel = 'OnTap_GiuaKy1_De1_Ban2';
         lessonHeaderTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2)';
@@ -2455,7 +2455,7 @@
       let lessonUrl = `${baseUrl}index.html`;
 
       if (currentActiveLessonId === 'kttx2') {
-        lessonTitle = 'ĐỀ KIỂM TRA THƯỜNG XUYÊN SỐ 2';
+        lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2 (BẢN 2)';
         lessonUrl = `${baseUrl}kttx2.html`;
       } else if (currentActiveLessonId === 'kttx1') {
         lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (BẢN 2)';
