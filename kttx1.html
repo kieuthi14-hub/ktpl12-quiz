@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Đề Kiểm Tra Thường Xuyên Số 1 - KTPL 12</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
+  <!-- html2canvas for downloading result certificate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Class Rosters Data -->
+  <script src="rosters.js"></script>
+  <style>
+    body { font-family: 'Lexend', sans-serif; }
+    .font-mono { font-family: 'Fira Code', monospace; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(14px);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-slate-50 to-blue-50 min-h-screen text-slate-800 flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-indigo-700 text-white py-3.5 shadow-md sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
+      <div>
+        <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">GDKT &amp; PL 12 • Kết nối tri thức</span>
+        <h1 class="text-base md:text-lg font-bold mt-0.5">Đề Kiểm Tra Thường Xuyên – Đề Số 1</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Quay lại Cổng Chọn Bài Học">
+          <span>🏠</span> <span class="hidden sm:inline">Cổng bài học</span>
+        </a>
+        <a href="giaovien.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Khu vực dành cho Giáo viên">
+          <span>👩‍🏫</span> <span class="hidden sm:inline">Giáo viên</span>
+        </a>
+        <div id="header-timer" class="text-xs font-mono font-semibold text-indigo-200 hidden bg-indigo-900/80 px-2.5 py-1 rounded-lg border border-indigo-500">⏱️ 00:00</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-2xl mx-auto w-full p-4 flex-grow flex items-center justify-center">
+
+    <!-- 1. MÀN HÌNH BẮT ĐẦU -->
+    <div id="start-screen" class="glass-card w-full p-6 md:p-8 rounded-3xl shadow-xl border border-indigo-100 text-center">
+      <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3 shadow-inner">⭐</div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-300 text-emerald-700 text-xs rounded-full font-semibold mb-3">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+        <span>Hệ thống nộp bài trực tuyến: ĐÃ SẴN SÀNG 🟢</span>
+      </div>
+      <h2 class="text-2xl font-black text-slate-800">ĐỀ KIỂM TRA THƯỜNG XUYÊN – ĐỀ SỐ 1</h2>
+      <p class="text-slate-500 text-sm mt-1.5 mb-6">Môn: Giáo dục Kinh tế và Pháp luật 12 • Thời gian làm bài: <b>15 phút</b>.<br>Cấu trúc: <b>12 câu trắc nghiệm nhiều phương án + 2 câu trắc nghiệm Đúng/Sai</b>. Điểm số tự động lưu về sổ điểm của cô giáo.</p>
+      
+      <div class="space-y-4 max-w-sm mx-auto text-left">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">1. Chọn Lớp của em *</label>
+          <select id="student-class" onchange="onClassChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
+            <option value="">-- Bấm vào đây để chọn lớp --</option>
+            <option value="12A5">Lớp 12A5 (48 học sinh)</option>
+            <option value="12A7">Lớp 12A7 (42 học sinh)</option>
+            <option value="12A9">Lớp 12A9 (44 học sinh)</option>
+            <option value="Khác">Lớp khác...</option>
+          </select>
+          <input type="text" id="student-class-other" placeholder="Nhập tên lớp của em..." class="hidden mt-2 w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center justify-between">
+            <span>2. Họ và tên học sinh *</span>
+            <button type="button" id="btn-toggle-custom-name" onclick="toggleCustomName()" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold hover:underline">
+              ✍️ Tự gõ tên
+            </button>
+          </label>
+          <select id="student-name-select" onchange="onStudentNameChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
+            <option value="">-- Vui lòng chọn lớp ở trên trước --</option>
+          </select>
+          <input type="text" id="student-name-custom" placeholder="Nhập đầy đủ Họ và tên của em..." class="hidden mt-2 w-full px-4 py-3 rounded-xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white font-semibold text-slate-800 transition">
+          <div id="class-hint" class="text-[11px] text-slate-500 mt-1.5 leading-snug">💡 Em chọn lớp trước, hệ thống sẽ hiện danh sách họ tên chuẩn để chọn nhanh không bị nhầm lẫn.</div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1 text-xs text-slate-600">
+          <input type="checkbox" id="shuffle-options-check" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+          <label for="shuffle-options-check">Trộn ngẫu nhiên thứ tự các đáp án A, B, C, D</label>
+        </div>
+      </div>
+
+      <!-- Cảnh báo quy chế thi chống gian lận -->
+      <div class="mt-5 max-w-sm mx-auto p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-300 text-left flex items-start gap-2.5 shadow-sm">
+        <span class="text-xl leading-none">🛡️</span>
+        <div class="text-xs text-amber-900 leading-relaxed">
+          <strong class="font-black text-amber-950 uppercase tracking-tight block mb-0.5">Quy chế thi chống gian lận:</strong>
+          Hệ thống tự động giám sát chuyển tab/thoát ứng dụng. Nếu rời màn hình quá <strong>3 lần</strong>, bài làm sẽ <strong>tự động bị khóa và thu bài ngay lập tức</strong>!
+        </div>
+      </div>
+
+      <button onclick="startQuiz()" class="mt-5 w-full max-w-sm bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition-all active:scale-95 text-base">
+        Bắt đầu làm bài 🚀
+      </button>
+    </div>
+
+    <!-- 2. MÀN HÌNH LÀM BÀI -->
+    <div id="quiz-screen" class="glass-card w-full p-6 md:p-8 rounded-3xl shadow-xl border border-slate-200 select-none hidden" style="-webkit-user-select: none; user-select: none;">
+      <!-- Progress & Timer -->
+      <div class="mb-5">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-500 mb-1.5">
+          <span id="question-number">Câu hỏi 1/14</span>
+          <span id="quiz-timer" class="font-mono bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200">⏱️ 00:00</span>
+          <span id="score-counter" class="text-emerald-700 font-bold">Điểm: 0</span>
+        </div>
+        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-300" style="width: 7%"></div>
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="mb-6">
+        <h3 id="question-text" class="text-base md:text-lg font-semibold text-slate-800 leading-snug">Nội dung câu hỏi...</h3>
+      </div>
+
+      <!-- Options -->
+      <div id="options-container" class="space-y-3">
+        <!-- Nút đáp án render bằng JS -->
+      </div>
+
+      <!-- Feedback (Hiện sau khi trả lời) -->
+      <div id="feedback-box" class="mt-5 p-4 rounded-xl border hidden text-sm">
+        <div id="feedback-status" class="font-bold flex items-center gap-1.5 mb-1"></div>
+        <div id="feedback-explanation" class="text-slate-600 leading-relaxed text-xs md:text-sm"></div>
+      </div>
+
+      <!-- Nút câu tiếp -->
+      <button id="next-btn" onclick="nextQuestion()" class="mt-5 w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition hidden flex items-center justify-center gap-2 shadow text-sm">
+        <span>Câu tiếp theo</span> <span>➡️</span>
+      </button>
+    </div>
+
+    <!-- 3. MÀN HÌNH KẾT QUẢ -->
+    <div id="result-screen" class="glass-card w-full p-6 md:p-8 rounded-3xl shadow-xl border border-slate-200 text-center hidden">
+      <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3 shadow-inner">🏆</div>
+      <h2 class="text-2xl font-black text-slate-800">Kết Quả Kiểm Tra Thường Xuyên</h2>
+      <p id="res-student-info" class="text-slate-500 text-sm mt-1">Học sinh: <b id="res-name">-</b> • Lớp: <b id="res-class">-</b></p>
+      
+      <!-- Bảng điểm to -->
+      <div class="my-5 p-5 bg-gradient-to-r from-indigo-50 via-blue-50 to-indigo-50 border-2 border-indigo-200 rounded-2xl">
+        <div class="text-xs uppercase font-bold text-indigo-800 tracking-wider">Điểm số đạt được (Thang điểm 10)</div>
+        <div id="res-score" class="text-4xl md:text-5xl font-black text-indigo-700 my-1 font-mono">0.0 / 10</div>
+        <div class="text-xs font-bold text-slate-600 flex items-center justify-center gap-3">
+          <span>Đúng: <b id="res-correct" class="text-emerald-700">0/14</b></span>
+          <span>•</span>
+          <span>Tỉ lệ: <b id="res-percent" class="text-blue-700">0%</b></span>
+          <span>•</span>
+          <span>Thời gian: <b id="res-time" class="text-slate-700">00:00</b></span>
+        </div>
+        <div id="res-anticheat-status" class="mt-2.5 p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-center gap-1.5">
+          <span>🛡️</span> <span>Giám sát: Làm bài trung thực (0 lần rời màn hình)</span>
+        </div>
+      </div>
+
+      <!-- Trạng thái lưu đám mây -->
+      <div id="cloud-sync-status" class="my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center">
+        <div class="flex items-center justify-center gap-1.5 font-bold text-sm"><span class="animate-spin">⏳</span> Đang lưu kết quả lên sổ điểm của cô...</div>
+      </div>
+
+      <!-- Mã nộp bài -->
+      <div class="text-xs text-slate-500 mb-5 font-mono">
+        Mã nộp bài: <b id="res-sub-code" class="text-slate-800">-</b> • Nộp lúc: <span id="res-timestamp">-</span>
+      </div>
+
+      <!-- Các nút thao tác -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        <button onclick="downloadCertificate()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow">
+          <span>📜</span> <span>Tải Phiếu Điểm (Ảnh)</span>
+        </button>
+        <button onclick="retryQuiz()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 border border-slate-300">
+          <span>🔄</span> <span>Làm lại bài kiểm tra</span>
+        </button>
+      </div>
+
+      <!-- Chi tiết bài làm -->
+      <div class="text-left mt-6 pt-5 border-t border-slate-200">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+            <span>📖</span> <span>Xem lại chi tiết bài làm &amp; giải thích</span>
+          </h3>
+          <div class="flex items-center gap-1 text-[11px]">
+            <button onclick="filterReview('all')" id="rev-filter-all" class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold">Tất cả</button>
+            <button onclick="filterReview('wrong')" id="rev-filter-wrong" class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 font-medium">Câu sai</button>
+          </div>
+        </div>
+        <div id="review-list" class="space-y-3.5 max-h-[420px] overflow-y-auto custom-scrollbar pr-1">
+          <!-- Render danh sách đáp án -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-3 text-center text-xs text-slate-500 border-t border-slate-200/60 bg-white/60">
+    Hệ thống Kiểm tra &amp; Luyện tập KTPL 12 • Kết nối tri thức • GV: Trương Thùy Linh Kiều
+  </footer>
+
+  <!-- MODAL CẢNH BÁO RỜI MÀN HÌNH -->
+  <div id="violation-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-500 max-w-md w-full p-6 text-center">
+      <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner">
+        ⚠️
+      </div>
+      <h3 class="text-xl font-black text-rose-600 uppercase tracking-tight">Cảnh Báo Rời Màn Hình!</h3>
+      <div class="my-4 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-left space-y-2">
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-bold text-slate-700">Số lần vi phạm:</span>
+          <span id="violation-count-badge" class="font-black text-rose-700 text-base">Lần 1 / 3</span>
+        </div>
+        <p class="text-xs text-rose-800 pt-2 border-t border-rose-200 leading-relaxed font-medium">
+          🚨 Nếu rời màn hình quá <strong>3 lần</strong>, hệ thống sẽ tự động khóa bài thi và thu bài ngay lập tức!
+        </p>
+      </div>
+      <button onclick="acknowledgeViolation()" class="w-full py-3.5 px-6 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm transition shadow-lg">
+        Tôi đã hiểu &amp; Cam kết không vi phạm
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL BỊ THU BÀI SỚM -->
+  <div id="auto-submit-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-rose-600 max-w-md w-full p-6 text-center">
+      <div class="text-4xl mb-2">🚫</div>
+      <h3 class="text-2xl font-black text-rose-700 uppercase">ĐÃ BỊ THU BÀI SỚM!</h3>
+      <p class="text-xs font-bold text-slate-500 mt-1">Vi phạm chuyển tab/rời màn hình quá 3 lần</p>
+      <button onclick="dismissAutoSubmitModal()" class="mt-5 w-full py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm transition">
+        Xem kết quả điểm số
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4r-YWh1K5uppwF9LgzYGN42N-dIYVq-GdDExH2wmHQVTp8pTdxcYU_biP188Q427H/exec";
+
+    const questionsBank_KTTX1 = [
+      // PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN (12 CÂU)
+      {
+        q: "Tăng trưởng kinh tế được hiểu là",
+        options: [
+          "sự gia tăng của GDP hoặc GNI trong một thời kì nhất định.",
+          "sự biến đổi cả về lượng và chất của nền kinh tế.",
+          "sự chuyển dịch cơ cấu kinh tế theo hướng hiện đại, bền vững.",
+          "sự gia tăng của chỉ số phát triển con người (HDI)."
+        ],
+        answer: 0,
+        exp: "Theo SGK KTPL 12: Tăng trưởng kinh tế là sự gia tăng về quy mô sản lượng hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra, được đo lường bằng sự gia tăng của GDP hoặc GNI trong một thời kì nhất định (thường là một năm)."
+      },
+      {
+        q: "Để đánh giá tốc độ tăng trưởng kinh tế của Việt Nam năm 2024 so với năm 2023, người ta thường so sánh",
+        options: [
+          "chỉ số phát triển con người (HDI) năm 2024 với năm 2023.",
+          "hệ số bất bình đẳng trong phân phối thu nhập (GINI) của hai năm.",
+          "chỉ số nghèo đa chiều (MPI) của hai năm.",
+          "GDP (hoặc GNI) năm 2024 với GDP (hoặc GNI) năm 2023."
+        ],
+        answer: 3,
+        exp: "Để đánh giá tốc độ tăng trưởng kinh tế giữa hai thời kì, người ta so sánh quy mô GDP (hoặc GNI) theo giá so sánh của năm 2024 so với năm 2023."
+      },
+      {
+        q: "Điểm khác biệt cơ bản giữa phát triển kinh tế và tăng trưởng kinh tế là",
+        options: [
+          "tăng trưởng kinh tế có phạm vi rộng hơn và toàn diện hơn phát triển kinh tế.",
+          "phát triển kinh tế phản ánh sự biến đổi cả về lượng và chất của nền kinh tế, còn tăng trưởng kinh tế chủ yếu phản ánh sự biến đổi về lượng.",
+          "phát triển kinh tế chỉ quan tâm đến sự gia tăng của GDP.",
+          "tăng trưởng kinh tế và phát triển kinh tế là hai khái niệm hoàn toàn đồng nhất."
+        ],
+        answer: 1,
+        exp: "Phát triển kinh tế phản ánh sự biến đổi cả về lượng (tăng trưởng GDP/GNI) và về chất (chuyển dịch cơ cấu kinh tế hiện đại, tiến bộ và công bằng xã hội). Trong khi đó, tăng trưởng kinh tế chủ yếu phản ánh sự gia tăng về lượng."
+      },
+      {
+        q: "Tăng trưởng kinh tế có vai trò quan trọng đối với mỗi quốc gia vì tăng trưởng kinh tế",
+        options: [
+          "tạo ra nguồn lực vật chất để đầu tư phát triển, nâng cao đời sống nhân dân.",
+          "tự động xóa bỏ mọi bất bình đẳng trong xã hội.",
+          "đảm bảo chắc chắn sự phát triển bền vững của đất nước.",
+          "có thể thay thế hoàn toàn vai trò của tiến bộ xã hội và bảo vệ môi trường."
+        ],
+        answer: 0,
+        exp: "Tăng trưởng kinh tế tạo ra tiền đề và nguồn lực vật chất dồi dào để đầu tư phát triển cơ sở hạ tầng, y tế, giáo dục, giải quyết việc làm và nâng cao đời sống của nhân dân."
+      },
+      {
+        q: "Phát triển bền vững được hiểu là sự phát triển",
+        options: [
+          "chỉ tập trung tối đa hóa tăng trưởng GDP bằng mọi giá.",
+          "chỉ chú trọng bảo vệ môi trường mà không cần tăng trưởng kinh tế.",
+          "đáp ứng nhu cầu của thế hệ hiện tại mà không làm tổn hại đến khả năng đáp ứng nhu cầu của các thế hệ tương lai.",
+          "ưu tiên tăng trưởng kinh tế trước, giải quyết các vấn đề xã hội và môi trường sau."
+        ],
+        answer: 2,
+        exp: "Theo định nghĩa chuẩn SGK KTPL 12: Phát triển bền vững là sự phát triển đáp ứng nhu cầu của thế hệ hiện tại mà không làm tổn hại đến khả năng đáp ứng nhu cầu của các thế hệ tương lai, dựa trên sự kết hợp hài hòa giữa tăng trưởng kinh tế, công bằng xã hội và bảo vệ môi trường."
+      },
+      {
+        q: "Một quốc gia có tốc độ tăng trưởng GDP cao nhưng tình trạng ô nhiễm môi trường ngày càng nghiêm trọng và khoảng cách giàu nghèo ngày càng lớn. Điều này cho thấy",
+        options: [
+          "quốc gia đó đã đạt được sự phát triển bền vững.",
+          "tăng trưởng kinh tế chưa đồng nghĩa với phát triển bền vững.",
+          "tăng trưởng kinh tế luôn kéo theo phát triển bền vững.",
+          "phát triển bền vững không cần đến tăng trưởng kinh tế."
+        ],
+        answer: 1,
+        exp: "Tăng trưởng GDP cao chỉ là điều kiện cần. Nếu tăng trưởng mà môi trường bị ô nhiễm nghiêm trọng và bất bình đẳng giàu nghèo tăng cao thì chưa đồng nghĩa với phát triển bền vững."
+      },
+      {
+        q: "Tỉnh A thu hút nhiều dự án công nghiệp giúp GDP tăng nhanh, nhưng người dân phản ánh nguồn nước bị ô nhiễm và nhiều hộ dân mất đất sản xuất mà chưa có việc làm mới. Để hướng tới phát triển bền vững, tỉnh A cần",
+        options: [
+          "tiếp tục mở rộng khu công nghiệp bằng mọi giá để tối đa hóa GDP.",
+          "đóng cửa toàn bộ các khu công nghiệp để bảo vệ môi trường.",
+          "vừa thúc đẩy tăng trưởng kinh tế, vừa thực hiện tiến bộ xã hội và bảo vệ môi trường.",
+          "chỉ tập trung tăng thu ngân sách, các vấn đề xã hội và môi trường sẽ tự được giải quyết."
+        ],
+        answer: 2,
+        exp: "Để phát triển bền vững, chính quyền tỉnh A cần kết hợp hài hòa giữa phát triển kinh tế công nghiệp với việc tạo sinh kế/việc làm cho người dân (tiến bộ xã hội) và xử lý triệt để nước thải, rác thải (bảo vệ môi trường)."
+      },
+      {
+        q: "Ngoài GDP, chỉ tiêu nào sau đây còn được dùng để đánh giá sự phát triển kinh tế của một quốc gia?",
+        options: [
+          "Chỉ số phát triển con người (HDI).",
+          "Tốc độ tăng dân số tự nhiên.",
+          "Tổng diện tích đất tự nhiên.",
+          "Số lượng doanh nghiệp đang hoạt động."
+        ],
+        answer: 0,
+        exp: "Chỉ số phát triển con người (HDI) là thước đo tổng hợp về tuổi thọ, học vấn và thu nhập bình quân đầu người, dùng để đánh giá mức độ tiến bộ xã hội và sự phát triển kinh tế toàn diện của một quốc gia."
+      },
+      {
+        q: "Bạn M cùng nhóm bạn trong lớp tổ chức thu gom pin cũ, phân loại rác thải tại nguồn và tuyên truyền cho người dân địa phương về tiêu dùng tiết kiệm. Hành động này góp phần",
+        options: [
+          "làm tăng GDP của địa phương một cách trực tiếp và nhanh chóng.",
+          "thay thế hoàn toàn vai trò quản lý nhà nước về bảo vệ môi trường.",
+          "chỉ mang ý nghĩa giáo dục đơn thuần, không liên quan đến phát triển kinh tế.",
+          "thúc đẩy phát triển bền vững từ những việc làm cụ thể của công dân."
+        ],
+        answer: 3,
+        exp: "Hành động của bạn M và nhóm bạn thể hiện ý thức trách nhiệm bảo vệ môi trường, tiêu dùng có trách nhiệm, đóng góp thiết thực vào mục tiêu phát triển bền vững của cộng đồng."
+      },
+      {
+        q: "Hội nhập kinh tế quốc tế được hiểu là",
+        options: [
+          "quá trình một quốc gia đóng cửa nền kinh tế để tự cung, tự cấp.",
+          "việc các doanh nghiệp trong nước chỉ giao thương với nhau.",
+          "quá trình gắn kết nền kinh tế của một quốc gia với nền kinh tế các quốc gia khác trong khu vực và trên thế giới.",
+          "chính sách bảo hộ mậu dịch tuyệt đối của mỗi quốc gia."
+        ],
+        answer: 2,
+        exp: "Theo SGK KTPL 12: Hội nhập kinh tế quốc tế là quá trình gắn kết nền kinh tế của một quốc gia với nền kinh tế các quốc gia khác trong khu vực và trên thế giới dựa trên cơ sở chia sẻ lợi ích và cùng tuân thủ các quy tắc chuẩn mực quốc tế."
+      },
+      {
+        q: "Việt Nam tham gia Hiệp định Đối tác Toàn diện và Tiến bộ xuyên Thái Bình Dương (CPTPP) cùng với 10 quốc gia khác. Đây là hội nhập kinh tế quốc tế ở cấp độ",
+        options: [
+          "đa phương.",
+          "song phương.",
+          "đơn phương.",
+          "phi chính phủ."
+        ],
+        answer: 0,
+        exp: "CPTPP là hiệp định thương mại tự do thế hệ mới với 11 quốc gia thành viên, thuộc cấp độ hội nhập kinh tế quốc tế đa phương (khu vực)."
+      },
+      {
+        q: "Trong bối cảnh toàn cầu hóa, hội nhập kinh tế quốc tế được coi là tất yếu khách quan vì",
+        options: [
+          "các tổ chức quốc tế bắt buộc mọi quốc gia đều phải hội nhập.",
+          "hội nhập giúp xóa bỏ hoàn toàn mọi rủi ro trong quá trình phát triển.",
+          "chỉ có hội nhập mới giúp quốc gia thu được lợi nhuận tuyệt đối.",
+          "không quốc gia nào có đủ mọi nguồn lực để phát triển hiệu quả khi đứng một mình."
+        ],
+        answer: 3,
+        exp: "Do sự phát triển của phân công lao động quốc tế, không quốc gia nào có thể tự đáp ứng đủ tất cả các nguồn lực (vốn, công nghệ, tài nguyên, thị trường) nếu phát triển khép kín, biệt lập."
+      },
+
+      // PHẦN II. TRẮC NGHIỆM ĐÚNG SAI (2 CÂU)
+      {
+        type: "true_false",
+        passage: "Huyện M có tốc độ tăng trưởng GDP bình quân đạt 10%/năm nhờ khai thác khoáng sản, giúp thu ngân sách tăng mạnh. Tuy nhiên, môi trường bị ô nhiễm nghiêm trọng, nhiều diện tích rừng tự nhiên bị tàn phá, thu nhập của người dân vùng khai thác hầu như không được cải thiện và tỷ lệ hộ nghèo vẫn ở mức cao. Trước thực trạng đó, bạn L (học sinh lớp 11) đã đề xuất với chính quyền địa phương mô hình “phát triển xanh”: khai thác khoáng sản hợp lý đi đôi với trồng rừng, phát triển du lịch sinh thái và đào tạo nghề cho lao động địa phương.",
+        q: "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+        items: [
+          {
+            label: "a",
+            text: "Tốc độ tăng trưởng GDP bình quân đạt 10%/năm chứng tỏ huyện M đã đạt được sự phát triển bền vững.",
+            correct: false,
+            exp: "Sai. Tăng trưởng GDP 10%/năm mới chỉ là tăng trưởng về lượng. Huyện M chưa đạt phát triển bền vững vì môi trường bị tàn phá, thu nhập người dân không cải thiện và tỷ lệ hộ nghèo còn cao."
+          },
+          {
+            label: "b",
+            text: "Thu ngân sách tăng mạnh đồng nghĩa với việc thu nhập của mọi người dân trong huyện đều được cải thiện.",
+            correct: false,
+            exp: "Sai. Thực tế thu ngân sách tăng nhưng thu nhập của người dân vùng khai thác hầu như không được cải thiện, do đó không đồng nghĩa với việc đời sống mọi người dân đều được nâng lên."
+          },
+          {
+            label: "c",
+            text: "Tăng trưởng kinh tế nhanh không phải là điều kiện duy nhất để đạt được sự phát triển bền vững.",
+            correct: true,
+            exp: "Đúng. Phát triển bền vững đòi hỏi phải kết hợp hài hòa cả 3 yếu tố: kinh tế, tiến bộ công bằng xã hội và bảo vệ môi trường, không thể chỉ phụ thuộc vào tăng trưởng kinh tế nhanh."
+          },
+          {
+            label: "d",
+            text: "Mô hình “phát triển xanh” mà bạn L đề xuất là phù hợp vì nó hướng tới sự hài hòa giữa tăng trưởng kinh tế, tiến bộ xã hội và bảo vệ môi trường.",
+            correct: true,
+            exp: "Đúng. Mô hình bạn L đề xuất kết hợp khai thác hợp lý (kinh tế), trồng rừng và du lịch sinh thái (môi trường), đào tạo nghề cho lao động địa phương (xã hội)."
+          }
+        ]
+      },
+      {
+        type: "true_false",
+        passage: "Chị Q làm việc tại công ty may N theo hợp đồng lao động có thời hạn 2 năm. Công ty đã đăng ký và đóng bảo hiểm xã hội bắt buộc đầy đủ cho chị Q. Khi mang thai, chị được nghỉ chế độ thai sản 6 tháng và hưởng trợ cấp theo đúng quy định. Sau thời gian nghỉ sinh, chị quay trở lại làm việc và tiếp tục được công ty đóng BHXH. Bạn của chị Q là chị R làm nghề tự do, đã chủ động tham gia bảo hiểm xã hội tự nguyện để khi về già có lương hưu.",
+        q: "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+        items: [
+          {
+            label: "a",
+            text: "Chị Q được nghỉ chế độ thai sản 6 tháng là nhờ tham gia bảo hiểm y tế.",
+            correct: false,
+            exp: "Sai. Chế độ thai sản là quyền lợi thuộc Bảo hiểm xã hội bắt buộc (do công ty và chị Q đóng), không phải quyền lợi của bảo hiểm y tế."
+          },
+          {
+            label: "b",
+            text: "Bảo hiểm xã hội bắt buộc do Nhà nước tổ chức và hoạt động theo nguyên tắc phi lợi nhuận.",
+            correct: true,
+            exp: "Đúng. BHXH bắt buộc là chính sách an sinh xã hội trụ cột do Nhà nước tổ chức, quản lý và hoạt động hoàn toàn theo nguyên tắc phi lợi nhuận."
+          },
+          {
+            label: "c",
+            text: "Vì đã có bảo hiểm y tế nên chị R không cần tham gia bảo hiểm xã hội tự nguyện.",
+            correct: false,
+            exp: "Sai. Bảo hiểm y tế chỉ hỗ trợ chi phí khám chữa bệnh khi ốm đau; để có lương hưu và chế độ tử tuất khi về già thì người lao động tự do như chị R cần tham gia BHXH tự nguyện."
+          },
+          {
+            label: "d",
+            text: "Người lao động tự do như chị R có thể tham gia bảo hiểm xã hội tự nguyện để hưởng lương hưu khi về già.",
+            correct: true,
+            exp: "Đúng. Người lao động làm nghề tự do (từ đủ 15 tuổi trở lên, không thuộc diện BHXH bắt buộc) có quyền tham gia BHXH tự nguyện để hưởng chế độ hưu trí và tử tuất."
+          }
+        ]
+      }
+    ];
+
+    let currentQuiz = [];
+    let currentIndex = 0;
+    let score = 0;
+    let studentInfo = { name: '', class: '' };
+    let timerInterval = null;
+    let secondsElapsed = 0;
+    let userAnswersLog = [];
+
+    let tabSwitchCount = 0;
+    const MAX_TAB_SWITCH = 3;
+    let quizInProgress = false;
+    let isAutoSubmitted = false;
+    let lastTabLeaveTimestamp = 0;
+    let isManualNameMode = false;
+
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60).toString().padStart(2, '0');
+      const s = (secs % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function startTimer() {
+      secondsElapsed = 0;
+      clearInterval(timerInterval);
+      document.getElementById('header-timer').classList.remove('hidden');
+      timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const timeStr = formatTime(secondsElapsed);
+        document.getElementById('quiz-timer').innerText = `⏱️ ${timeStr}`;
+        document.getElementById('header-timer').innerText = `⏱️ ${timeStr}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function toggleCustomName(forceState) {
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
+      const toggleBtn = document.getElementById('btn-toggle-custom-name');
+
+      if (typeof forceState === 'boolean') {
+        isManualNameMode = forceState;
+      } else {
+        isManualNameMode = !isManualNameMode;
+      }
+
+      if (isManualNameMode) {
+        nameSelect.classList.add('hidden');
+        nameCustom.classList.remove('hidden');
+        nameCustom.focus();
+        if (toggleBtn) toggleBtn.innerText = '📋 Chọn từ danh sách';
+      } else {
+        nameSelect.classList.remove('hidden');
+        nameCustom.classList.add('hidden');
+        if (toggleBtn) toggleBtn.innerText = '✍️ Tự gõ tên';
+      }
+    }
+
+    function onStudentNameChange() {
+      const nameSelect = document.getElementById('student-name-select');
+      if (nameSelect && nameSelect.value === '__custom__') {
+        toggleCustomName(true);
+      }
+    }
+
+    function onClassChange() {
+      const classSelect = document.getElementById('student-class');
+      const classOther = document.getElementById('student-class-other');
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
+      const hint = document.getElementById('class-hint');
+
+      const val = classSelect.value;
+      nameSelect.innerHTML = '';
+      nameCustom.value = '';
+
+      if (val === 'Khác') {
+        classOther.classList.remove('hidden');
+        classOther.focus();
+        toggleCustomName(true);
+        if (hint) hint.innerHTML = '💡 Em nhập tên lớp của mình và tự gõ đầy đủ họ và tên bên dưới.';
+      } else {
+        classOther.classList.add('hidden');
+        toggleCustomName(false);
+
+        if (val && typeof CLASS_ROSTERS !== 'undefined' && CLASS_ROSTERS[val]) {
+          const defaultOpt = document.createElement('option');
+          defaultOpt.value = '';
+          defaultOpt.innerText = `-- Bấm vào đây để chọn tên (${CLASS_ROSTERS[val].length} học sinh) --`;
+          nameSelect.appendChild(defaultOpt);
+
+          const testOpt = document.createElement('option');
+          testOpt.value = 'Cô giáo / Học sinh trải nghiệm';
+          testOpt.innerText = '⭐ Cô giáo / Học sinh trải nghiệm đề';
+          nameSelect.appendChild(testOpt);
+
+          CLASS_ROSTERS[val].forEach(st => {
+            const opt = document.createElement('option');
+            opt.value = st.name;
+            opt.innerText = `${st.stt}. ${st.name}`;
+            nameSelect.appendChild(opt);
+          });
+
+          const customOpt = document.createElement('option');
+          customOpt.value = '__custom__';
+          customOpt.innerText = '✍️ Tự gõ tên khác...';
+          nameSelect.appendChild(customOpt);
+
+          if (hint) hint.innerHTML = `✅ Đã có danh sách <b>${CLASS_ROSTERS[val].length}</b> học sinh lớp <b>${val}</b>. Em bấm vào ô trên để chọn tên của mình!`;
+          nameSelect.focus();
+        } else {
+          const defaultOpt = document.createElement('option');
+          defaultOpt.value = '';
+          defaultOpt.innerText = '-- Vui lòng chọn lớp ở trên trước --';
+          nameSelect.appendChild(defaultOpt);
+          if (hint) hint.innerHTML = '💡 Em chọn lớp trước, hệ thống sẽ tự động hiện danh sách họ tên để chọn nhanh và không bị sai sót.';
+        }
+      }
+    }
+
+    function handleTabLeave() {
+      if (!quizInProgress || isAutoSubmitted) return;
+      const now = Date.now();
+      if (now - lastTabLeaveTimestamp < 800) return;
+      lastTabLeaveTimestamp = now;
+
+      tabSwitchCount++;
+      if (tabSwitchCount >= MAX_TAB_SWITCH) {
+        isAutoSubmitted = true;
+        quizInProgress = false;
+        triggerAutoSubmitViolation();
+      } else {
+        showViolationModal(tabSwitchCount);
+      }
+    }
+
+    document.addEventListener('visibilitychange', () => { if (document.hidden) handleTabLeave(); });
+    window.addEventListener('blur', () => { handleTabLeave(); });
+
+    function showViolationModal(count) {
+      const modal = document.getElementById('violation-modal');
+      const badge = document.getElementById('violation-count-badge');
+      if (badge) badge.innerText = `Lần ${count} / ${MAX_TAB_SWITCH}`;
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function acknowledgeViolation() {
+      lastTabLeaveTimestamp = Date.now();
+      const modal = document.getElementById('violation-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function triggerAutoSubmitViolation() {
+      const ackModal = document.getElementById('violation-modal');
+      if (ackModal) ackModal.classList.add('hidden');
+      const submitModal = document.getElementById('auto-submit-modal');
+      if (submitModal) submitModal.classList.remove('hidden');
+      showResults(true, "Bị thu bài sớm: Rời màn hình 3 lần");
+    }
+
+    function dismissAutoSubmitModal() {
+      const submitModal = document.getElementById('auto-submit-modal');
+      if (submitModal) submitModal.classList.add('hidden');
+    }
+
+    function startQuiz() {
+      const classSelect = document.getElementById('student-class');
+      let sClass = classSelect ? classSelect.value.trim() : '';
+      if (sClass === 'Khác') {
+        sClass = (document.getElementById('student-class-other')?.value || '').trim();
+      }
+
+      let name = '';
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
+
+      if (isManualNameMode) {
+        name = nameCustom ? nameCustom.value.trim() : '';
+      } else {
+        if (nameSelect && nameSelect.value && nameSelect.value !== '__custom__') {
+          name = nameSelect.value.trim();
+        } else if (nameCustom && nameCustom.value.trim()) {
+          name = nameCustom.value.trim();
+        }
+      }
+
+      const shuffleOptions = document.getElementById('shuffle-options-check')?.checked ?? true;
+
+      // Không bao giờ chặn nếu chưa chọn đầy đủ
+      if (!sClass) {
+        sClass = '12A9';
+        if (classSelect) classSelect.value = '12A9';
+      }
+      if (!name) {
+        name = 'Cô giáo / Học sinh trải nghiệm';
+      }
+
+      studentInfo.name = name;
+      studentInfo.class = sClass;
+
+      const rawQuestions = questionsBank_KTTX1;
+      const mcqList = rawQuestions.filter(q => q.type !== 'true_false').sort(() => Math.random() - 0.5);
+      const tfList = rawQuestions.filter(q => q.type === 'true_false').sort(() => Math.random() - 0.5);
+      const rawBank = [...mcqList, ...tfList];
+
+      currentQuiz = rawBank.map(item => {
+        if (item.type === 'true_false') return { ...item };
+        if (!shuffleOptions) {
+          return { ...item, renderOptions: [...item.options], correctIndex: item.answer };
+        }
+        const mappedOptions = item.options.map((text, idx) => ({
+          text,
+          isCorrect: idx === item.answer
+        })).sort(() => Math.random() - 0.5);
+
+        return {
+          ...item,
+          renderOptions: mappedOptions.map(o => o.text),
+          correctIndex: mappedOptions.findIndex(o => o.isCorrect)
+        };
+      });
+
+      currentIndex = 0;
+      score = 0;
+      userAnswersLog = [];
+      secondsElapsed = 0;
+
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+      document.getElementById('header-timer').classList.remove('hidden');
+
+      tabSwitchCount = 0;
+      isAutoSubmitted = false;
+      quizInProgress = true;
+      lastTabLeaveTimestamp = 0;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      startTimer();
+      loadQuestion();
+    }
+
+    let currentTfChoices = {};
+
+    function loadQuestion() {
+      const qData = currentQuiz[currentIndex];
+      document.getElementById('question-number').innerText = `Câu hỏi ${currentIndex + 1}/${currentQuiz.length}`;
+      document.getElementById('score-counter').innerText = `Điểm: ${Number(score.toFixed(2))}`;
+      const progressPercent = ((currentIndex + 1) / currentQuiz.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+      document.getElementById('feedback-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+
+      const qTextEl = document.getElementById('question-text');
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      if (qData.type === 'true_false') {
+        currentTfChoices = {};
+        qTextEl.innerHTML = `
+          <div class="mb-2"><span class="bg-indigo-100 text-indigo-800 text-[11px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider">Phần II: Câu trắc nghiệm Đúng / Sai</span></div>
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs md:text-sm text-slate-800 font-medium leading-relaxed mb-3">
+            <div class="font-bold text-indigo-700 flex items-center gap-1.5 mb-1 text-xs uppercase tracking-wide">
+              <span>📖</span> Đoạn thông tin tư liệu:
+            </div>
+            <p class="text-justify leading-relaxed text-slate-700 font-normal">${qData.passage}</p>
+          </div>
+          <div class="font-bold text-slate-800 text-sm">${qData.q}</div>
+        `;
+
+        const listDiv = document.createElement('div');
+        listDiv.className = "space-y-3 mt-3";
+
+        qData.items.forEach((item, idx) => {
+          const itemCard = document.createElement('div');
+          itemCard.id = `tf-card-${idx}`;
+          itemCard.className = "p-3.5 rounded-xl border border-slate-200 bg-white shadow-sm transition";
+          itemCard.innerHTML = `
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="text-xs md:text-sm font-medium text-slate-800 leading-snug flex-grow">
+                <b class="text-indigo-600 font-bold mr-1">${item.label})</b> ${item.text}
+              </div>
+              <div class="flex items-center gap-2 shrink-0 self-end sm:self-center" id="tf-btn-group-${idx}">
+                <button type="button" onclick="setTfChoice(${idx}, true)" id="btn-tf-${idx}-true" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-600 font-bold text-xs hover:border-emerald-400 hover:text-emerald-700 transition">
+                  Đúng
+                </button>
+                <button type="button" onclick="setTfChoice(${idx}, false)" id="btn-tf-${idx}-false" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-600 font-bold text-xs hover:border-rose-400 hover:text-rose-700 transition">
+                  Sai
+                </button>
+              </div>
+            </div>
+            <div id="tf-explanation-${idx}" class="hidden text-xs mt-2 pt-2 border-t border-slate-100 text-slate-600"></div>
+          `;
+          listDiv.appendChild(itemCard);
+        });
+
+        const submitBtnDiv = document.createElement('div');
+        submitBtnDiv.className = "mt-4";
+        submitBtnDiv.innerHTML = `
+          <button type="button" id="btn-submit-tf" onclick="submitTfAnswer()" class="w-full py-3.5 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2">
+            <span>✓</span> <span>Xác nhận trả lời câu hỏi</span>
+          </button>
+        `;
+
+        container.appendChild(listDiv);
+        container.appendChild(submitBtnDiv);
+
+      } else {
+        qTextEl.innerText = qData.q;
+        qData.renderOptions.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = "w-full text-left p-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 transition flex items-center justify-between text-sm active:scale-[0.99]";
+          btn.innerHTML = `<span><b class="mr-2 text-slate-400">${String.fromCharCode(65 + idx)}.</b> ${opt}</span>`;
+          btn.onclick = () => selectOption(idx, btn);
+          container.appendChild(btn);
+        });
+      }
+    }
+
+    function setTfChoice(itemIdx, val) {
+      currentTfChoices[itemIdx] = val;
+      const btnTrue = document.getElementById(`btn-tf-${itemIdx}-true`);
+      const btnFalse = document.getElementById(`btn-tf-${itemIdx}-false`);
+
+      if (val === true) {
+        if (btnTrue) btnTrue.className = "px-4 py-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 text-white font-black text-xs shadow-sm transition";
+        if (btnFalse) btnFalse.className = "px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-400 font-bold text-xs hover:border-rose-400 hover:text-rose-700 transition";
+      } else {
+        if (btnFalse) btnFalse.className = "px-4 py-2 rounded-xl border-2 border-rose-600 bg-rose-600 text-white font-black text-xs shadow-sm transition";
+        if (btnTrue) btnTrue.className = "px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-400 font-bold text-xs hover:border-emerald-400 hover:text-emerald-700 transition";
+      }
+    }
+
+    function submitTfAnswer() {
+      const qData = currentQuiz[currentIndex];
+      const unchosen = qData.items.findIndex((_, idx) => currentTfChoices[idx] === undefined || currentTfChoices[idx] === null);
+      if (unchosen !== -1) {
+        alert("Em vui lòng chọn 'Đúng' hoặc 'Sai' cho cả 4 ý a, b, c, d trước khi bấm xác nhận nhé!");
+        return;
+      }
+
+      const subBtn = document.getElementById('btn-submit-tf');
+      if (subBtn) subBtn.classList.add('hidden');
+
+      let correctSubCount = 0;
+      const itemLogs = [];
+
+      qData.items.forEach((item, idx) => {
+        const userChoice = currentTfChoices[idx];
+        const isCorrect = (userChoice === item.correct);
+        if (isCorrect) correctSubCount++;
+
+        const card = document.getElementById(`tf-card-${idx}`);
+        const expEl = document.getElementById(`tf-explanation-${idx}`);
+        const btnGroup = document.getElementById(`tf-btn-group-${idx}`);
+
+        if (btnGroup) {
+          const btns = btnGroup.getElementsByTagName('button');
+          for (let b of btns) b.disabled = true;
+        }
+
+        if (card) {
+          card.className = `p-3.5 rounded-xl border-2 ${isCorrect ? 'border-emerald-400 bg-emerald-50/40' : 'border-rose-400 bg-rose-50/40'} shadow-sm transition`;
+        }
+
+        if (expEl) {
+          expEl.className = `text-xs mt-2 pt-2 border-t border-slate-200 ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}`;
+          expEl.innerHTML = `
+            <div class="font-bold flex items-center gap-1 mb-0.5">
+              ${isCorrect ? '✓ Em trả lời Đúng!' : `✕ Chưa chính xác! (Đáp án chuẩn: <b>${item.correct ? 'ĐÚNG' : 'SAI'}</b>)`}
+            </div>
+            <div class="text-slate-600 font-normal">💡 ${item.exp}</div>
+          `;
+          expEl.classList.remove('hidden');
+        }
+
+        itemLogs.push({
+          label: item.label,
+          text: item.text,
+          userChoice: userChoice,
+          correct: item.correct,
+          isCorrect: isCorrect,
+          exp: item.exp
+        });
+      });
+
+      const qScore = correctSubCount / 4;
+      score += qScore;
+
+      userAnswersLog.push({
+        type: 'true_false',
+        passage: qData.passage,
+        question: qData.q,
+        items: itemLogs,
+        correctSubCount: correctSubCount,
+        isCorrect: (correctSubCount === 4),
+        scoreAwarded: qScore
+      });
+
+      const feedbackBox = document.getElementById('feedback-box');
+      const feedbackStatus = document.getElementById('feedback-status');
+      const feedbackExplanation = document.getElementById('feedback-explanation');
+
+      if (correctSubCount === 4) {
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
+        feedbackStatus.innerHTML = "✓ Xuất sắc! Em đã trả lời chính xác cả 4/4 ý (+1.0 điểm)!";
+      } else if (correctSubCount > 0) {
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-blue-200 bg-blue-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-blue-700";
+        feedbackStatus.innerHTML = `✓ Em trả lời đúng ${correctSubCount}/4 ý (+${qScore.toFixed(2)} điểm)!`;
+      } else {
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
+        feedbackStatus.innerHTML = "✕ Chưa chính xác! Em hãy xem lời giải thích chi tiết cho từng ý ở trên nhé.";
+      }
+
+      feedbackExplanation.innerText = "Em bấm nút 'Câu tiếp theo' để tiếp tục bài thi.";
+      feedbackBox.classList.remove('hidden');
+      document.getElementById('next-btn').classList.remove('hidden');
+      document.getElementById('score-counter').innerText = `Điểm: ${Number(score.toFixed(2))}`;
+    }
+
+    function selectOption(selectedIdx, btnElement) {
+      const qData = currentQuiz[currentIndex];
+      const buttons = document.getElementById('options-container').getElementsByTagName('button');
+      for (let btn of buttons) { btn.disabled = true; }
+
+      const feedbackBox = document.getElementById('feedback-box');
+      const feedbackStatus = document.getElementById('feedback-status');
+      const feedbackExplanation = document.getElementById('feedback-explanation');
+      const isCorrect = (selectedIdx === qData.correctIndex);
+
+      userAnswersLog.push({
+        question: qData.q,
+        options: qData.renderOptions,
+        selectedIdx: selectedIdx,
+        correctIdx: qData.correctIndex,
+        isCorrect: isCorrect,
+        exp: qData.exp
+      });
+
+      if (isCorrect) {
+        score++;
+        btnElement.classList.remove('border-slate-300', 'bg-white');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
+        feedbackStatus.innerHTML = "✓ Chính xác!";
+      } else {
+        btnElement.classList.remove('border-slate-300', 'bg-white');
+        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
+        buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white');
+        buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
+        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
+        feedbackStatus.innerHTML = "✕ Chưa chính xác!";
+      }
+
+      feedbackExplanation.innerText = qData.exp;
+      feedbackBox.classList.remove('hidden');
+      document.getElementById('next-btn').classList.remove('hidden');
+      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < currentQuiz.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults(isAutoSubmit = false, violationMsg = "") {
+      quizInProgress = false;
+      stopTimer();
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const finalScore10 = ((score / currentQuiz.length) * 10).toFixed(1);
+      const percent = Math.round((score / currentQuiz.length) * 100);
+      const timeElapsedStr = formatTime(secondsElapsed);
+
+      document.getElementById('res-name').innerText = studentInfo.name;
+      document.getElementById('res-class').innerText = `Lớp: ${studentInfo.class}`;
+      document.getElementById('res-score').innerText = `${finalScore10} / 10`;
+      document.getElementById('res-correct').innerText = `${Number(score.toFixed(2))}/${currentQuiz.length}`;
+      document.getElementById('res-percent').innerText = `${percent}%`;
+      document.getElementById('res-time').innerText = timeElapsedStr;
+
+      const now = new Date();
+      const dateFormatted = `${now.toLocaleDateString('vi-VN')} ${now.toLocaleTimeString('vi-VN')}`;
+      document.getElementById('res-timestamp').innerText = dateFormatted;
+
+      if (parseFloat(finalScore10) >= 8.0 && typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
+
+      // Cập nhật nhãn giám sát thoát màn hình trên phiếu điểm
+      const antiCheatEl = document.getElementById('res-anticheat-status');
+      if (antiCheatEl) {
+        if (isAutoSubmit || tabSwitchCount >= MAX_TAB_SWITCH) {
+          antiCheatEl.className = "mt-2.5 p-2 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 text-xs font-bold flex items-center justify-center gap-1.5";
+          antiCheatEl.innerHTML = "<span>🚫</span> <span>Vi phạm: Đã rời màn hình 3 lần (Bị thu bài sớm)</span>";
+          antiCheatEl.classList.remove('hidden');
+        } else if (tabSwitchCount > 0) {
+          antiCheatEl.className = "mt-2.5 p-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-800 text-xs font-bold flex items-center justify-center gap-1.5";
+          antiCheatEl.innerHTML = `<span>⚠️</span> <span>Ghi nhận: Đã rời màn hình ${tabSwitchCount} lần</span>`;
+          antiCheatEl.classList.remove('hidden');
+        } else {
+          antiCheatEl.className = "mt-2.5 p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-center gap-1.5";
+          antiCheatEl.innerHTML = "<span>🛡️</span> <span>Giám sát: Làm bài trung thực (0 lần rời màn hình)</span>";
+          antiCheatEl.classList.remove('hidden');
+        }
+      }
+
+      renderReviewList('all');
+
+      // TẠO MÃ NỘP BÀI ĐỘC NHẤT
+      const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
+      const randomPart = Math.floor(1000 + Math.random() * 9000);
+      const antiSuffix = `-V${tabSwitchCount}${isAutoSubmit || tabSwitchCount >= MAX_TAB_SWITCH ? 'X' : ''}`;
+      const subCode = `#${cleanClass}-KTTX1-${randomPart}${antiSuffix}`;
+      document.getElementById('res-sub-code').innerText = subCode;
+
+      saveSubmission({
+        id: Date.now(),
+        subject: "KTPL12",
+        subCode: subCode,
+        name: studentInfo.name,
+        className: studentInfo.class,
+        lesson: "Đề Kiểm Tra Thường Xuyên – Đề Số 1",
+        score: finalScore10,
+        correctCount: `${Number(score.toFixed(2))}/${currentQuiz.length}`,
+        timeElapsed: timeElapsedStr,
+        timestamp: dateFormatted,
+        tabSwitchCount: tabSwitchCount,
+        isViolation: isAutoSubmit || (tabSwitchCount >= MAX_TAB_SWITCH),
+        violationReason: violationMsg || (tabSwitchCount > 0 ? `Thoát màn hình ${tabSwitchCount} lần` : '')
+      });
+    }
+
+    async function saveSubmission(record, retries = 3) {
+      const statusEl = document.getElementById('cloud-sync-status');
+      if (statusEl) {
+        statusEl.className = "my-3 p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium text-center";
+        statusEl.innerHTML = `<div class="flex items-center justify-center gap-1.5 font-bold text-sm"><span class="animate-spin">⏳</span> Đang lưu kết quả lên sổ điểm của cô...</div><div class="text-[11px] text-slate-500 mt-1">Mã nộp bài: <b>${record.subCode}</b></div>`;
+      }
+
+      try {
+        let localList = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
+        if (!localList.some(item => item.id === record.id)) {
+          localList.push(record);
+          localStorage.setItem('ktpl12_submissions', JSON.stringify(localList));
+        }
+      } catch(e) {}
+
+      let success = false;
+      const payload = JSON.stringify(record);
+
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+          });
+          success = true;
+          break;
+        } catch(e) {
+          if (attempt === retries) console.warn("Lỗi gửi điểm:", e);
+        }
+      }
+
+      if (statusEl) {
+        if (success) {
+          statusEl.className = "my-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium text-center";
+          statusEl.innerHTML = `
+            <div class="flex items-center justify-center gap-1.5 font-bold text-sm text-emerald-700"><span>✅</span> Đã lưu điểm thành công vào sổ điểm của Cô Kiều!</div>
+            <div class="text-[11px] text-emerald-600 mt-0.5">Cô Kiều đã nhận được kết quả của em.</div>
+          `;
+        } else {
+          statusEl.className = "my-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium text-center";
+          statusEl.innerHTML = `
+            <div class="flex items-center justify-center gap-1.5 font-bold text-sm text-amber-700"><span>⚠️</span> Đã lưu kết quả tại máy của em!</div>
+            <div class="text-[11px] text-amber-600 mt-0.5">Hệ thống sẽ tự động đồng bộ khi có kết nối mạng ổn định.</div>
+          `;
+        }
+      }
+    }
+
+    function renderReviewList(filterMode) {
+      const container = document.getElementById('review-list');
+      container.innerHTML = '';
+
+      userAnswersLog.forEach((item, idx) => {
+        if (filterMode === 'wrong' && item.isCorrect) return;
+
+        const card = document.createElement('div');
+        card.className = `p-3.5 rounded-2xl border text-xs md:text-sm leading-relaxed ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/20' : 'border-rose-200 bg-rose-50/20'}`;
+
+        if (item.type === 'true_false') {
+          const itemsHtml = item.items.map(it => `
+            <div class="p-2 rounded-lg bg-white border border-slate-100 mt-1">
+              <div class="flex items-center justify-between">
+                <span><b>${it.label})</b> ${it.text}</span>
+                <span class="${it.isCorrect ? 'text-emerald-700' : 'text-rose-600'} font-bold">
+                  Em chọn: ${it.userChoice ? 'Đúng' : 'Sai'} ${it.isCorrect ? '✅' : '❌'}
+                </span>
+              </div>
+              <div class="text-[11px] text-slate-500 mt-0.5">💡 ${it.exp}</div>
+            </div>
+          `).join('');
+
+          card.innerHTML = `
+            <div class="font-bold text-slate-800 flex items-center justify-between mb-1">
+              <span>Câu ${idx + 1}: ${item.question}</span>
+              <span class="${item.isCorrect ? 'text-emerald-700' : 'text-amber-700'} font-bold">Đúng ${item.correctSubCount}/4 ý</span>
+            </div>
+            ${itemsHtml}
+          `;
+        } else {
+          const letters = ['A', 'B', 'C', 'D'];
+          card.innerHTML = `
+            <div class="font-bold text-slate-800 flex items-center justify-between mb-1">
+              <span>Câu ${idx + 1}: ${item.question}</span>
+              <span class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-600'} font-black">${item.isCorrect ? 'ĐÚNG' : 'CHƯA ĐÚNG'}</span>
+            </div>
+            <div class="mt-1 space-y-0.5 text-xs">
+              <div>Em chọn: <b class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-600'}">${letters[item.selectedIdx]}. ${item.options[item.selectedIdx]}</b></div>
+              ${!item.isCorrect ? `<div>Đáp án đúng: <b class="text-emerald-700">${letters[item.correctIdx]}. ${item.options[item.correctIdx]}</b></div>` : ''}
+              <div class="p-2 bg-white rounded-lg border border-slate-100 text-slate-600 text-[11px] mt-1">
+                💡 <b>Giải thích:</b> ${item.exp}
+              </div>
+            </div>
+          `;
+        }
+        container.appendChild(card);
+      });
+    }
+
+    function filterReview(mode) {
+      document.getElementById('rev-filter-all').className = mode === 'all' ? 'px-2 py-0.5 rounded bg-indigo-600 text-white font-bold' : 'px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium';
+      document.getElementById('rev-filter-wrong').className = mode === 'wrong' ? 'px-2 py-0.5 rounded bg-indigo-600 text-white font-bold' : 'px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium';
+      renderReviewList(mode);
+    }
+
+    function retryQuiz() {
+      if (confirm("Em có muốn làm lại đề kiểm tra này để nâng cao điểm số không?")) {
+        startQuiz();
+      }
+    }
+
+    function downloadCertificate() {
+      const target = document.getElementById('result-screen');
+      if (!target || typeof html2canvas === 'undefined') {
+        alert("Đang chuẩn bị ảnh phiếu điểm...");
+        return;
+      }
+      html2canvas(target, { scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Phieu_Diem_KTTX1_KTPL12_${studentInfo.name.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>

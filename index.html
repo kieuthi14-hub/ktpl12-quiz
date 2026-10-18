@@ -42,7 +42,7 @@
     <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
       <div>
         <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">KTPL 12 • Kết nối tri thức</span>
-        <h1 id="header-lesson-title" class="text-base md:text-lg font-bold mt-0.5">Bài 3: Bảo hiểm</h1>
+        <h1 id="header-lesson-title" class="text-base md:text-lg font-bold mt-0.5">Đề Kiểm Tra Thường Xuyên – Đề Số 1</h1>
       </div>
       <div class="flex items-center gap-2">
         <a href="index.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Quay lại Cổng Chọn Bài Học">
@@ -70,12 +70,13 @@
       <div class="space-y-4 max-w-sm mx-auto text-left">
         <div>
           <label class="block text-xs font-bold text-indigo-900 uppercase mb-1 flex items-center justify-between">
-            <span>1. Chọn Bài học muốn làm *</span>
-            <span class="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-bold">4 Bài Học</span>
+            <span>1. Chọn Bài học / Đề thi *</span>
+            <span class="text-[11px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300 font-bold">15 Phút</span>
           </label>
           <select id="selected-lesson" onchange="onLessonChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-indigo-50/50 font-bold text-indigo-950 transition shadow-sm">
-            <option value="4" selected>📕 Bài 4: An sinh xã hội (Trắc nghiệm &amp; Đúng/Sai - Mới nhất ⭐)</option>
-            <option value="3">📙 Bài 3: Bảo hiểm (20 câu - Mới nhất)</option>
+            <option value="kttx1" selected>⭐ ĐỀ KIỂM TRA THƯỜNG XUYÊN – ĐỀ SỐ 1 (15 Phút • 12 TN + 2 Đúng/Sai)</option>
+            <option value="4">📕 Bài 4: An sinh xã hội (Trắc nghiệm &amp; Đúng/Sai)</option>
+            <option value="3">📙 Bài 3: Bảo hiểm (20 câu)</option>
             <option value="2">📗 Bài 2: Hội nhập kinh tế quốc tế (20 câu)</option>
             <option value="1">📘 Bài 1: Tăng trưởng &amp; phát triển kinh tế (20 câu)</option>
           </select>
@@ -1406,7 +1407,221 @@ const questionsBank_Bai4 = [
   }
 ];
 
+    // ==========================================
+    // NGÂN HÀNG CÂU HỎI ĐỀ KIỂM TRA THƯỜNG XUYÊN – ĐỀ SỐ 1 (15 PHÚT)
+    // 12 Câu Trắc Nghiệm Nhiều Phương Án + 2 Câu Trắc Nghiệm Đúng/Sai
+    // ==========================================
+    const questionsBank_KTTX1 = [
+      // PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN (12 CÂU)
+      {
+        q: "Tăng trưởng kinh tế được hiểu là",
+        options: [
+          "sự gia tăng của GDP hoặc GNI trong một thời kì nhất định.",
+          "sự biến đổi cả về lượng và chất của nền kinh tế.",
+          "sự chuyển dịch cơ cấu kinh tế theo hướng hiện đại, bền vững.",
+          "sự gia tăng của chỉ số phát triển con người (HDI)."
+        ],
+        answer: 0,
+        exp: "Theo SGK KTPL 12: Tăng trưởng kinh tế là sự gia tăng về quy mô sản lượng hay tổng giá trị hàng hoá và dịch vụ mà nền kinh tế tạo ra, được đo lường bằng sự gia tăng của GDP hoặc GNI trong một thời kì nhất định (thường là một năm)."
+      },
+      {
+        q: "Để đánh giá tốc độ tăng trưởng kinh tế của Việt Nam năm 2024 so với năm 2023, người ta thường so sánh",
+        options: [
+          "chỉ số phát triển con người (HDI) năm 2024 với năm 2023.",
+          "hệ số bất bình đẳng trong phân phối thu nhập (GINI) của hai năm.",
+          "chỉ số nghèo đa chiều (MPI) của hai năm.",
+          "GDP (hoặc GNI) năm 2024 với GDP (hoặc GNI) năm 2023."
+        ],
+        answer: 3,
+        exp: "Để đánh giá tốc độ tăng trưởng kinh tế giữa hai thời kì, người ta so sánh quy mô GDP (hoặc GNI) theo giá so sánh của năm 2024 so với năm 2023."
+      },
+      {
+        q: "Điểm khác biệt cơ bản giữa phát triển kinh tế và tăng trưởng kinh tế là",
+        options: [
+          "tăng trưởng kinh tế có phạm vi rộng hơn và toàn diện hơn phát triển kinh tế.",
+          "phát triển kinh tế phản ánh sự biến đổi cả về lượng và chất của nền kinh tế, còn tăng trưởng kinh tế chủ yếu phản ánh sự biến đổi về lượng.",
+          "phát triển kinh tế chỉ quan tâm đến sự gia tăng của GDP.",
+          "tăng trưởng kinh tế và phát triển kinh tế là hai khái niệm hoàn toàn đồng nhất."
+        ],
+        answer: 1,
+        exp: "Phát triển kinh tế phản ánh sự biến đổi cả về lượng (tăng trưởng GDP/GNI) và về chất (chuyển dịch cơ cấu kinh tế hiện đại, tiến bộ và công bằng xã hội). Trong khi đó, tăng trưởng kinh tế chủ yếu phản ánh sự gia tăng về lượng."
+      },
+      {
+        q: "Tăng trưởng kinh tế có vai trò quan trọng đối với mỗi quốc gia vì tăng trưởng kinh tế",
+        options: [
+          "tạo ra nguồn lực vật chất để đầu tư phát triển, nâng cao đời sống nhân dân.",
+          "tự động xóa bỏ mọi bất bình đẳng trong xã hội.",
+          "đảm bảo chắc chắn sự phát triển bền vững của đất nước.",
+          "có thể thay thế hoàn toàn vai trò của tiến bộ xã hội và bảo vệ môi trường."
+        ],
+        answer: 0,
+        exp: "Tăng trưởng kinh tế tạo ra tiền đề và nguồn lực vật chất dồi dào để đầu tư phát triển cơ sở hạ tầng, y tế, giáo dục, giải quyết việc làm và nâng cao đời sống của nhân dân."
+      },
+      {
+        q: "Phát triển bền vững được hiểu là sự phát triển",
+        options: [
+          "chỉ tập trung tối đa hóa tăng trưởng GDP bằng mọi giá.",
+          "chỉ chú trọng bảo vệ môi trường mà không cần tăng trưởng kinh tế.",
+          "đáp ứng nhu cầu của thế hệ hiện tại mà không làm tổn hại đến khả năng đáp ứng nhu cầu của các thế hệ tương lai.",
+          "ưu tiên tăng trưởng kinh tế trước, giải quyết các vấn đề xã hội và môi trường sau."
+        ],
+        answer: 2,
+        exp: "Theo định nghĩa chuẩn SGK KTPL 12: Phát triển bền vững là sự phát triển đáp ứng nhu cầu của thế hệ hiện tại mà không làm tổn hại đến khả năng đáp ứng nhu cầu của các thế hệ tương lai, dựa trên sự kết hợp hài hòa giữa tăng trưởng kinh tế, công bằng xã hội và bảo vệ môi trường."
+      },
+      {
+        q: "Một quốc gia có tốc độ tăng trưởng GDP cao nhưng tình trạng ô nhiễm môi trường ngày càng nghiêm trọng và khoảng cách giàu nghèo ngày càng lớn. Điều này cho thấy",
+        options: [
+          "quốc gia đó đã đạt được sự phát triển bền vững.",
+          "tăng trưởng kinh tế chưa đồng nghĩa với phát triển bền vững.",
+          "tăng trưởng kinh tế luôn kéo theo phát triển bền vững.",
+          "phát triển bền vững không cần đến tăng trưởng kinh tế."
+        ],
+        answer: 1,
+        exp: "Tăng trưởng GDP cao chỉ là điều kiện cần. Nếu tăng trưởng mà môi trường bị ô nhiễm nghiêm trọng và bất bình đẳng giàu nghèo tăng cao thì chưa đồng nghĩa với phát triển bền vững."
+      },
+      {
+        q: "Tỉnh A thu hút nhiều dự án công nghiệp giúp GDP tăng nhanh, nhưng người dân phản ánh nguồn nước bị ô nhiễm và nhiều hộ dân mất đất sản xuất mà chưa có việc làm mới. Để hướng tới phát triển bền vững, tỉnh A cần",
+        options: [
+          "tiếp tục mở rộng khu công nghiệp bằng mọi giá để tối đa hóa GDP.",
+          "đóng cửa toàn bộ các khu công nghiệp để bảo vệ môi trường.",
+          "vừa thúc đẩy tăng trưởng kinh tế, vừa thực hiện tiến bộ xã hội và bảo vệ môi trường.",
+          "chỉ tập trung tăng thu ngân sách, các vấn đề xã hội và môi trường sẽ tự được giải quyết."
+        ],
+        answer: 2,
+        exp: "Để phát triển bền vững, chính quyền tỉnh A cần kết hợp hài hòa giữa phát triển kinh tế công nghiệp với việc tạo sinh kế/việc làm cho người dân (tiến bộ xã hội) và xử lý triệt để nước thải, rác thải (bảo vệ môi trường)."
+      },
+      {
+        q: "Ngoài GDP, chỉ tiêu nào sau đây còn được dùng để đánh giá sự phát triển kinh tế của một quốc gia?",
+        options: [
+          "Chỉ số phát triển con người (HDI).",
+          "Tốc độ tăng dân số tự nhiên.",
+          "Tổng diện tích đất tự nhiên.",
+          "Số lượng doanh nghiệp đang hoạt động."
+        ],
+        answer: 0,
+        exp: "Chỉ số phát triển con người (HDI) là thước đo tổng hợp về tuổi thọ, học vấn và thu nhập bình quân đầu người, dùng để đánh giá mức độ tiến bộ xã hội và sự phát triển kinh tế toàn diện của một quốc gia."
+      },
+      {
+        q: "Bạn M cùng nhóm bạn trong lớp tổ chức thu gom pin cũ, phân loại rác thải tại nguồn và tuyên truyền cho người dân địa phương về tiêu dùng tiết kiệm. Hành động này góp phần",
+        options: [
+          "làm tăng GDP của địa phương một cách trực tiếp và nhanh chóng.",
+          "thay thế hoàn toàn vai trò quản lý nhà nước về bảo vệ môi trường.",
+          "chỉ mang ý nghĩa giáo dục đơn thuần, không liên quan đến phát triển kinh tế.",
+          "thúc đẩy phát triển bền vững từ những việc làm cụ thể của công dân."
+        ],
+        answer: 3,
+        exp: "Hành động của bạn M và nhóm bạn thể hiện ý thức trách nhiệm bảo vệ môi trường, tiêu dùng có trách nhiệm, đóng góp thiết thực vào mục tiêu phát triển bền vững của cộng đồng."
+      },
+      {
+        q: "Hội nhập kinh tế quốc tế được hiểu là",
+        options: [
+          "quá trình một quốc gia đóng cửa nền kinh tế để tự cung, tự cấp.",
+          "việc các doanh nghiệp trong nước chỉ giao thương với nhau.",
+          "quá trình gắn kết nền kinh tế của một quốc gia với nền kinh tế các quốc gia khác trong khu vực và trên thế giới.",
+          "chính sách bảo hộ mậu dịch tuyệt đối của mỗi quốc gia."
+        ],
+        answer: 2,
+        exp: "Theo SGK KTPL 12: Hội nhập kinh tế quốc tế là quá trình gắn kết nền kinh tế của một quốc gia với nền kinh tế các quốc gia khác trong khu vực và trên thế giới dựa trên cơ sở chia sẻ lợi ích và cùng tuân thủ các quy tắc chuẩn mực quốc tế."
+      },
+      {
+        q: "Việt Nam tham gia Hiệp định Đối tác Toàn diện và Tiến bộ xuyên Thái Bình Dương (CPTPP) cùng với 10 quốc gia khác. Đây là hội nhập kinh tế quốc tế ở cấp độ",
+        options: [
+          "đa phương.",
+          "song phương.",
+          "đơn phương.",
+          "phi chính phủ."
+        ],
+        answer: 0,
+        exp: "CPTPP là hiệp định thương mại tự do thế hệ mới với 11 quốc gia thành viên, thuộc cấp độ hội nhập kinh tế quốc tế đa phương (khu vực)."
+      },
+      {
+        q: "Trong bối cảnh toàn cầu hóa, hội nhập kinh tế quốc tế được coi là tất yếu khách quan vì",
+        options: [
+          "các tổ chức quốc tế bắt buộc mọi quốc gia đều phải hội nhập.",
+          "hội nhập giúp xóa bỏ hoàn toàn mọi rủi ro trong quá trình phát triển.",
+          "chỉ có hội nhập mới giúp quốc gia thu được lợi nhuận tuyệt đối.",
+          "không quốc gia nào có đủ mọi nguồn lực để phát triển hiệu quả khi đứng một mình."
+        ],
+        answer: 3,
+        exp: "Do sự phát triển của phân công lao động quốc tế, không quốc gia nào có thể tự đáp ứng đủ tất cả các nguồn lực (vốn, công nghệ, tài nguyên, thị trường) nếu phát triển khép kín, biệt lập."
+      },
+
+      // PHẦN II. TRẮC NGHIỆM ĐÚNG SAI (2 CÂU)
+      {
+        type: "true_false",
+        passage: "Huyện M có tốc độ tăng trưởng GDP bình quân đạt 10%/năm nhờ khai thác khoáng sản, giúp thu ngân sách tăng mạnh. Tuy nhiên, môi trường bị ô nhiễm nghiêm trọng, nhiều diện tích rừng tự nhiên bị tàn phá, thu nhập của người dân vùng khai thác hầu như không được cải thiện và tỷ lệ hộ nghèo vẫn ở mức cao. Trước thực trạng đó, bạn L (học sinh lớp 11) đã đề xuất với chính quyền địa phương mô hình “phát triển xanh”: khai thác khoáng sản hợp lý đi đôi với trồng rừng, phát triển du lịch sinh thái và đào tạo nghề cho lao động địa phương.",
+        q: "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+        items: [
+          {
+            label: "a",
+            text: "Tốc độ tăng trưởng GDP bình quân đạt 10%/năm chứng tỏ huyện M đã đạt được sự phát triển bền vững.",
+            correct: false,
+            exp: "Sai. Tăng trưởng GDP 10%/năm mới chỉ là tăng trưởng về lượng. Huyện M chưa đạt phát triển bền vững vì môi trường bị tàn phá, thu nhập người dân không cải thiện và tỷ lệ hộ nghèo còn cao."
+          },
+          {
+            label: "b",
+            text: "Thu ngân sách tăng mạnh đồng nghĩa với việc thu nhập của mọi người dân trong huyện đều được cải thiện.",
+            correct: false,
+            exp: "Sai. Thực tế thu ngân sách tăng nhưng thu nhập của người dân vùng khai thác hầu như không được cải thiện, do đó không đồng nghĩa với việc đời sống mọi người dân đều được nâng lên."
+          },
+          {
+            label: "c",
+            text: "Tăng trưởng kinh tế nhanh không phải là điều kiện duy nhất để đạt được sự phát triển bền vững.",
+            correct: true,
+            exp: "Đúng. Phát triển bền vững đòi hỏi phải kết hợp hài hòa cả 3 yếu tố: kinh tế, tiến bộ công bằng xã hội và bảo vệ môi trường, không thể chỉ phụ thuộc vào tăng trưởng kinh tế nhanh."
+          },
+          {
+            label: "d",
+            text: "Mô hình “phát triển xanh” mà bạn L đề xuất là phù hợp vì nó hướng tới sự hài hòa giữa tăng trưởng kinh tế, tiến bộ xã hội và bảo vệ môi trường.",
+            correct: true,
+            exp: "Đúng. Mô hình bạn L đề xuất kết hợp khai thác hợp lý (kinh tế), trồng rừng và du lịch sinh thái (môi trường), đào tạo nghề cho lao động địa phương (xã hội)."
+          }
+        ]
+      },
+      {
+        type: "true_false",
+        passage: "Chị Q làm việc tại công ty may N theo hợp đồng lao động có thời hạn 2 năm. Công ty đã đăng ký và đóng bảo hiểm xã hội bắt buộc đầy đủ cho chị Q. Khi mang thai, chị được nghỉ chế độ thai sản 6 tháng và hưởng trợ cấp theo đúng quy định. Sau thời gian nghỉ sinh, chị quay trở lại làm việc và tiếp tục được công ty đóng BHXH. Bạn của chị Q là chị R làm nghề tự do, đã chủ động tham gia bảo hiểm xã hội tự nguyện để khi về già có lương hưu.",
+        q: "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+        items: [
+          {
+            label: "a",
+            text: "Chị Q được nghỉ chế độ thai sản 6 tháng là nhờ tham gia bảo hiểm y tế.",
+            correct: false,
+            exp: "Sai. Chế độ thai sản là quyền lợi thuộc Bảo hiểm xã hội bắt buộc (do công ty và chị Q đóng), không phải quyền lợi của bảo hiểm y tế."
+          },
+          {
+            label: "b",
+            text: "Bảo hiểm xã hội bắt buộc do Nhà nước tổ chức và hoạt động theo nguyên tắc phi lợi nhuận.",
+            correct: true,
+            exp: "Đúng. BHXH bắt buộc là chính sách an sinh xã hội trụ cột do Nhà nước tổ chức, quản lý và hoạt động hoàn toàn theo nguyên tắc phi lợi nhuận."
+          },
+          {
+            label: "c",
+            text: "Vì đã có bảo hiểm y tế nên chị R không cần tham gia bảo hiểm xã hội tự nguyện.",
+            correct: false,
+            exp: "Sai. Bảo hiểm y tế chỉ hỗ trợ chi phí khám chữa bệnh khi ốm đau; để có lương hưu và chế độ tử tuất khi về già thì người lao động tự do như chị R cần tham gia BHXH tự nguyện."
+          },
+          {
+            label: "d",
+            text: "Người lao động tự do như chị R có thể tham gia bảo hiểm xã hội tự nguyện để hưởng lương hưu khi về già.",
+            correct: true,
+            exp: "Đúng. Người lao động làm nghề tự do (từ đủ 15 tuổi trở lên, không thuộc diện BHXH bắt buộc) có quyền tham gia BHXH tự nguyện để hưởng chế độ hưu trí và tử tuất."
+          }
+        ]
+      }
+    ];
+
     const LESSONS_DATA = {
+      kttx1: {
+        id: "kttx1",
+        title: "Đề Kiểm Tra Thường Xuyên – Đề Số 1 (15 Phút)",
+        shortTitle: "KTTX - Đề số 1",
+        codePrefix: "KTTX1",
+        commentExcellent: "Xuất sắc! Em đã nắm rất vững kiến thức KTPL 12 và xuất sắc hoàn thành Đề kiểm tra thường xuyên số 1.",
+        commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý đọc kĩ đoạn thông tin tư liệu để xác định chính xác các nhận định Đúng/Sai nhé.",
+        commentReview: "Em cần đọc lại SGK các bài học để củng cố kiến thức và rèn luyện thêm kỹ năng làm bài Đúng/Sai nhé!",
+        questions: questionsBank_KTTX1
+      },
       4: {
         id: 4,
         title: "Bài 4: An sinh xã hội",
@@ -1449,19 +1664,19 @@ const questionsBank_Bai4 = [
       }
     };
 
-    let currentLesson = LESSONS_DATA[4];
+    let currentLesson = LESSONS_DATA['kttx1'];
 
     function onLessonChange() {
       const lessonSelect = document.getElementById('selected-lesson');
-      const lessonId = parseInt(lessonSelect ? lessonSelect.value : '4', 10) || 4;
-      currentLesson = LESSONS_DATA[lessonId] || LESSONS_DATA[4];
+      const lessonVal = lessonSelect ? lessonSelect.value : 'kttx1';
+      currentLesson = LESSONS_DATA[lessonVal] || LESSONS_DATA['kttx1'] || LESSONS_DATA[4];
       const headerTitle = document.getElementById('header-lesson-title');
       if (headerTitle) headerTitle.innerText = currentLesson.title;
       const certTopic = document.getElementById('cert-topic');
       if (certTopic) certTopic.innerText = currentLesson.shortTitle;
     }
 
-    // Đọc tham số ?bai=1, ?bai=2 hoặc ?bai=3 từ URL nếu có
+    // Đọc tham số ?bai=kttx1, ?bai=4, ?bai=1... từ URL nếu có
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const baiParam = urlParams.get('bai');
@@ -1561,6 +1776,11 @@ const questionsBank_Bai4 = [
           defaultOpt.value = '';
           defaultOpt.innerText = `-- Bấm vào đây để chọn tên (${CLASS_ROSTERS[val].length} học sinh) --`;
           nameSelect.appendChild(defaultOpt);
+
+          const testOpt = document.createElement('option');
+          testOpt.value = 'Cô giáo / Học sinh trải nghiệm';
+          testOpt.innerText = '⭐ Cô giáo / Học sinh trải nghiệm đề';
+          nameSelect.appendChild(testOpt);
 
           CLASS_ROSTERS[val].forEach(st => {
             const opt = document.createElement('option');
@@ -1729,20 +1949,15 @@ const questionsBank_Bai4 = [
 
       const shuffleOptions = document.getElementById('shuffle-options-check')?.checked ?? true;
 
+      // Nếu chưa chọn lớp, mặc định 12A9 để không bị chặn
       if (!sClass) {
-        alert("Vui lòng chọn hoặc nhập Lớp của em để bắt đầu!");
-        if (classSelect) classSelect.focus();
-        return;
+        sClass = '12A9';
+        if (classSelect) classSelect.value = '12A9';
       }
 
+      // Nếu chưa chọn tên, mặc định là học sinh / cô giáo trải nghiệm
       if (!name) {
-        alert("Vui lòng chọn Họ và tên học sinh từ danh sách để bắt đầu!");
-        if (!isManualNameMode && nameSelect) {
-          nameSelect.focus();
-        } else if (nameCustom) {
-          nameCustom.focus();
-        }
-        return;
+        name = 'Cô giáo / Học sinh trải nghiệm';
       }
 
       studentInfo.name = name;
