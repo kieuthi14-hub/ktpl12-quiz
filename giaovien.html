@@ -140,36 +140,36 @@
       <!-- Hàng chọn nhanh bài học & menu 16 bài -->
       <div class="mt-3 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         
-        <!-- Các nút chuyển nhanh 2 bài học đang làm thực tế -->
+        <!-- Các nút chuyển nhanh bài học & đề kiểm tra -->
         <div class="flex flex-wrap items-center gap-2">
-          <button id="btn-quick-b1" onclick="switchLesson(1)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-white text-indigo-950 ring-2 ring-indigo-300">
+          <button id="btn-quick-kttx1" onclick="switchLesson('kttx1')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md">
+            <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 1</span>
+            <span id="badge-count-kttx1" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
+          </button>
+
+          <button id="btn-quick-kttx2" onclick="switchLesson('kttx2')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 2</span>
+            <span id="badge-count-kttx2" class="bg-amber-400 text-slate-950 text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
+          </button>
+
+          <button id="btn-quick-b1" onclick="switchLesson(1)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📘</span> <span>Bài 1: Tăng trưởng KT</span>
-            <span id="badge-count-b1" class="bg-indigo-100 text-indigo-800 text-[10px] px-1.5 py-0.5 rounded-full font-black">184 bài</span>
+            <span id="badge-count-b1" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">...</span>
           </button>
           
           <button id="btn-quick-b2" onclick="switchLesson(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📗</span> <span>Bài 2: Hội nhập KTQT</span>
-            <span id="badge-count-b2" class="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">14 bài</span>
+            <span id="badge-count-b2" class="bg-emerald-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
           </button>
 
           <button id="btn-quick-b3" onclick="switchLesson(3)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📙</span> <span>Bài 3: Bảo hiểm</span>
-            <span id="badge-count-b3" class="bg-amber-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
+            <span id="badge-count-b3" class="bg-amber-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
           </button>
 
           <button id="btn-quick-b4" onclick="switchLesson(4)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📕</span> <span>Bài 4: An sinh xã hội</span>
-            <span id="badge-count-b4" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
-          </button>
-
-          <button id="btn-quick-kttx2" onclick="switchLesson('kttx2')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md">
-            <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 2</span>
-            <span id="badge-count-kttx2" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
-          </button>
-
-          <button id="btn-quick-kttx1" onclick="switchLesson('kttx1')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
-            <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 1</span>
-            <span id="badge-count-kttx1" class="bg-amber-400 text-slate-950 text-[10px] px-1.5 py-0.5 rounded-full font-black">0 bài</span>
+            <span id="badge-count-b4" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
           </button>
 
           <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
@@ -377,13 +377,13 @@
       <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         <!-- 3 Tab chính -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-grow">
-          <button id="tab-btn-matrix" onclick="switchMainViewTab('matrix')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-indigo-700 text-white shadow-sm">
-            <span>📊</span> <span>Bảng Điểm 16 Bài</span>
-            <span class="bg-amber-400 text-slate-900 text-[10px] px-1.5 py-0.5 rounded-full font-black">⭐ Ma trận</span>
-          </button>
-          <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-700 hover:text-indigo-700 hover:bg-slate-100">
+          <button id="tab-btn-gradebook" onclick="switchMainViewTab('gradebook')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-indigo-700 text-white shadow-sm">
             <span>📋</span> <span>Sổ Điểm Chi Tiết 1 Bài</span>
-            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-md font-bold">vnEdu</span>
+            <span class="text-[10px] bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded-full font-black">⭐ vnEdu</span>
+          </button>
+          <button id="tab-btn-matrix" onclick="switchMainViewTab('matrix')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-700 hover:text-indigo-700 hover:bg-slate-100">
+            <span>📊</span> <span>Bảng Điểm Ma Trận Toàn Bộ</span>
+            <span class="bg-indigo-100 text-indigo-700 text-[10px] px-1.5 py-0.5 rounded-md font-bold">18 Bài/Đề</span>
           </button>
           <button id="tab-btn-progress" onclick="switchMainViewTab('progress')" class="px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-700 hover:text-indigo-700 hover:bg-slate-100">
             <span>📈</span> <span>Lịch Sử Luyện Lại Cùng Bài</span>
@@ -392,11 +392,11 @@
 
         <!-- Nút xuất file tương ứng -->
         <div id="main-export-actions" class="flex items-center justify-end gap-2 shrink-0">
-          <button id="btn-export-matrix" onclick="exportAll16LessonsMatrix()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất toàn bộ bảng điểm 16 bài ra file Excel chuẩn tiếng Việt UTF-8">
-            <span>📥</span> <span>Xuất Excel Bảng Điểm 16 Bài (.CSV)</span>
-          </button>
-          <button id="btn-export-gradebook" onclick="exportToExcelOfficial()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất sổ điểm bài đang chọn để dán vào vnEdu">
+          <button id="btn-export-gradebook" onclick="exportToExcelOfficial()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất sổ điểm bài đang chọn để dán vào vnEdu">
             <span>📋</span> <span>Xuất Sổ Điểm vnEdu Bài Đang Xem</span>
+          </button>
+          <button id="btn-export-matrix" onclick="exportAll16LessonsMatrix()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất toàn bộ bảng điểm 18 bài/đề ra file Excel chuẩn tiếng Việt UTF-8">
+            <span>📥</span> <span>Xuất Excel Bảng Điểm Toàn Bộ (.CSV)</span>
           </button>
           <button id="btn-export-progress" onclick="exportProgressionReport()" class="hidden bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2" title="Xuất báo cáo số lần luyện lại và tinh thần tự giác của học sinh">
             <span>📈</span> <span>Xuất Báo Cáo Luyện Lại (.CSV)</span>
@@ -592,16 +592,49 @@
       { id: 16, code: 'B16', title: "Bài 16: Nguyên tắc cơ bản của WTO và hợp đồng thương mại quốc tế", short: "Bài 16: Nguyên tắc WTO & HĐTM", fileCode: "Bai16_NguyenTacWTO" }
     ];
 
-    // Chế độ xem hiện tại: 'gradebook' (Sổ điểm chuẩn) hoặc 'progress' (Đánh giá tiến bộ)
-    let currentMainViewTab = 'matrix';
+    // DANH SÁCH ĐẦY ĐỦ CÁC BÀI HỌC VÀ ĐỀ THI HIỂN THỊ TRÊN MA TRẬN
+    const MATRIX_ASSESSMENTS = [
+      { id: 'kttx1', code: 'Đ1', title: "Ôn tập Giữa HK1 - Đề số 1", short: "Đề 1", fileCode: "OnTap_GiuaKy1_De1", isExam: true },
+      { id: 'kttx2', code: 'Đ2', title: "Ôn tập Giữa HK1 - Đề số 2", short: "Đề 2", fileCode: "OnTap_GiuaKy1_De2", isExam: true },
+      ...ALL_16_LESSONS
+    ];
 
-    // Bài học hiện tại đang xem (Mặc định: Bài 1 hoặc lấy từ URL ?bai=)
-    let currentActiveLessonId = 1;
+    function getLessonMeta(lessonId) {
+      if (lessonId === 'kttx1') return MATRIX_ASSESSMENTS[0];
+      if (lessonId === 'kttx2') return MATRIX_ASSESSMENTS[1];
+      const parsed = parseInt(lessonId, 10);
+      return ALL_16_LESSONS.find(l => l.id === parsed) || {
+        id: lessonId,
+        code: `B${lessonId}`,
+        title: `Bài ${lessonId}`,
+        short: `Bài ${lessonId}`,
+        fileCode: `Bai${lessonId}`
+      };
+    }
+
+    // Chế độ xem hiện tại: Mặc định là 'gradebook' (Sổ điểm chi tiết theo lớp) để cô giáo mở ra thấy ngay điểm học sinh
+    let currentMainViewTab = 'gradebook';
+
+    // Bài học hiện tại đang xem (Mặc định: Ôn giữa kỳ Đề 1 vì học sinh đang thi bài này)
+    let currentActiveLessonId = 'kttx1';
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const urlBai = urlParams.get('bai');
+      const urlTab = urlParams.get('tab');
       if (urlBai) {
-        currentActiveLessonId = (urlBai.toUpperCase() === 'ALL') ? 'ALL' : (parseInt(urlBai, 10) || 1);
+        const u = urlBai.toLowerCase();
+        if (u === 'all') {
+          currentActiveLessonId = 'ALL';
+          currentMainViewTab = 'matrix';
+        } else if (u === 'kttx2' || u === 'kttx1') {
+          currentActiveLessonId = u;
+          currentMainViewTab = 'gradebook';
+        } else {
+          currentActiveLessonId = parseInt(urlBai, 10) || 1;
+        }
+      }
+      if (urlTab && (urlTab === 'matrix' || urlTab === 'gradebook' || urlTab === 'progress')) {
+        currentMainViewTab = urlTab;
       }
     } catch(e) {}
 
@@ -1175,6 +1208,32 @@ const EXAM_BANK_KTTX2 = [
     function switchLesson(lessonId) {
       currentActiveLessonId = (lessonId === 'kttx2' || lessonId === 'kttx1' || lessonId === 'ALL') ? lessonId : (parseInt(lessonId, 10) || lessonId);
       
+      // Khi chọn một bài/đề thi cụ thể, tự động chuyển sang chế độ Sổ Điểm Chi Tiết (vnEdu)
+      // Khi chọn 'ALL' (Tổng hợp), chuyển sang Bảng Ma Trận
+      if (lessonId === 'ALL') {
+        currentMainViewTab = 'matrix';
+      } else if (currentMainViewTab === 'matrix') {
+        currentMainViewTab = 'gradebook';
+      }
+
+      // Đồng bộ giao diện tab & nút xuất
+      const btnMatrix = document.getElementById('tab-btn-matrix');
+      const btnGb = document.getElementById('tab-btn-gradebook');
+      const btnProg = document.getElementById('tab-btn-progress');
+      const expMatrix = document.getElementById('btn-export-matrix');
+      const expGb = document.getElementById('btn-export-gradebook');
+      const expProg = document.getElementById('btn-export-progress');
+      const activeTabClass = "px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2 bg-indigo-700 text-white";
+      const inactiveTabClass = "px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-700 hover:text-indigo-700";
+
+      if (btnMatrix) btnMatrix.className = (currentMainViewTab === 'matrix') ? activeTabClass : inactiveTabClass;
+      if (btnGb) btnGb.className = (currentMainViewTab === 'gradebook') ? activeTabClass : inactiveTabClass;
+      if (btnProg) btnProg.className = (currentMainViewTab === 'progress') ? activeTabClass : inactiveTabClass;
+
+      if (expMatrix) expMatrix.classList.toggle('hidden', currentMainViewTab !== 'matrix');
+      if (expGb) expGb.classList.toggle('hidden', currentMainViewTab !== 'gradebook');
+      if (expProg) expProg.classList.toggle('hidden', currentMainViewTab !== 'progress');
+
       const masterSelect = document.getElementById('lesson-master-select');
       if (masterSelect) masterSelect.value = currentActiveLessonId;
 
@@ -1234,14 +1293,10 @@ const EXAM_BANK_KTTX2 = [
       const badge = document.getElementById('current-lesson-badge');
       if (badge) {
         if (currentActiveLessonId === 'ALL') {
-          badge.innerText = 'Tất cả 16 bài';
-        } else if (currentActiveLessonId === 'kttx2') {
-          badge.innerText = '⭐ Ôn Giữa Kỳ 1: Đề 2';
-        } else if (currentActiveLessonId === 'kttx1') {
-          badge.innerText = '⭐ Ôn Giữa Kỳ 1: Đề 1';
+          badge.innerText = 'Tất cả bài học & đề thi';
         } else {
-          const found = ALL_16_LESSONS.find(l => l.id === currentActiveLessonId);
-          badge.innerText = found ? found.short : `Bài ${currentActiveLessonId}`;
+          const meta = getLessonMeta(currentActiveLessonId);
+          badge.innerText = meta ? meta.short : `Bài ${currentActiveLessonId}`;
         }
       }
 
@@ -1833,8 +1888,8 @@ const EXAM_BANK_KTTX2 = [
           ? `<span class="bg-rose-600 text-white font-black px-2 py-0.5 rounded text-[11px] border border-rose-700">🚫 BỊ THU BÀI SỚM (${swCount} lần rời màn hình)</span>`
           : `<span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[11px]">⚠️ Cảnh báo rời màn hình (${swCount} lần)</span>`;
         
-        const lesObj = ALL_16_LESSONS.find(l => l.id === item.lessonId);
-        const lesName = lesObj ? `Bài ${lesObj.id}: ${lesObj.short}` : `Bài ${item.lessonId || '?'}`;
+        const lesObj = getLessonMeta(item.lessonId);
+        const lesName = lesObj ? lesObj.short : `Bài ${item.lessonId || '?'}`;
 
         return `
           <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-rose-300 shadow-sm hover:shadow transition">
@@ -1990,18 +2045,14 @@ const EXAM_BANK_KTTX2 = [
 
       if (heading) {
         if (currentMainViewTab === 'matrix') {
-          heading.innerHTML = `<span class="text-indigo-900">BẢNG MA TRẬN ĐIỂM 16 BÀI SGK KTPL 12</span> <span class="text-indigo-600 font-normal text-sm">(${classTitle})</span>`;
+          heading.innerHTML = `<span class="text-indigo-900">BẢNG MA TRẬN ĐIỂM TOÀN BỘ 18 BÀI HỌC & ĐỀ THI</span> <span class="text-indigo-600 font-normal text-sm">(${classTitle})</span>`;
         } else if (currentMainViewTab === 'progress') {
           heading.innerHTML = `<span class="text-purple-900">LỊCH SỬ LUYỆN LẠI & ĐÁNH GIÁ CHUYÊN CẦN</span> <span class="text-purple-600 font-normal text-sm">(${classTitle})</span>`;
         } else {
           if (currentActiveLessonId === 'ALL') {
-            heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC - ${classTitle}`;
-          } else if (currentActiveLessonId === 'kttx2') {
-            heading.innerText = `DANH SÁCH HỌC SINH - ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2 (${classTitle})`;
-          } else if (currentActiveLessonId === 'kttx1') {
-            heading.innerText = `DANH SÁCH HỌC SINH - ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1 (${classTitle})`;
+            heading.innerText = `TỔNG HỢP TIẾN ĐỘ TẤT CẢ BÀI HỌC & ĐỀ THI - ${classTitle}`;
           } else {
-            const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+            const lesObj = getLessonMeta(currentActiveLessonId);
             heading.innerText = `DANH SÁCH HỌC SINH - ${lesObj.title.toUpperCase()} (${classTitle})`;
           }
         }
@@ -2316,13 +2367,19 @@ const EXAM_BANK_KTTX2 = [
       if (!thead) return;
 
       if (currentMainViewTab === 'matrix') {
-        // CHẾ ĐỘ MA TRẬN TIẾN ĐỘ 16 BÀI (CHÍNH)
-        const lessonHeaders = ALL_16_LESSONS.map(l => 
-          `<th class="py-3 px-1.5 text-center min-w-[52px] border-l border-slate-200/80 bg-slate-100/90" title="${l.title}">
+        // CHẾ ĐỘ MA TRẬN TIẾN ĐỘ TẤT CẢ CÁC BÀI & ĐỀ THI
+        const lessonHeaders = MATRIX_ASSESSMENTS.map(l => {
+          if (l.isExam) {
+            return `<th class="py-3 px-1.5 text-center min-w-[54px] border-l border-amber-300 bg-amber-100/90 text-amber-950 font-black cursor-pointer hover:bg-amber-200 transition" onclick="switchLesson('${l.id}')" title="${l.title} - Bấm để xem sổ điểm chi tiết đề này">
+              <div class="font-black text-amber-900 flex items-center justify-center gap-0.5"><span>⭐</span><span>${l.code}</span></div>
+              <div class="text-[9px] text-amber-800 font-bold">${l.short}</div>
+            </th>`;
+          }
+          return `<th class="py-3 px-1.5 text-center min-w-[50px] border-l border-slate-200/80 bg-slate-100/90 cursor-pointer hover:bg-slate-200 transition" onclick="switchLesson(${l.id})" title="${l.title} - Bấm để xem sổ điểm chi tiết bài này">
             <div class="font-black text-indigo-900">B${l.id}</div>
             <div class="text-[9px] text-slate-400 font-normal">Bài ${l.id}</div>
-          </th>`
-        ).join('');
+          </th>`;
+        }).join('');
 
         thead.innerHTML = `
           <tr>
@@ -2330,9 +2387,9 @@ const EXAM_BANK_KTTX2 = [
             <th class="py-3 px-3 sticky-col-name bg-slate-100 min-w-[175px] border-r border-slate-200">Họ và Tên Học Sinh</th>
             <th class="py-3 px-2 text-center w-16 bg-slate-100">Lớp</th>
             ${lessonHeaders}
-            <th class="py-3 px-2 text-center w-20 border-l border-slate-200 bg-slate-100" title="Số bài SGK đã làm">Đã làm</th>
+            <th class="py-3 px-2 text-center w-20 border-l border-slate-200 bg-slate-100" title="Số bài/đề đã làm">Đã làm</th>
             <th class="py-3 px-2 text-center w-16 bg-slate-100" title="Điểm trung bình các bài đã làm">ĐTB</th>
-            <th class="py-3 px-3 min-w-[210px] bg-slate-100" title="Tiến trình phát triển qua các bài (Ví dụ: B1: 5.0 ➔ B2: 7.0)">Tiến Trình Điểm Các Bài</th>
+            <th class="py-3 px-3 min-w-[210px] bg-slate-100" title="Tiến trình phát triển qua các bài">Tiến Trình Điểm</th>
             <th class="py-3 px-2 text-center w-16 bg-slate-100">Chi tiết</th>
           </tr>`;
       } else if (currentMainViewTab === 'gradebook') {
@@ -2365,7 +2422,7 @@ const EXAM_BANK_KTTX2 = [
     }
 
     
-    // TÍNH TOÁN ĐIỂM 16 BÀI & TIẾN TRÌNH PHÁT TRIỂN CHO TỪNG HỌC SINH
+    // TÍNH TOÁN ĐIỂM CÁC BÀI HỌC/ĐỀ THI & TIẾN TRÌNH PHÁT TRIỂN CHO TỪNG HỌC SINH
     function getStudent16LessonsProgress(student) {
       const studentNorm = normText(student.name);
       const studentClean = cleanSubName(student.name);
@@ -2393,12 +2450,12 @@ const EXAM_BANK_KTTX2 = [
         return false;
       });
 
-      // Đối chiếu điểm cho từng bài trong 16 bài
+      // Đối chiếu điểm cho từng bài/đề trong MATRIX_ASSESSMENTS
       let completedLessons = [];
       let totalScoreSum = 0;
       const lessonResults = {};
 
-      ALL_16_LESSONS.forEach(les => {
+      MATRIX_ASSESSMENTS.forEach(les => {
         const subsOfLesson = studentSubs.filter(s => s.lessonId === les.id);
         if (subsOfLesson.length > 0) {
           const best = [...subsOfLesson].sort((a, b) => parseFloat(b.score) - parseFloat(a.score))[0];
@@ -2406,6 +2463,7 @@ const EXAM_BANK_KTTX2 = [
           const ac = getAntiCheatInfo(best);
           completedLessons.push({
             id: les.id,
+            code: les.code || `B${les.id}`,
             title: les.title,
             score: best.score,
             scoreNum: bestScoreNum,
@@ -2439,7 +2497,7 @@ const EXAM_BANK_KTTX2 = [
       const completedCount = completedLessons.length;
       const avgScore = completedCount > 0 ? (totalScoreSum / completedCount).toFixed(1) : '-';
 
-      // Tạo chuỗi tiến trình phát triển qua các bài (Ví dụ: B1: 5.0 ➔ B2: 7.0)
+      // Tạo chuỗi tiến trình phát triển qua các bài
       let progressHtml = '';
       let progressText = '';
       let evaluationText = '';
@@ -2451,10 +2509,10 @@ const EXAM_BANK_KTTX2 = [
       } else if (completedCount === 1) {
         const item = completedLessons[0];
         progressHtml = `<span class="inline-flex items-center gap-1 font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-          <span>B${item.id}:</span> <b class="text-indigo-700">${item.score}đ</b>
+          <span>${item.code}:</span> <b class="text-indigo-700">${item.score}đ</b>
         </span>`;
-        progressText = `B${item.id}: ${item.score}đ`;
-        evaluationText = `Đã hoàn thành Bài ${item.id} (${item.score}đ)`;
+        progressText = `${item.code}: ${item.score}đ`;
+        evaluationText = `Đã hoàn thành ${item.title} (${item.score}đ)`;
       } else {
         // Có từ 2 bài trở lên: hiển thị chuỗi điểm và độ tăng giảm
         const partsHtml = completedLessons.map(l => {
@@ -2462,7 +2520,7 @@ const EXAM_BANK_KTTX2 = [
           if (l.scoreNum >= 9.0) color = "text-emerald-800 bg-emerald-50 border-emerald-300";
           else if (l.scoreNum >= 7.0) color = "text-blue-800 bg-blue-50 border-blue-300";
           else if (l.scoreNum >= 5.0) color = "text-amber-800 bg-amber-50 border-amber-300";
-          return `<span class="inline-flex items-center px-1.5 py-0.5 rounded border text-[11px] font-mono font-bold ${color}" title="${l.title}: ${l.score}đ (${l.correctCount})">B${l.id}: ${l.score}</span>`;
+          return `<span class="inline-flex items-center px-1.5 py-0.5 rounded border text-[11px] font-mono font-bold ${color}" title="${l.title}: ${l.score}đ (${l.correctCount})">${l.code}: ${l.score}</span>`;
         }).join('<span class="text-slate-300 text-xs font-black">➔</span>');
 
         // So sánh bài đầu tiên và bài mới nhất
@@ -2473,7 +2531,7 @@ const EXAM_BANK_KTTX2 = [
         let deltaBadge = '';
         if (delta > 0) {
           deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0">🚀 +${delta}đ</span>`;
-          evaluationText = `Tiến bộ rõ rệt (+${delta}đ từ B${first.id} lên B${last.id})`;
+          evaluationText = `Tiến bộ rõ rệt (+${delta}đ từ ${first.code} lên ${last.code})`;
         } else if (delta === 0 && last.scoreNum >= 9.0) {
           deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 shrink-0">💎 Xuất sắc</span>`;
           evaluationText = `Duy trì kết quả xuất sắc (${last.scoreNum}đ)`;
@@ -2482,11 +2540,11 @@ const EXAM_BANK_KTTX2 = [
           evaluationText = `Điểm số ổn định qua các bài`;
         } else {
           deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 shrink-0">⚠️ ${delta}đ</span>`;
-          evaluationText = `Điểm B${last.id} giảm nhẹ so với B${first.id}, cần ôn thêm`;
+          evaluationText = `Điểm ${last.code} giảm nhẹ so với ${first.code}, cần ôn thêm`;
         }
 
         progressHtml = `<div class="flex items-center gap-1.5 flex-wrap">${partsHtml} ${deltaBadge}</div>`;
-        progressText = completedLessons.map(l => `B${l.id}: ${l.score}`).join(' ➔ ') + (delta > 0 ? ` (+${delta}đ)` : '');
+        progressText = completedLessons.map(l => `${l.code}: ${l.score}`).join(' ➔ ') + (delta > 0 ? ` (+${delta}đ)` : '');
       }
 
       return {
@@ -2515,7 +2573,7 @@ const EXAM_BANK_KTTX2 = [
 
       if (currentMainViewTab === 'matrix') {
         // ==========================================
-        // CHẾ ĐỘ 1: MA TRẬN ĐIỂM TIẾN ĐỘ 16 BÀI (MỚI ⭐)
+        // CHẾ ĐỘ 1: MA TRẬN ĐIỂM TIẾN ĐỘ 18 BÀI/ĐỀ
         // ==========================================
         items.forEach((item) => {
           const tr = document.createElement('tr');
@@ -2525,9 +2583,10 @@ const EXAM_BANK_KTTX2 = [
           const safeItemName = String(item.name || '').replace(/'/g, "\\'");
           const safeItemClass = String(item.className || '').replace(/'/g, "\\'");
 
-          // Render 16 ô điểm tương ứng 16 bài
-          const lessonCells = ALL_16_LESSONS.map(les => {
+          // Render các ô điểm tương ứng MATRIX_ASSESSMENTS
+          const lessonCells = MATRIX_ASSESSMENTS.map(les => {
             const res = pInfo.lessonResults[les.id];
+            const examCellBg = les.isExam ? 'bg-amber-50/40 border-amber-200/70' : 'border-slate-100';
             if (res && res.hasDone) {
               const sc = res.scoreNum;
               let badgeStyle = "bg-slate-100 text-slate-800 border-slate-200";
@@ -2539,23 +2598,24 @@ const EXAM_BANK_KTTX2 = [
 
               const attemptsNote = res.attempts > 1 ? ` (${res.attempts} lần làm)` : '';
               const cheatNote = (res.isViolation || (res.tabSwitchCount && res.tabSwitchCount >= 3)) ? ' - 🚫 Rời màn hình 3L (Thu sớm)' : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? ` - ⚠️ Rời màn hình ${res.tabSwitchCount}L` : '');
-              const tooltip = `Bài ${les.id}: ${res.score}đ (${res.correctCount}) lúc ${res.timestamp}${attemptsNote}${cheatNote}`;
+              const tooltip = `${les.title}: ${res.score}đ (${res.correctCount}) lúc ${res.timestamp}${attemptsNote}${cheatNote}`;
 
-              return `<td class="py-2 px-1 text-center border-l border-slate-100" title="${tooltip}">
+              return `<td class="py-2 px-1 text-center border-l ${examCellBg}" title="${tooltip}">
                 <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded text-xs font-mono border ${badgeStyle} cursor-pointer hover:scale-110 transition shadow-sm" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">
                   ${res.score}
                   ${(res.isViolation || (res.tabSwitchCount && res.tabSwitchCount >= 3)) ? `<span class="ml-0.5 px-1 py-0.2 bg-rose-600 text-white rounded text-[9px] font-bold">🚫3L</span>` : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? `<span class="ml-0.5 px-0.5 py-0.2 bg-amber-500 text-white rounded text-[9px] font-bold">⚠️${res.tabSwitchCount}</span>` : '')}
                 </span>
               </td>`;
             } else {
-              return `<td class="py-2 px-1 text-center border-l border-slate-100 text-slate-300 font-mono text-xs select-none">-</td>`;
+              return `<td class="py-2 px-1 text-center border-l ${examCellBg} text-slate-300 font-mono text-xs select-none">-</td>`;
             }
           }).join('');
 
           // Cột số bài đã làm
+          const totalAssCount = MATRIX_ASSESSMENTS.length;
           const completedBadge = pInfo.completedCount > 0 
-            ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${pInfo.completedCount >= 2 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700'}">${pInfo.completedCount} / 16</span>`
-            : `<span class="px-2 py-0.5 rounded-full text-xs text-slate-400 bg-slate-50">0 / 16</span>`;
+            ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${pInfo.completedCount >= 2 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-700'}">${pInfo.completedCount} / ${totalAssCount}</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-xs text-slate-400 bg-slate-50">0 / ${totalAssCount}</span>`;
 
           // Cột điểm trung bình
           const avgBadge = pInfo.avgScore !== '-' 
@@ -2581,12 +2641,12 @@ const EXAM_BANK_KTTX2 = [
           tbody.appendChild(tr);
         });
 
-        // DÒNG TỔNG KẾT TOÀN DIỆN 16 BÀI Ở CHÂN BẢNG
+        // DÒNG TỔNG KẾT TOÀN DIỆN CÁC BÀI/ĐỀ Ở CHÂN BẢNG
         const summaryTr = document.createElement('tr');
         summaryTr.className = "bg-slate-100/90 font-bold border-t-2 border-indigo-300 text-[11px] text-slate-700 sticky bottom-0 z-20 shadow-lg";
 
-        // Thống kê từng bài
-        const lessonSummaries = ALL_16_LESSONS.map(les => {
+        // Thống kê từng bài/đề
+        const lessonSummaries = MATRIX_ASSESSMENTS.map(les => {
           let count = 0;
           let sumScore = 0;
           items.forEach(it => {
@@ -2598,7 +2658,8 @@ const EXAM_BANK_KTTX2 = [
             }
           });
           const avg = count > 0 ? (sumScore / count).toFixed(1) : '-';
-          return `<td class="py-2.5 px-1 text-center border-l border-slate-200" title="Bài ${les.id}: ${count} học sinh đã làm, ĐTB: ${avg}">
+          const examSummaryBg = les.isExam ? 'bg-amber-100/70 border-l border-amber-300' : 'border-l border-slate-200';
+          return `<td class="py-2.5 px-1 text-center ${examSummaryBg}" title="${les.title}: ${count} học sinh đã làm, ĐTB: ${avg}">
             <div class="text-[10px] text-indigo-700 font-black">${count > 0 ? count + ' em' : '-'}</div>
             <div class="text-[9px] text-slate-500 font-mono">${count > 0 ? avg + 'đ' : ''}</div>
           </td>`;
@@ -2872,7 +2933,7 @@ const EXAM_BANK_KTTX2 = [
       if (nameEl) nameEl.innerText = studentName;
       if (metaEl) metaEl.innerText = `Lớp: ${className} • Môn Giáo dục Kinh tế & Pháp luật 12`;
       
-      if (statCount) statCount.innerText = `${p16.completedCount} / 16`;
+      if (statCount) statCount.innerText = `${p16.completedCount} / ${MATRIX_ASSESSMENTS.length}`;
       if (statFirst) statFirst.innerText = (p16.completedCount > 0 && p16.completedLessons[0]) ? `${p16.completedLessons[0].score}` : '-';
       if (statBest) statBest.innerText = p16.avgScore !== '-' ? `${p16.avgScore} (ĐTB)` : '-';
       
@@ -2892,10 +2953,10 @@ const EXAM_BANK_KTTX2 = [
         if (p16.completedCount === 0) {
           evalBox.innerHTML = `<div class="font-bold text-amber-900">⏳ Học sinh chưa hoàn thành bài luyện tập nào</div><div class="text-[11px] text-amber-700 mt-0.5">Cô có thể bấm nút "Nhắc Zalo" ở thanh công cụ để đôn đốc em tham gia nhé.</div>`;
         } else if (p16.completedCount >= 2) {
-          evalBox.innerHTML = `<div class="font-bold text-emerald-900">🚀 Đánh giá tiến độ qua các bài học SGK:</div><div class="text-xs text-emerald-800 mt-1 font-semibold">${p16.progressText}</div><div class="text-[11px] text-emerald-700 mt-0.5">${p16.evaluationText}. Em theo sát tiến độ học tập và có ý thức rèn luyện rất tốt!</div>`;
+          evalBox.innerHTML = `<div class="font-bold text-emerald-900">🚀 Đánh giá tiến độ học tập:</div><div class="text-xs text-emerald-800 mt-1 font-semibold">${p16.progressText}</div><div class="text-[11px] text-emerald-700 mt-0.5">${p16.evaluationText}. Em theo sát tiến độ học tập và có ý thức rèn luyện rất tốt!</div>`;
         } else {
           const item = p16.completedLessons[0];
-          evalBox.innerHTML = `<div class="font-bold text-indigo-900">💎 Đã hoàn thành Bài ${item.id}: ${item.score} điểm</div><div class="text-[11px] text-indigo-700 mt-0.5">Khuyến khích em tiếp tục hoàn thành các bài tiếp theo trong chương trình 16 bài SGK KTPL 12 nhé cô.</div>`;
+          evalBox.innerHTML = `<div class="font-bold text-indigo-900">💎 Đã hoàn thành ${item.title}: ${item.score} điểm</div><div class="text-[11px] text-indigo-700 mt-0.5">Khuyến khích em tiếp tục hoàn thành các bài tiếp theo trong chương trình nhé cô.</div>`;
         }
       }
 
@@ -2913,12 +2974,15 @@ const EXAM_BANK_KTTX2 = [
             else if (scoreNum >= 5.0) badgeColor = "bg-amber-50 text-amber-800 border-amber-300 font-semibold";
             else badgeColor = "bg-rose-50 text-rose-800 border-rose-300 font-semibold";
 
-            const lesTitle = ALL_16_LESSONS.find(l => l.id === s.lessonId)?.title || `Bài ${s.lessonId}`;
+            const meta = getLessonMeta(s.lessonId);
+            const lesTitle = meta ? meta.title : `Bài ${s.lessonId}`;
+            const lesBadge = meta ? meta.code : `B${s.lessonId}`;
+            const badgeClass = meta && meta.isExam ? 'bg-amber-100 text-amber-900 ring-1 ring-amber-300' : 'bg-indigo-100 text-indigo-800';
 
             return `
               <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-3">
-                  <span class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-800 font-black flex items-center justify-center shrink-0">B${s.lessonId}</span>
+                  <span class="w-9 h-9 rounded-lg ${badgeClass} font-black flex items-center justify-center shrink-0">${lesBadge}</span>
                   <div>
                     <div class="font-bold text-slate-800">${lesTitle}</div>
                     <div class="text-[11px] text-slate-400 font-mono mt-0.5">Mã: ${s.subCode || '#KT12'} • ${s.timestamp || ''}</div>
@@ -3117,15 +3181,15 @@ const EXAM_BANK_KTTX2 = [
       const now = new Date();
       const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
 
-      // Tạo tiêu đề các cột 16 bài
-      const lessonCols = ALL_16_LESSONS.map(l => `"Bài ${l.id}"`);
-      const colHeaders = ["STT", "Mã định danh", "Họ và tên", "Lớp", ...lessonCols, "Số bài đã làm", "Điểm Trung Bình", "Tiến Trình Điểm Các Bài", "Đánh Giá Tiến Bộ"];
+      // Tạo tiêu đề các cột ma trận
+      const lessonCols = MATRIX_ASSESSMENTS.map(l => `"${l.title}"`);
+      const colHeaders = ["STT", "Mã định danh", "Họ và tên", "Lớp", ...lessonCols, "Số bài/đề đã làm", "Điểm Trung Bình", "Tiến Trình Điểm Các Bài", "Đánh Giá Tiến Bộ"];
 
       // Đối chiếu điểm từng bài cho từng học sinh
       const rows = rosterList.map(student => {
         const pInfo = getStudent16LessonsProgress(student);
 
-        const scoresBy16Lessons = ALL_16_LESSONS.map(les => {
+        const scoresByLessons = MATRIX_ASSESSMENTS.map(les => {
           const res = pInfo.lessonResults[les.id];
           return (res && res.hasDone) ? `"${res.score}"` : '""';
         });
@@ -3135,7 +3199,7 @@ const EXAM_BANK_KTTX2 = [
           `"${student.studentId || ''}"`,
           `"${String(student.name || '').replace(/"/g, '""')}"`,
           `"${student.className}"`,
-          ...scoresBy16Lessons,
+          ...scoresByLessons,
           pInfo.completedCount,
           `"${pInfo.avgScore}"`,
           `"${String(pInfo.progressText || '').replace(/"/g, '""')}"`,
@@ -3144,7 +3208,7 @@ const EXAM_BANK_KTTX2 = [
       });
 
       const csvContent = "\uFEFF" + [
-        `"BẢNG TỔNG HỢP MA TRẬN ĐIỂM 16 BÀI SGK KTPL 12 - ${classNameStr.replace(/_/g, ' ')}"`,
+        `"BẢNG TỔNG HỢP MA TRẬN ĐIỂM TOÀN BỘ 18 BÀI HỌC VÀ ĐỀ THI KTPL 12 - ${classNameStr.replace(/_/g, ' ')}"`,
         `"Ngày xuất: ${now.toLocaleString('vi-VN')} - Giáo viên: Trương Thùy Linh Kiều"`,
         "",
         colHeaders.join(","),
@@ -3154,7 +3218,7 @@ const EXAM_BANK_KTTX2 = [
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `Bang_Diem_Tong_Hop_16_Bai_KTPL12_${classNameStr}_${dateStr}.csv`;
+      link.download = `Bang_Diem_Tong_Hop_Ma_Tran_KTPL12_${classNameStr}_${dateStr}.csv`;
       link.click();
     }
 
@@ -3192,7 +3256,7 @@ const EXAM_BANK_KTTX2 = [
         lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1';
         lessonUrl = `${baseUrl}kttx1.html`;
       } else if (currentActiveLessonId !== 'ALL') {
-        const lesObj = ALL_16_LESSONS.find(l => l.id === parseInt(currentActiveLessonId, 10)) || ALL_16_LESSONS[0];
+        const lesObj = getLessonMeta(currentActiveLessonId);
         lessonTitle = lesObj.title.toUpperCase();
         lessonUrl = `${baseUrl}index.html?bai=${lesObj.id}`;
       }
@@ -3241,9 +3305,8 @@ const EXAM_BANK_KTTX2 = [
     // TỰ ĐỘNG KHỞI CHẠY KHI MỞ TRANG
     window.addEventListener('DOMContentLoaded', () => {
       initMasterLessonSelect();
-      if (currentActiveLessonId !== 1) {
-        switchLesson(currentActiveLessonId);
-      }
+      switchMainViewTab(currentMainViewTab);
+      switchLesson(currentActiveLessonId);
 
       // Chỉ vào thẳng Dashboard nếu có phiên xác thực hợp lệ
       const isAuthed = (localStorage.getItem('ktpl12_teacher_authed') === 'true' || sessionStorage.getItem('ktpl12_teacher_authed') === 'true');
