@@ -1817,20 +1817,20 @@ const questionsBank_Bai4 = [
     const LESSONS_DATA = {
       kttx2: {
         id: "kttx2",
-        title: "Ôn Tập Giữa Học Kỳ I – Đề Số 2 (Phiên Bản 2)",
-        shortTitle: "Ôn tập Giữa HK1 (Đề 2 Bản 2)",
+        title: "Ôn Tập Giữa Học Kỳ I – Đề Số 2",
+        shortTitle: "Ôn tập Giữa HK1 (Đề 2)",
         codePrefix: "KTTX2",
-        commentExcellent: "Xuất sắc! Em đã nắm rất vững kiến thức KTPL 12 và hoàn thành xuất sắc Đề ôn tập giữa học kỳ I (Đề số 2 - Phiên bản 2).",
+        commentExcellent: "Xuất sắc! Em đã nắm rất vững kiến thức KTPL 12 và hoàn thành xuất sắc Đề ôn tập giữa học kỳ I (Đề số 2).",
         commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý đọc kĩ đoạn thông tin tư liệu để xác định chính xác các nhận định Đúng/Sai nhé.",
         commentReview: "Em cần đọc lại SGK các bài học để củng cố kiến thức và rèn luyện thêm kỹ năng làm bài Đúng/Sai nhé!",
         questions: questionsBank_KTTX2
       },
       kttx1: {
         id: "kttx1",
-        title: "Ôn Tập Giữa Học Kỳ I – Đề Số 1 (Phiên Bản 2)",
-        shortTitle: "Ôn tập Giữa HK1 (Bản 2)",
+        title: "Ôn Tập Giữa Học Kỳ I – Đề Số 1",
+        shortTitle: "Ôn tập Giữa HK1 (Đề 1)",
         codePrefix: "KTTX1",
-        commentExcellent: "Xuất sắc! Em đã nắm rất vững kiến thức KTPL 12 và xuất sắc hoàn thành Đề ôn tập giữa học kỳ I (Phiên bản 2).",
+        commentExcellent: "Xuất sắc! Em đã nắm rất vững kiến thức KTPL 12 và xuất sắc hoàn thành Đề ôn tập giữa học kỳ I (Đề số 1).",
         commentGood: "Khá tốt! Em đã hiểu bài, cần chú ý đọc kĩ đoạn thông tin tư liệu để xác định chính xác các nhận định Đúng/Sai nhé.",
         commentReview: "Em cần đọc lại SGK các bài học để củng cố kiến thức và rèn luyện thêm kỹ năng làm bài Đúng/Sai nhé!",
         questions: questionsBank_KTTX1
@@ -2184,9 +2184,9 @@ const questionsBank_Bai4 = [
       studentInfo.name = name;
       studentInfo.class = sClass;
 
-      const rawQuestions = (currentLesson && currentLesson.questions && currentLesson.questions.length > 0)
+      const rawQuestions = ((currentLesson && currentLesson.questions && currentLesson.questions.length > 0)
         ? currentLesson.questions
-        : questionsBank_Bai2;
+        : questionsBank_Bai2).map((q, idx) => ({ ...q, qNum: idx + 1 }));
 
       // Phân nhóm: Các câu MCQ xáo trộn ở nửa đầu, các câu Đúng/Sai nằm ở nửa sau
       const mcqList = rawQuestions.filter(q => q.type !== 'true_false').sort(() => Math.random() - 0.5);
@@ -2385,6 +2385,7 @@ const questionsBank_Bai4 = [
       score += qScore;
 
       userAnswersLog.push({
+        qNum: qData.qNum,
         type: 'true_false',
         passage: qData.passage,
         question: qData.q,
@@ -2429,6 +2430,7 @@ const questionsBank_Bai4 = [
       const isCorrect = (selectedIdx === qData.correctIndex);
 
       userAnswersLog.push({
+        qNum: qData.qNum,
         question: qData.q,
         options: qData.renderOptions,
         selectedIdx: selectedIdx,
@@ -2542,6 +2544,26 @@ const questionsBank_Bai4 = [
       const subCode = `#${cleanClass}-${prefix}-${randomPart}${antiSuffix}`;
       document.getElementById('res-sub-code').innerText = subCode;
 
+      // Thu thập các câu làm sai theo số thứ tự đề gốc của cô
+      const wrongItems = [];
+      const sortedLogs = [...userAnswersLog].sort((a, b) => (a.qNum || 0) - (b.qNum || 0));
+
+      sortedLogs.forEach(log => {
+        if (log.type === 'true_false') {
+          const wrongSubs = (log.items || []).filter(it => !it.isCorrect).map(it => it.label);
+          if (wrongSubs.length > 0) {
+            wrongItems.push(`C${log.qNum}(${wrongSubs.join(',')})`);
+          }
+        } else {
+          if (!log.isCorrect) {
+            wrongItems.push(`C${log.qNum}`);
+          }
+        }
+      });
+
+      const wrongSummary = wrongItems.length > 0 ? `Sai: ${wrongItems.join(', ')}` : `Đúng 100% 🎉`;
+      const detailedCorrectCount = `${Number(score.toFixed(2))}/${currentQuiz.length} • ${wrongSummary}`;
+
       // TỰ ĐỘNG LƯU BÀI NỘP LÊN HỆ THỐNG ĐÁM MÂY CỦA GIÁO VIÊN
       saveSubmission({
         id: Date.now(),
@@ -2551,12 +2573,14 @@ const questionsBank_Bai4 = [
         className: studentInfo.class,
         lesson: currentLesson ? currentLesson.title : "Bài 2",
         score: finalScore10,
-        correctCount: `${Number(score.toFixed(2))}/${currentQuiz.length}`,
+        correctCount: detailedCorrectCount,
         timeElapsed: timeElapsedStr,
         timestamp: dateFormatted,
         tabSwitchCount: tabSwitchCount,
         isViolation: isAutoSubmit || (tabSwitchCount >= MAX_TAB_SWITCH),
-        violationReason: violationMsg || (tabSwitchCount > 0 ? `Thoát màn hình ${tabSwitchCount} lần` : '')
+        violationReason: violationMsg || (tabSwitchCount > 0 ? `Thoát màn hình ${tabSwitchCount} lần` : ''),
+        wrongSummary: wrongSummary,
+        wrongList: wrongItems
       });
     }
 

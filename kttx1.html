@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Ôn Tập Giữa Học Kỳ I (Phiên Bản 2) - GDKT&PL 12</title>
+  <title>Ôn Tập Giữa Học Kỳ I - Đề Số 1 - GDKT&PL 12</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -43,7 +43,7 @@
     <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
       <div>
         <span class="text-[11px] font-semibold uppercase tracking-wider bg-indigo-800 px-2.5 py-0.5 rounded-full text-indigo-200">GDKT &amp; PL 12 • Kết nối tri thức</span>
-        <h1 class="text-base md:text-lg font-bold mt-0.5">Ôn Tập Giữa Học Kỳ I – Đề Số 1 (Phiên Bản 2)</h1>
+        <h1 class="text-base md:text-lg font-bold mt-0.5">Ôn Tập Giữa Học Kỳ I – Đề Số 1</h1>
       </div>
       <div class="flex items-center gap-2">
         <a href="index.html" class="bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow transition flex items-center gap-1" title="Quay lại Cổng Chọn Bài Học">
@@ -67,7 +67,7 @@
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
         <span>Hệ thống nộp bài trực tuyến: ĐÃ SẴN SÀNG 🟢</span>
       </div>
-      <h2 class="text-2xl font-black text-slate-800">ÔN TẬP GIỮA HỌC KỲ I – MÔN: GDKTPL<br><span class="text-lg text-indigo-700 font-bold">(PHIÊN BẢN 2)</span></h2>
+      <h2 class="text-2xl font-black text-slate-800">ÔN TẬP GIỮA HỌC KỲ I – MÔN: GDKTPL<br><span class="text-lg text-indigo-700 font-bold">ĐỀ SỐ 1</span></h2>
       <p class="text-slate-500 text-sm mt-1.5 mb-6">Môn: Giáo dục Kinh tế và Pháp luật 12 • Thời gian làm bài: <b>15 phút</b>.<br>Cấu trúc: <b>12 câu trắc nghiệm nhiều phương án + 2 câu trắc nghiệm Đúng/Sai</b>. Điểm số tự động lưu về sổ điểm của cô giáo.</p>
       
       <div class="space-y-4 max-w-sm mx-auto text-left">
@@ -649,7 +649,7 @@
       studentInfo.name = name;
       studentInfo.class = sClass;
 
-      const rawQuestions = questionsBank_KTTX1;
+      const rawQuestions = questionsBank_KTTX1.map((q, idx) => ({ ...q, qNum: idx + 1 }));
       const mcqList = rawQuestions.filter(q => q.type !== 'true_false').sort(() => Math.random() - 0.5);
       const tfList = rawQuestions.filter(q => q.type === 'true_false').sort(() => Math.random() - 0.5);
       const rawBank = [...mcqList, ...tfList];
@@ -817,6 +817,7 @@
       score += qScore;
 
       userAnswersLog.push({
+        qNum: qData.qNum,
         type: 'true_false',
         passage: qData.passage,
         question: qData.q,
@@ -838,6 +839,7 @@
       if (isCorrect) score++;
 
       userAnswersLog.push({
+        qNum: qData.qNum,
         question: qData.q,
         options: qData.renderOptions,
         selectedIdx: selectedIdx,
@@ -924,20 +926,42 @@
       const subCode = `#${cleanClass}-KTTX1-${randomPart}${antiSuffix}`;
       document.getElementById('res-sub-code').innerText = subCode;
 
+      // Thu thập các câu làm sai theo số thứ tự đề gốc của cô
+      const wrongItems = [];
+      const sortedLogs = [...userAnswersLog].sort((a, b) => (a.qNum || 0) - (b.qNum || 0));
+
+      sortedLogs.forEach(log => {
+        if (log.type === 'true_false') {
+          const wrongSubs = (log.items || []).filter(it => !it.isCorrect).map(it => it.label);
+          if (wrongSubs.length > 0) {
+            wrongItems.push(`C${log.qNum}(${wrongSubs.join(',')})`);
+          }
+        } else {
+          if (!log.isCorrect) {
+            wrongItems.push(`C${log.qNum}`);
+          }
+        }
+      });
+
+      const wrongSummary = wrongItems.length > 0 ? `Sai: ${wrongItems.join(', ')}` : `Đúng 100% 🎉`;
+      const detailedCorrectCount = `${Number(score.toFixed(2))}/${currentQuiz.length} • ${wrongSummary}`;
+
       saveSubmission({
         id: Date.now(),
         subject: "KTPL12",
         subCode: subCode,
         name: studentInfo.name,
         className: studentInfo.class,
-        lesson: "Đề Kiểm Tra Thường Xuyên – Đề Số 1",
+        lesson: "Ôn Tập Giữa Học Kỳ I – Đề Số 1",
         score: finalScore10,
-        correctCount: `${Number(score.toFixed(2))}/${currentQuiz.length}`,
+        correctCount: detailedCorrectCount,
         timeElapsed: timeElapsedStr,
         timestamp: dateFormatted,
         tabSwitchCount: tabSwitchCount,
         isViolation: isAutoSubmit || (tabSwitchCount >= MAX_TAB_SWITCH),
-        violationReason: violationMsg || (tabSwitchCount > 0 ? `Thoát màn hình ${tabSwitchCount} lần` : '')
+        violationReason: violationMsg || (tabSwitchCount > 0 ? `Thoát màn hình ${tabSwitchCount} lần` : ''),
+        wrongSummary: wrongSummary,
+        wrongList: wrongItems
       });
     }
 
