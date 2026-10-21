@@ -403,8 +403,9 @@
 
     function handleTabLeave() {
       if (!quizInProgress || isAutoSubmitted) return;
+      if (!document.hidden) return; // Chỉ tính khi thực sự ẩn hoặc chuyển tab
       const now = Date.now();
-      if (now - lastTabLeaveTimestamp < 800) return;
+      if (now - lastTabLeaveTimestamp < 1500) return; // Chống rung 1.5s
       lastTabLeaveTimestamp = now;
 
       tabSwitchCount++;
@@ -418,7 +419,7 @@
     }
 
     document.addEventListener('visibilitychange', () => { if (document.hidden) handleTabLeave(); });
-    window.addEventListener('blur', () => { handleTabLeave(); });
+    // Đã loại bỏ window.blur để tránh tính nhầm khi học sinh gõ phím/chạm màn hình điện thoại
 
     function showViolationModal(count) {
       const modal = document.getElementById('violation-modal');

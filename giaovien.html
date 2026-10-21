@@ -207,9 +207,9 @@
     <!-- Hàng thống kê tổng quan tiến độ của Bài học đang chọn -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
-        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Sĩ số danh sách</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Sĩ số</div>
         <div id="stat-total" class="text-2xl font-black text-indigo-600 mt-0.5">134</div>
-        <div id="stat-class-label" class="text-[10px] text-slate-400 mt-0.5">3 lớp (12A5, 12A7, 12A9)</div>
+        <div id="stat-class-label" class="text-[10px] text-slate-400 mt-0.5">Danh sách lớp</div>
       </div>
       <div class="bg-white p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm text-center">
         <div class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Đã nộp bài</div>
@@ -222,7 +222,7 @@
         <div id="stat-pending-percent" class="text-[10px] font-bold text-amber-600 mt-0.5">100%</div>
       </div>
       <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm text-center">
-        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Điểm TB bài này</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Điểm TB</div>
         <div id="stat-avg" class="text-2xl font-black text-blue-600 mt-0.5">0.0</div>
         <div class="text-[10px] text-slate-400 mt-0.5">Thang điểm 10</div>
       </div>
@@ -312,19 +312,7 @@
       </div>
     </div>
 
-    <!-- HỘP CẢNH BÁO BÀI NỘP TỰ GÕ TÊN (CHƯA KHỚP SỔ ĐIỂM) -->
-    <!-- HỘP CẢNH BÁO VI PHẠM THI (THU BÀI SỚM HOẶC RỜI MÀN HÌNH) -->
-    <div id="violation-alert-box" class="mb-4 bg-rose-50 border-2 border-rose-400 rounded-2xl p-4 text-xs shadow-md hidden">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-rose-200">
-        <div class="flex items-center gap-2.5">
-          <span class="text-2xl animate-bounce">🚨</span>
-          <div>
-            <div class="font-black text-rose-900 text-sm flex items-center gap-2">
-              <span id="violation-alert-title">PHÁT HIỆN HỌC SINH VI PHẠM QUY CHẾ THI</span>
-              <span id="violation-alert-count" class="bg-rose-600 text-white px-2 py-0.5 rounded-full text-xs font-bold">0 bài</span>
-            </div>
-            <div class="text-[11px] text-rose-700 font-medium">Hệ thống giám sát phát hiện các lượt thi bị thu bài sớm do rời màn hình quá 3 lần hoặc có cảnh báo thoát app.</div>
-          </div>
+    
         </div>
         <div class="shrink-0">
           <button onclick="filterViolationsOnly()" class="bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow transition flex items-center gap-1.5">
@@ -2886,6 +2874,54 @@ const EXAM_BANK_KTTX2 = [
       };
     }
 
+    
+    let currentCategoryTab = 'exams'; // 'exams' | 'lessons' | 'matrix'
+
+    function switchCategoryTab(tab) {
+      currentCategoryTab = tab;
+      const btnExams = document.getElementById('tab-nav-exams');
+      const btnLessons = document.getElementById('tab-nav-lessons');
+      const btnMatrix = document.getElementById('tab-nav-matrix');
+      const subExams = document.getElementById('subnav-exams');
+      const subLessons = document.getElementById('subnav-lessons');
+
+      const activeClass = "flex-1 py-3 px-3 sm:px-5 rounded-xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition bg-indigo-700 text-white shadow-sm";
+      const inactiveClass = "flex-1 py-3 px-3 sm:px-5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition text-slate-600 hover:text-indigo-800 hover:bg-slate-100";
+
+      if (tab === 'exams') {
+        if (btnExams) btnExams.className = activeClass;
+        if (btnLessons) btnLessons.className = inactiveClass;
+        if (btnMatrix) btnMatrix.className = "py-3 px-3 sm:px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition text-slate-500 hover:text-indigo-700 hover:bg-slate-100 shrink-0 border border-slate-200";
+        if (subExams) subExams.classList.remove('hidden');
+        if (subLessons) subLessons.classList.add('hidden');
+        currentMainViewTab = 'gradebook';
+        // Mặc định chọn đề kiểm tra
+        if (currentActiveLessonId !== 'ktpl' && currentActiveLessonId !== 'kttx1' && currentActiveLessonId !== 'kttx2') {
+          currentActiveLessonId = 'ktpl';
+        }
+      } else if (tab === 'lessons') {
+        if (btnLessons) btnLessons.className = activeClass;
+        if (btnExams) btnExams.className = inactiveClass;
+        if (btnMatrix) btnMatrix.className = "py-3 px-3 sm:px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition text-slate-500 hover:text-indigo-700 hover:bg-slate-100 shrink-0 border border-slate-200";
+        if (subExams) subExams.classList.add('hidden');
+        if (subLessons) subLessons.classList.remove('hidden');
+        currentMainViewTab = 'gradebook';
+        // Mặc định chọn bài 1 nếu đang ở đề thi
+        if (typeof currentActiveLessonId === 'string' && (currentActiveLessonId.startsWith('kttx') || currentActiveLessonId === 'ktpl')) {
+          currentActiveLessonId = 1;
+        }
+      } else if (tab === 'matrix') {
+        if (btnExams) btnExams.className = inactiveClass;
+        if (btnLessons) btnLessons.className = inactiveClass;
+        if (btnMatrix) btnMatrix.className = "py-3 px-3 sm:px-4 rounded-xl font-black text-xs flex items-center justify-center gap-1.5 transition bg-indigo-700 text-white shadow-sm shrink-0 border border-indigo-700";
+        if (subExams) subExams.classList.remove('hidden');
+        if (subLessons) subLessons.classList.add('hidden');
+        currentMainViewTab = 'matrix';
+      }
+
+      switchLesson(currentActiveLessonId);
+    }
+
     function switchLesson(lessonId) {
       currentActiveLessonId = (lessonId === 'kttx2' || lessonId === 'kttx1' || lessonId === 'ALL') ? lessonId : (parseInt(lessonId, 10) || lessonId);
       
@@ -2925,6 +2961,38 @@ const EXAM_BANK_KTTX2 = [
       const tBtnB1 = document.getElementById('toolbar-btn-b1');
       const tBtnB2 = document.getElementById('toolbar-btn-b2');
 
+      
+      // Đồng bộ trạng thái giao diện nút chọn đề / bài
+      const isExamLesson = (lessonId === 'ktpl' || lessonId === 'kttx1' || lessonId === 'kttx2');
+      if (isExamLesson && currentCategoryTab === 'lessons') {
+        currentCategoryTab = 'exams';
+      } else if (!isExamLesson && lessonId !== 'ALL' && currentCategoryTab === 'exams') {
+        currentCategoryTab = 'lessons';
+      }
+
+      const btnKtpl = document.getElementById('btn-quick-ktpl');
+      const btnKttx1 = document.getElementById('btn-quick-kttx1');
+      const btnKttx2 = document.getElementById('btn-quick-kttx2');
+      const btnB1 = document.getElementById('btn-quick-b1');
+      const btnB2 = document.getElementById('btn-quick-b2');
+      const btnB3 = document.getElementById('btn-quick-b3');
+      const btnB4 = document.getElementById('btn-quick-b4');
+
+      const activeBtnExam = "px-3 py-1.5 rounded-xl text-xs font-black transition shadow-xs flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300";
+      const inactiveBtnExam = "px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800";
+
+      const activeBtnLesson = "px-3 py-1.5 rounded-xl text-xs font-black transition shadow-xs flex items-center gap-1.5 bg-indigo-600 text-white ring-2 ring-indigo-300";
+      const inactiveBtnLesson = "px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800";
+
+      if (btnKtpl) btnKtpl.className = (currentActiveLessonId === 'ktpl') ? activeBtnExam : inactiveBtnExam;
+      if (btnKttx1) btnKttx1.className = (currentActiveLessonId === 'kttx1') ? activeBtnExam : inactiveBtnExam;
+      if (btnKttx2) btnKttx2.className = (currentActiveLessonId === 'kttx2') ? activeBtnExam : inactiveBtnExam;
+
+      if (btnB1) btnB1.className = (currentActiveLessonId === 1) ? activeBtnLesson : inactiveBtnLesson;
+      if (btnB2) btnB2.className = (currentActiveLessonId === 2) ? activeBtnLesson : inactiveBtnLesson;
+      if (btnB3) btnB3.className = (currentActiveLessonId === 3) ? activeBtnLesson : inactiveBtnLesson;
+      if (btnB4) btnB4.className = (currentActiveLessonId === 4) ? activeBtnLesson : inactiveBtnLesson;
+
       const activeB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-sm border border-indigo-300 ring-2 ring-indigo-200";
       const inactiveB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-slate-200 text-slate-700 hover:bg-white hover:text-indigo-900";
 
@@ -2934,13 +3002,7 @@ const EXAM_BANK_KTTX2 = [
       if (tBtnB1) tBtnB1.className = (currentActiveLessonId === 1) ? activeB1Style : inactiveB1Style;
       if (tBtnB2) tBtnB2.className = (currentActiveLessonId === 2) ? activeB2Style : inactiveB2Style;
 
-      // Cập nhật nút trong banner tím
-      const btnB1 = document.getElementById('btn-quick-b1');
-      const btnB2 = document.getElementById('btn-quick-b2');
-      const btnB3 = document.getElementById('btn-quick-b3');
-      const btnB4 = document.getElementById('btn-quick-b4');
-      const btnKttx2 = document.getElementById('btn-quick-kttx2');
-      const btnKttx1 = document.getElementById('btn-quick-kttx1');
+      // Đã đồng bộ nút chuyển bài ở trên
       const btnAll = document.getElementById('btn-quick-all');
 
       if (btnB1) btnB1.className = (currentActiveLessonId === 1) 
@@ -3323,6 +3385,16 @@ const EXAM_BANK_KTTX2 = [
       });
 
       allRawSubmissions = list;
+
+      // Cập nhật số bài nộp cho 2 Tab chính
+      const totalExamsSubmissions = allRawSubmissions.filter(s => s.lessonId === 'ktpl' || s.lessonId === 'kttx1' || s.lessonId === 'kttx2').length;
+      const totalLessonsSubmissions = allRawSubmissions.filter(s => typeof s.lessonId === 'number' || (!isNaN(parseInt(s.lessonId, 10)) && s.lessonId !== 'ktpl' && s.lessonId !== 'kttx1' && s.lessonId !== 'kttx2')).length;
+      
+      const badgeTabExams = document.getElementById('badge-tab-exams-count');
+      const badgeTabLessons = document.getElementById('badge-tab-lessons-count');
+      if (badgeTabExams) badgeTabExams.innerText = `${totalExamsSubmissions} bài`;
+      if (badgeTabLessons) badgeTabLessons.innerText = `${totalLessonsSubmissions} bài`;
+
 
       // Cập nhật số đếm trên các nút chuyển nhanh
       const b1Count = allRawSubmissions.filter(s => s.lessonId === 1).length;
@@ -4718,9 +4790,9 @@ const EXAM_BANK_KTTX2 = [
                     })()}
                     ${(() => {
                       const sc = parseInt(s.tabSwitchCount, 10) || 0;
-                      if (s.isViolation || sc >= 3) return `<span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-rose-300">🚫 Thoát ${sc}L (Thu bài sớm)</span>`;
-                      if (sc > 0) return `<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-300">⚠️ Thoát ${sc} lần</span>`;
-                      return `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-emerald-300">🛡️ 0L thoát</span>`;
+                      if (s.isViolation && sc >= 3) return `<span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-rose-300">🚫 Rời ${sc}L (Thu sớm)</span>`;
+                      if (sc > 0) return `<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-300">⚠️ ${sc} lần</span>`;
+                      return `<span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-emerald-200">🛡️ 0L</span>`;
                     })()}
                   </div>
                 </div>
