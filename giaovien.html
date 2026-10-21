@@ -2845,31 +2845,36 @@ const EXAM_BANK_KTTX2 = [
       if (sub.tabSwitchCount !== undefined && sub.tabSwitchCount !== null && sub.tabSwitchCount !== '') {
         count = parseInt(sub.tabSwitchCount, 10) || 0;
       } else {
-        const code = (sub.subCode || '').toUpperCase();
-        const m = code.match(/-V(\d+)/);
+        const code = String(sub.subCode || '').toUpperCase();
+        const m = code.match(/-V(\d+)/i);
         if (m) count = parseInt(m[1], 10) || 0;
       }
 
-      let isViol = false;
-      if (sub.isViolation !== undefined && sub.isViolation !== null) {
-        isViol = Boolean(sub.isViolation);
-      } else {
-        const code = (sub.subCode || '').toUpperCase();
-        isViol = code.includes('X') || count >= 3;
+      const code = String(sub.subCode || '').toUpperCase();
+      // Nhận diện cờ cưỡng chế thu bài: mã có đuôi -V...X (ví dụ: -V3X, -V0X, v.v.)
+      // Tuyệt đối KHÔNG dùng code.includes('X') vì mã bài làm KTTX luôn chứa chữ cái 'X'
+      const hasForcedSuffix = /-V\d+X/i.test(code);
+      let isViol = (count >= 3) || hasForcedSuffix;
+
+      // Không bao giờ coi là vi phạm nếu rời màn hình 0 lần và không có cờ cưỡng chế -V...X
+      if (count === 0 && !hasForcedSuffix) {
+        isViol = false;
       }
 
       let reason = sub.violationReason || '';
-      if (!reason) {
-        if (isViol || count >= 3) {
-          reason = `Thoát màn hình ${count} lần (Thu bài sớm)`;
+      if (!reason || (count === 0 && !hasForcedSuffix)) {
+        if (isViol) {
+          reason = `Thoát màn hình ${count || 3} lần (Thu bài sớm)`;
         } else if (count > 0) {
           reason = `Thoát màn hình ${count} lần`;
+        } else {
+          reason = '';
         }
       }
 
       return {
         tabSwitchCount: count,
-        isViolation: isViol || count >= 3,
+        isViolation: isViol,
         violationReason: reason
       };
     }
@@ -3605,7 +3610,7 @@ const EXAM_BANK_KTTX2 = [
       });
       renderViolationSection(violationList);
 
-      const forcedCount = violationList.filter(s => s.isViolation || (parseInt(s.tabSwitchCount, 10) >= 3)).length;
+      const forcedCount = violationList.filter(s => s.isViolation && (parseInt(s.tabSwitchCount, 10) >= 3 || /-V\d+X/i.test(s.subCode || ''))).length;
       const statViolations = document.getElementById('stat-violations');
       const statViolationsSub = document.getElementById('stat-violations-sub');
       if (statViolations) statViolations.innerText = violationList.length;
@@ -3669,7 +3674,7 @@ const EXAM_BANK_KTTX2 = [
 
       listEl.innerHTML = violations.map(item => {
         const swCount = parseInt(item.tabSwitchCount, 10) || 0;
-        const isForced = item.isViolation || swCount >= 3;
+        const isForced = item.isViolation && (swCount >= 3 || /-V\d+X/i.test(item.subCode || ''));
         const badge = isForced
           ? `<span class="bg-rose-600 text-white font-black px-2 py-0.5 rounded text-[11px] border border-rose-700">🚫 BỊ THU BÀI SỚM (${swCount} lần rời màn hình)</span>`
           : `<span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[11px]">⚠️ Cảnh báo rời màn hình (${swCount} lần)</span>`;
@@ -3712,8 +3717,9 @@ const EXAM_BANK_KTTX2 = [
 
       listEl.innerHTML = unmatchedList.map(item => {
         const swCount = parseInt(item.tabSwitchCount, 10) || 0;
+        const isForced = item.isViolation && (swCount >= 3 || /-V\d+X/i.test(item.subCode || ''));
         let cheatBadge = '';
-        if (item.isViolation || swCount >= 3) {
+        if (isForced) {
           cheatBadge = `<span class="bg-rose-100 text-rose-800 text-[11px] font-bold px-2 py-0.5 rounded border border-rose-300">🚫 Thu bài sớm (Thoát ${swCount}L)</span>`;
         } else if (swCount > 0) {
           cheatBadge = `<span class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2 py-0.5 rounded border border-amber-300">⚠️ Thoát ${swCount} lần</span>`;
@@ -4383,13 +4389,14 @@ const EXAM_BANK_KTTX2 = [
               else badgeStyle = "bg-rose-100 text-rose-800 border-rose-200 font-medium";
 
               const attemptsNote = res.attempts > 1 ? ` (${res.attempts} lần làm)` : '';
-              const cheatNote = (res.isViolation || (res.tabSwitchCount && res.tabSwitchCount >= 3)) ? ' - 🚫 Rời màn hình 3L (Thu sớm)' : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? ` - ⚠️ Rời màn hình ${res.tabSwitchCount}L` : '');
+              const isForced = res.isViolation && ((res.tabSwitchCount && res.tabSwitchCount >= 3) || /-V\d+X/i.test(res.subCode || ''));
+              const cheatNote = isForced ? ' - 🚫 Rời màn hình 3L (Thu sớm)' : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? ` - ⚠️ Rời màn hình ${res.tabSwitchCount}L` : '');
               const tooltip = `${les.title}: ${res.score}đ (${res.correctCount}) lúc ${res.timestamp}${attemptsNote}${cheatNote}`;
 
               return `<td class="py-2 px-1 text-center border-l ${examCellBg}" title="${tooltip}">
                 <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded text-xs font-mono border ${badgeStyle} cursor-pointer hover:scale-110 transition shadow-sm" onclick="openStudentHistoryModal('${safeItemName}', '${safeItemClass}')">
                   ${res.score}
-                  ${(res.isViolation || (res.tabSwitchCount && res.tabSwitchCount >= 3)) ? `<span class="ml-0.5 px-1 py-0.2 bg-rose-600 text-white rounded text-[9px] font-bold">🚫3L</span>` : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? `<span class="ml-0.5 px-0.5 py-0.2 bg-amber-500 text-white rounded text-[9px] font-bold">⚠️${res.tabSwitchCount}</span>` : '')}
+                  ${isForced ? `<span class="ml-0.5 px-1 py-0.2 bg-rose-600 text-white rounded text-[9px] font-bold">🚫3L</span>` : ((res.tabSwitchCount && res.tabSwitchCount > 0) ? `<span class="ml-0.5 px-0.5 py-0.2 bg-amber-500 text-white rounded text-[9px] font-bold">⚠️${res.tabSwitchCount}</span>` : '')}
                 </span>
               </td>`;
             } else {
@@ -4483,7 +4490,8 @@ const EXAM_BANK_KTTX2 = [
           let scoreBadge = '-';
           let cheatBadge = '';
           const swCount = parseInt(item.tabSwitchCount, 10) || 0;
-          if (item.isViolation || swCount >= 3) {
+          const isForced = item.isViolation && (swCount >= 3 || /-V\d+X/i.test(item.subCode || ''));
+          if (isForced) {
             cheatBadge = `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 bg-rose-100 text-rose-800 font-bold px-1.5 py-0.5 rounded text-[10px] border border-rose-300" title="Đã thoát màn hình ${swCount} lần - Bị thu bài sớm"><span>🚫</span> Thoát ${swCount}L (Thu sớm)</span></div>`;
           } else if (swCount > 0) {
             cheatBadge = `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded text-[10px] border border-amber-300" title="Ghi nhận thoát màn hình ${swCount} lần"><span>⚠️</span> Thoát ${swCount} lần</span></div>`;
@@ -4918,7 +4926,8 @@ const EXAM_BANK_KTTX2 = [
         const swCount = parseInt(item.tabSwitchCount, 10) || 0;
         let cheatText = '';
         if (item.isDone) {
-          if (item.isViolation || swCount >= 3) {
+          const isForced = item.isViolation && (swCount >= 3 || /-V\d+X/i.test(item.subCode || ''));
+          if (isForced) {
             cheatText = `Vi phạm: Thoát ${swCount} lần (Bị thu bài sớm)`;
           } else if (swCount > 0) {
             cheatText = `Thoát màn hình ${swCount} lần`;
