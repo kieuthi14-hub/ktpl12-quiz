@@ -64,6 +64,20 @@
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
         <span>Hệ thống nộp bài trực tuyến: ĐÃ KẾT NỐI 🟢</span>
       </div>
+      <!-- BANNER DE ON TAP GIUA KY I -->
+      <div class="mb-5 p-3.5 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 text-left flex items-center justify-between gap-3 shadow-sm">
+        <div>
+          <div class="text-xs font-black text-amber-950 uppercase flex items-center gap-1.5">
+            <span>⭐</span> <span>ĐỀ ÔN TẬP GIỮA KỲ I - MÔN KTPL</span>
+          </div>
+          <div class="text-[11px] text-amber-800 mt-0.5 leading-snug">
+            Cấu trúc chuẩn: <b>24 câu TN nhiều lựa chọn + 4 câu Đúng/Sai</b>. Thời gian: 45 phút.
+          </div>
+        </div>
+        <a href="ktpl.html" class="shrink-0 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl shadow transition flex items-center gap-1">
+          <span>Vào thi</span> <span>👉</span>
+        </a>
+      </div>
       <h2 class="text-2xl font-bold text-slate-800">Luyện Tập Trắc Nghiệm Phản Xạ</h2>
       <p class="text-slate-500 text-sm mt-2 mb-6">Hệ thống trắc nghiệm phản xạ KTPL 12 Kết nối tri thức. Em chỉ cần chọn bài học, chọn lớp và tên là bắt đầu làm bài. Điểm số sẽ tự động lưu về bảng điểm của cô giáo.</p>
       
@@ -74,6 +88,9 @@
             <span class="text-[11px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300 font-bold">15 Phút</span>
           </label>
           <select id="selected-lesson" onchange="onLessonChange()" class="w-full px-4 py-3 rounded-xl border-2 border-indigo-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-indigo-50/50 font-bold text-indigo-950 transition shadow-sm">
+            <option value="ktpl" class="font-bold text-amber-700 bg-amber-50">⭐ Đề Ôn Tập Giữa Kỳ I - Môn KTPL (28 câu: 24 TN + 4 Đúng/Sai)</option>
+            <option value="kttx1">⭐ Ôn tập Giữa HK1 - Đề số 1 (14 câu)</option>
+            <option value="kttx2">⭐ Ôn tập Giữa HK1 - Đề số 2 (14 câu)</option>
             <option value="4" selected>📕 Bài 4: An sinh xã hội (Trắc nghiệm &amp; Đúng/Sai)</option>
             <option value="3">📙 Bài 3: Bảo hiểm (20 câu)</option>
             <option value="2">📗 Bài 2: Hội nhập kinh tế quốc tế (20 câu)</option>
@@ -1882,6 +1899,18 @@ const questionsBank_Bai4 = [
     function onLessonChange() {
       const lessonSelect = document.getElementById('selected-lesson');
       const lessonVal = lessonSelect ? lessonSelect.value : '4';
+      if (lessonVal === 'ktpl') {
+        window.location.href = 'ktpl.html';
+        return;
+      }
+      if (lessonVal === 'kttx1') {
+        window.location.href = 'kttx1.html';
+        return;
+      }
+      if (lessonVal === 'kttx2') {
+        window.location.href = 'kttx2.html';
+        return;
+      }
       currentLesson = LESSONS_DATA[lessonVal] || LESSONS_DATA[4] || LESSONS_DATA[1];
       const headerTitle = document.getElementById('header-lesson-title');
       if (headerTitle) headerTitle.innerText = currentLesson.title;
@@ -1893,6 +1922,10 @@ const questionsBank_Bai4 = [
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const baiParam = urlParams.get('bai');
+      if (baiParam === 'ktpl' || baiParam === 'giuaky' || baiParam === 'gk') {
+        window.location.replace('ktpl.html');
+        return;
+      }
       if (baiParam === 'kttx1') {
         window.location.replace('kttx1.html');
         return;

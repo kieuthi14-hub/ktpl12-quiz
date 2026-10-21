@@ -142,6 +142,11 @@
         
         <!-- Các nút chuyển nhanh bài học & đề kiểm tra -->
         <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-quick-ktpl" onclick="switchLesson('ktpl')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md">
+            <span>⭐</span> <span>Đề Giữa Kỳ (KTPL)</span>
+            <span id="badge-count-ktpl" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
+          </button>
+
           <button id="btn-quick-kttx1" onclick="switchLesson('kttx1')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300 font-black shadow-md">
             <span>⭐</span> <span>Ôn Giữa Kỳ 1: Đề 1</span>
             <span id="badge-count-kttx1" class="bg-indigo-900 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
@@ -594,14 +599,16 @@
 
     // DANH SÁCH ĐẦY ĐỦ CÁC BÀI HỌC VÀ ĐỀ THI HIỂN THỊ TRÊN MA TRẬN
     const MATRIX_ASSESSMENTS = [
+      { id: 'ktpl', code: 'ĐGK', title: "Đề Ôn tập Giữa HK1 - Môn KTPL", short: "Đề GK", fileCode: "OnTap_GiuaKy1_KTPL", isExam: true },
       { id: 'kttx1', code: 'Đ1', title: "Ôn tập Giữa HK1 - Đề số 1", short: "Đề 1", fileCode: "OnTap_GiuaKy1_De1", isExam: true },
       { id: 'kttx2', code: 'Đ2', title: "Ôn tập Giữa HK1 - Đề số 2", short: "Đề 2", fileCode: "OnTap_GiuaKy1_De2", isExam: true },
       ...ALL_16_LESSONS
     ];
 
     function getLessonMeta(lessonId) {
-      if (lessonId === 'kttx1') return MATRIX_ASSESSMENTS[0];
-      if (lessonId === 'kttx2') return MATRIX_ASSESSMENTS[1];
+      if (lessonId === 'ktpl') return MATRIX_ASSESSMENTS[0];
+      if (lessonId === 'kttx1') return MATRIX_ASSESSMENTS[1];
+      if (lessonId === 'kttx2') return MATRIX_ASSESSMENTS[2];
       const parsed = parseInt(lessonId, 10);
       return ALL_16_LESSONS.find(l => l.id === parsed) || {
         id: lessonId,
@@ -626,7 +633,7 @@
         if (u === 'all') {
           currentActiveLessonId = 'ALL';
           currentMainViewTab = 'matrix';
-        } else if (u === 'kttx2' || u === 'kttx1') {
+        } else if (u === 'ktpl' || u === 'kttx2' || u === 'kttx1') {
           currentActiveLessonId = u;
           currentMainViewTab = 'gradebook';
         } else {
@@ -662,6 +669,458 @@
       applyFilters();
     }
 
+
+const EXAM_BANK_KTPL = [
+  {
+    "q": "Người lao động tham gia loại hình bảo hiểm nào dưới đây để khi hết tuổi lao động được hưởng lương hưu hằng tháng?",
+    "options": [
+      "Bảo hiểm y tế.",
+      "Bảo hiểm xã hội.",
+      "Bảo hiểm thất nghiệp.",
+      "Bảo hiểm nhân thọ."
+    ],
+    "answer": 1,
+    "exp": "Bảo hiểm xã hội là sự bảo đảm thay thế hoặc bù đắp một phần thu nhập của người lao động khi họ bị giảm hoặc mất thu nhập do ốm đau, thai sản, tai nạn lao động, bệnh nghề nghiệp, hết tuổi lao động hoặc chết. Khi hết tuổi lao động và đủ điều kiện về thời gian đóng BHXH, người lao động sẽ được hưởng lương hưu hằng tháng.",
+    "qNum": 1,
+    "type": "mcq"
+  },
+  {
+    "q": "Một quốc gia có tuổi thọ trung bình của người dân tăng lên, tỉ lệ người biết chữ và số năm đi học tăng, thu nhập bình quân đầu người tăng. Những thay đổi đó phản ánh sự cải thiện của chỉ tiêu nào dưới đây?",
+    "options": [
+      "Tốc độ tăng trưởng kinh tế.",
+      "Chỉ số giá tiêu dùng (CPI).",
+      "Chỉ số phát triển con người (HDI).",
+      "Tỉ lệ thất nghiệp."
+    ],
+    "answer": 2,
+    "exp": "Chỉ số phát triển con người (HDI) là thước đo tổng hợp phản ánh sự phát triển của con người trên 3 phương diện: sức khỏe (tuổi thọ trung bình), giáo dục (tỉ lệ biết chữ và số năm đi học) và thu nhập (GNI bình quân đầu người).",
+    "qNum": 2,
+    "type": "mcq"
+  },
+  {
+    "passage": "Sau đợt mưa lũ gây ngập lụt trên diện rộng, chính quyền xã A đã kịp thời cấp phát gạo, tiền hỗ trợ đột xuất cho các hộ dân bị thiệt hại để ổn định cuộc sống. Bên cạnh đó, những người cao tuổi cô đơn, không có thu nhập trong xã được nhận trợ cấp xã hội hằng tháng; thanh niên sau lũ được giới thiệu việc làm tại các doanh nghiệp trên địa bàn; trạm y tế xã tổ chức khám bệnh, cấp thuốc miễn phí cho người dân vùng ngập.",
+    "q": "Việc chính quyền xã A cấp phát gạo, tiền hỗ trợ đột xuất cho các hộ dân bị thiệt hại do mưa lũ thuộc chính sách an sinh xã hội nào dưới đây?",
+    "options": [
+      "Chính sách trợ giúp xã hội.",
+      "Chính sách về bảo hiểm.",
+      "Chính sách hỗ trợ việc làm, thu nhập và giảm nghèo.",
+      "Chính sách bảo đảm các dịch vụ xã hội cơ bản."
+    ],
+    "answer": 0,
+    "exp": "Chính sách trợ giúp xã hội gồm trợ giúp thường xuyên và trợ giúp đột xuất. Việc cấp phát gạo, tiền hỗ trợ khẩn cấp cho các hộ dân chịu hậu quả thiên tai, mưa lũ thuộc chính sách trợ giúp xã hội đột xuất.",
+    "qNum": 3,
+    "type": "mcq"
+  },
+  {
+    "passage": "Sau đợt mưa lũ gây ngập lụt trên diện rộng, chính quyền xã A đã kịp thời cấp phát gạo, tiền hỗ trợ đột xuất cho các hộ dân bị thiệt hại để ổn định cuộc sống. Bên cạnh đó, những người cao tuổi cô đơn, không có thu nhập trong xã được nhận trợ cấp xã hội hằng tháng; thanh niên sau lũ được giới thiệu việc làm tại các doanh nghiệp trên địa bàn; trạm y tế xã tổ chức khám bệnh, cấp thuốc miễn phí cho người dân vùng ngập.",
+    "q": "Việc người cao tuổi cô đơn, không có thu nhập ở xã A được nhận trợ cấp xã hội hằng tháng thể hiện nội dung nào dưới đây của chính sách trợ giúp xã hội?",
+    "options": [
+      "Chỉ hỗ trợ cho người đã đóng phí bảo hiểm đầy đủ.",
+      "Chỉ hỗ trợ cho người đang làm việc tại doanh nghiệp.",
+      "Chỉ hỗ trợ một lần duy nhất khi xảy ra thiên tai.",
+      "Hỗ trợ thường xuyên cho người có hoàn cảnh đặc biệt khó khăn."
+    ],
+    "answer": 3,
+    "exp": "Trợ cấp xã hội hằng tháng cho người cao tuổi cô đơn, không có nguồn thu nhập và không có người phụng dưỡng thuộc chính sách trợ giúp xã hội thường xuyên từ ngân sách nhà nước.",
+    "qNum": 4,
+    "type": "mcq"
+  },
+  {
+    "passage": "Doanh nghiệp H chuyên sản xuất giày thể thao xuất khẩu sang thị trường Liên minh châu Âu (EU) theo Hiệp định thương mại tự do Việt Nam – EU (EVFTA). Để lô hàng được hưởng mức thuế nhập khẩu ưu đãi theo cam kết của hiệp định, doanh nghiệp phải chứng minh hàng hóa đáp ứng quy tắc xuất xứ. Vì vậy, doanh nghiệp H đã chủ động rà soát nguồn nguyên liệu, tăng tỉ lệ nguyên liệu có xuất xứ từ Việt Nam và các nước thành viên của hiệp định, đồng thời lưu trữ đầy đủ chứng từ để xuất trình khi cơ quan có thẩm quyền yêu cầu.",
+    "q": "Hoạt động doanh nghiệp H bán giày thể thao sang thị trường EU thuộc hình thức hoạt động kinh tế đối ngoại nào dưới đây?",
+    "options": [
+      "Thương mại quốc tế.",
+      "Đầu tư quốc tế.",
+      "Dịch vụ thu ngoại tệ.",
+      "Hợp tác quốc tế về lao động."
+    ],
+    "answer": 0,
+    "exp": "Thương mại quốc tế là sự trao đổi hàng hóa và dịch vụ giữa các quốc gia thông qua hoạt động xuất nhập khẩu. Doanh nghiệp H bán giày thể thao sang EU là hoạt động xuất khẩu hàng hóa.",
+    "qNum": 5,
+    "type": "mcq"
+  },
+  {
+    "passage": "Doanh nghiệp H chuyên sản xuất giày thể thao xuất khẩu sang thị trường Liên minh châu Âu (EU) theo Hiệp định thương mại tự do Việt Nam – EU (EVFTA). Để lô hàng được hưởng mức thuế nhập khẩu ưu đãi theo cam kết của hiệp định, doanh nghiệp phải chứng minh hàng hóa đáp ứng quy tắc xuất xứ. Vì vậy, doanh nghiệp H đã chủ động rà soát nguồn nguyên liệu, tăng tỉ lệ nguyên liệu có xuất xứ từ Việt Nam và các nước thành viên của hiệp định, đồng thời lưu trữ đầy đủ chứng từ để xuất trình khi cơ quan có thẩm quyền yêu cầu.",
+    "q": "Trong thông tin trên, doanh nghiệp H chứng minh hàng hóa đáp ứng quy tắc xuất xứ nhằm mục đích nào dưới đây?",
+    "options": [
+      "Để được miễn mọi thủ tục kiểm tra hàng hóa.",
+      "Để thay đổi chính sách thuế quan của EU.",
+      "Để được hưởng ưu đãi thuế quan theo hiệp định thương mại tự do.",
+      "Để trở thành thành viên của hiệp định thương mại."
+    ],
+    "answer": 2,
+    "exp": "Chứng minh đáp ứng quy tắc xuất xứ theo hiệp định EVFTA là điều kiện bắt buộc để hàng hóa xuất khẩu được áp dụng mức thuế nhập khẩu ưu đãi đặc biệt (thậm chí 0%) theo cam kết cắt giảm thuế quan.",
+    "qNum": 6,
+    "type": "mcq"
+  },
+  {
+    "passage": "Doanh nghiệp H chuyên sản xuất giày thể thao xuất khẩu sang thị trường Liên minh châu Âu (EU) theo Hiệp định thương mại tự do Việt Nam – EU (EVFTA). Để lô hàng được hưởng mức thuế nhập khẩu ưu đãi theo cam kết của hiệp định, doanh nghiệp phải chứng minh hàng hóa đáp ứng quy tắc xuất xứ. Vì vậy, doanh nghiệp H đã chủ động rà soát nguồn nguyên liệu, tăng tỉ lệ nguyên liệu có xuất xứ từ Việt Nam và các nước thành viên của hiệp định, đồng thời lưu trữ đầy đủ chứng từ để xuất trình khi cơ quan có thẩm quyền yêu cầu.",
+    "q": "Nếu lô hàng của doanh nghiệp H không đáp ứng quy tắc xuất xứ theo EVFTA thì hàng hóa đó sẽ phải chịu hệ quả nào dưới đây?",
+    "options": [
+      "Bị cấm nhập khẩu vào thị trường EU.",
+      "Không được hưởng ưu đãi thuế quan, phải chịu mức thuế nhập khẩu thông thường.",
+      "Được hưởng mức thuế ưu đãi cao hơn.",
+      "Được hoàn lại toàn bộ thuế sau một năm."
+    ],
+    "answer": 1,
+    "exp": "Nếu hàng hóa không đáp ứng hoặc không chứng minh được quy tắc xuất xứ theo hiệp định thương mại tự do, hàng hóa đó sẽ bị tước quyền hưởng thuế suất ưu đãi EVFTA và phải chịu mức thuế nhập khẩu thông thường (MFN).",
+    "qNum": 7,
+    "type": "mcq"
+  },
+  {
+    "q": "Chỉ tiêu nào dưới đây không thuộc nhóm chỉ tiêu tăng trưởng kinh tế?",
+    "options": [
+      "Tổng sản phẩm quốc nội (GDP).",
+      "Tổng thu nhập quốc dân (GNI).",
+      "Tổng sản phẩm quốc nội bình quân đầu người (GDP/người).",
+      "Chỉ số phát triển con người (HDI)."
+    ],
+    "answer": 3,
+    "exp": "Các chỉ tiêu tăng trưởng kinh tế gồm GDP, GNI, GDP/người, GNI/người (phản ánh mặt lượng). Còn chỉ số phát triển con người (HDI) là chỉ tiêu đánh giá chất lượng phát triển kinh tế và tiến bộ xã hội.",
+    "qNum": 8,
+    "type": "mcq"
+  },
+  {
+    "q": "Chỉ tiêu nào dưới đây thuộc nhóm chỉ tiêu về tiến bộ xã hội của phát triển kinh tế?",
+    "options": [
+      "Tỉ lệ hộ nghèo đa chiều.",
+      "Tổng sản phẩm quốc nội bình quân đầu người.",
+      "Kim ngạch xuất khẩu hàng hóa.",
+      "Chỉ số giá tiêu dùng (CPI)."
+    ],
+    "answer": 0,
+    "exp": "Tiến bộ xã hội trong phát triển kinh tế được đo lường qua các tiêu chí: tỉ lệ hộ nghèo đa chiều, hệ số bất bình đẳng trong phân phối thu nhập (GINI), chỉ số phát triển con người (HDI)...",
+    "qNum": 9,
+    "type": "mcq"
+  },
+  {
+    "q": "Trong nhiều năm, nền kinh tế nước M chỉ đạt mức tăng tổng sản phẩm quốc nội qua từng năm, nhưng cơ cấu kinh tế hầu như không thay đổi và chênh lệch giàu – nghèo ngày càng lớn. Nhận định nào dưới đây đúng về nền kinh tế nước M?",
+    "options": [
+      "Đã đạt được phát triển kinh tế toàn diện.",
+      "Mới đạt tăng trưởng kinh tế, chưa đạt phát triển kinh tế.",
+      "Đã bảo đảm tiến bộ xã hội cho người dân.",
+      "Đã chuyển dịch cơ cấu kinh tế theo hướng hiện đại."
+    ],
+    "answer": 1,
+    "exp": "Phát triển kinh tế bao gồm 3 nội dung: tăng trưởng kinh tế bền vững, chuyển dịch cơ cấu kinh tế theo hướng hiện đại và thực hiện tiến bộ xã hội. Nước M chỉ tăng GDP mà cơ cấu kinh tế trì trệ và bất bình đẳng gia tăng thì mới chỉ đạt tăng trưởng về lượng chứ chưa đạt phát triển kinh tế.",
+    "qNum": 10,
+    "type": "mcq"
+  },
+  {
+    "q": "Hằng năm, trẻ em trong độ tuổi ở các xã vùng cao đều được tiêm chủng mở rộng miễn phí tại trạm y tế xã. Hoạt động này thuộc nội dung của chính sách an sinh xã hội nào dưới đây?",
+    "options": [
+      "Chính sách về bảo hiểm.",
+      "Chính sách trợ giúp xã hội.",
+      "Chính sách bảo đảm các dịch vụ xã hội cơ bản.",
+      "Chính sách hỗ trợ việc làm, thu nhập và giảm nghèo."
+    ],
+    "answer": 2,
+    "exp": "Chính sách bảo đảm các dịch vụ xã hội cơ bản nhằm bảo đảm cho mọi người dân được tiếp cận ở mức tối thiểu các dịch vụ thiết yếu: y tế công, giáo dục, nhà ở, nước sạch và thông tin. Tiêm chủng miễn phí thuộc dịch vụ y tế công cơ bản.",
+    "qNum": 11,
+    "type": "mcq"
+  },
+  {
+    "q": "Một nhà đầu tư nước ngoài mua cổ phần, trái phiếu của doanh nghiệp Việt Nam trên thị trường chứng khoán để hưởng lợi nhuận, không trực tiếp tham gia quản lí doanh nghiệp. Hình thức đầu tư này là",
+    "options": [
+      "Đầu tư trực tiếp nước ngoài (FDI).",
+      "Thương mại quốc tế.",
+      "Dịch vụ thu ngoại tệ.",
+      "Đầu tư gián tiếp nước ngoài (FPI)."
+    ],
+    "answer": 3,
+    "exp": "Đầu tư gián tiếp nước ngoài (FPI) là hình thức đầu tư mà nhà đầu tư mua cổ phiếu, trái phiếu, chứng chỉ quỹ trên thị trường tài chính để hưởng lợi tức mà không trực tiếp nắm quyền kiểm soát, điều hành sản xuất kinh doanh.",
+    "qNum": 12,
+    "type": "mcq"
+  },
+  {
+    "q": "Tăng trưởng kinh tế phản ánh sự thay đổi nào dưới đây của nền kinh tế?",
+    "options": [
+      "Sự thay đổi về lượng.",
+      "Sự thay đổi về chất.",
+      "Sự chuyển dịch về cơ cấu.",
+      "Sự tiến bộ về xã hội."
+    ],
+    "answer": 0,
+    "exp": "Tăng trưởng kinh tế chủ yếu phản ánh sự thay đổi thuần túy về quy mô, số lượng (sự gia tăng về lượng của GDP/GNI) của nền kinh tế.",
+    "qNum": 13,
+    "type": "mcq"
+  },
+  {
+    "q": "Hoạt động nào dưới đây không thuộc hệ thống an sinh xã hội?",
+    "options": [
+      "Trợ cấp xã hội hằng tháng cho trẻ em mồ côi.",
+      "Cá nhân mua cổ phiếu để đầu tư sinh lời.",
+      "Hỗ trợ học nghề cho người lao động bị mất việc làm.",
+      "Xây dựng nhà ở xã hội cho người có thu nhập thấp."
+    ],
+    "answer": 1,
+    "exp": "Cá nhân mua cổ phiếu sinh lời là hành vi đầu tư tài chính mang tính cá nhân, tìm kiếm lợi nhuận thương mại, không thuộc hệ thống chính sách an sinh xã hội do Nhà nước và cộng đồng tổ chức.",
+    "qNum": 14,
+    "type": "mcq"
+  },
+  {
+    "q": "Theo sách giáo khoa, người tham gia bảo hiểm xã hội tự nguyện được hưởng các chế độ nào dưới đây?",
+    "options": [
+      "Ốm đau và thai sản.",
+      "Thai sản và thất nghiệp.",
+      "Hưu trí và tử tuất.",
+      "Ốm đau và tai nạn lao động."
+    ],
+    "answer": 2,
+    "exp": "Theo Luật Bảo hiểm xã hội và SGK KTPL 12: Người tham gia bảo hiểm xã hội tự nguyện được hưởng 2 chế độ là hưu trí và tử tuất.",
+    "qNum": 15,
+    "type": "mcq"
+  },
+  {
+    "passage": "Anh T là thợ xây làm việc tự do, không kí hợp đồng lao động với doanh nghiệp nào. Để có thu nhập khi về già, anh đăng kí tham gia bảo hiểm xã hội tự nguyện, lựa chọn mức đóng phù hợp với thu nhập và đóng đều đặn theo tháng. Đồng thời, anh T tham gia bảo hiểm y tế hộ gia đình. Tháng trước, anh bị bệnh phải nằm viện điều trị, một phần chi phí khám, chữa bệnh của anh đã được quỹ bảo hiểm y tế chi trả nên gánh nặng tài chính của gia đình giảm đi đáng kể.",
+    "q": "Việc anh T được lựa chọn mức đóng và đóng bảo hiểm xã hội tự nguyện theo tháng thể hiện đặc điểm nào dưới đây của loại hình bảo hiểm này?",
+    "options": [
+      "Người tham gia được lựa chọn mức đóng, phương thức đóng phù hợp với thu nhập của mình.",
+      "Chỉ dành cho người làm việc trong cơ quan nhà nước.",
+      "Người sử dụng lao động phải đóng toàn bộ thay cho người lao động.",
+      "Mọi công dân đều bắt buộc phải tham gia."
+    ],
+    "answer": 0,
+    "exp": "Bảo hiểm xã hội tự nguyện cho phép người lao động tự do tự nguyện tham gia và linh hoạt lựa chọn mức đóng, phương thức đóng (đóng theo tháng, quý, 6 tháng hoặc 1 năm) phù hợp với thu nhập.",
+    "qNum": 16,
+    "type": "mcq"
+  },
+  {
+    "passage": "Anh T là thợ xây làm việc tự do, không kí hợp đồng lao động với doanh nghiệp nào. Để có thu nhập khi về già, anh đăng kí tham gia bảo hiểm xã hội tự nguyện, lựa chọn mức đóng phù hợp với thu nhập và đóng đều đặn theo tháng. Đồng thời, anh T tham gia bảo hiểm y tế hộ gia đình. Tháng trước, anh bị bệnh phải nằm viện điều trị, một phần chi phí khám, chữa bệnh của anh đã được quỹ bảo hiểm y tế chi trả nên gánh nặng tài chính của gia đình giảm đi đáng kể.",
+    "q": "Một phần chi phí nằm viện của anh T được chi trả là nhờ anh đã tham gia loại hình bảo hiểm nào dưới đây?",
+    "options": [
+      "Bảo hiểm xã hội tự nguyện.",
+      "Bảo hiểm thất nghiệp.",
+      "Bảo hiểm nhân thọ.",
+      "Bảo hiểm y tế."
+    ],
+    "answer": 3,
+    "exp": "Bảo hiểm y tế là loại hình bảo hiểm thuộc lĩnh vực chăm sóc sức khỏe cộng đồng, hỗ trợ chi trả viện phí, thuốc men khi người tham gia ốm đau, bệnh tật phải điều trị nội trú hoặc ngoại trú.",
+    "qNum": 17,
+    "type": "mcq"
+  },
+  {
+    "q": "Các quốc gia thành viên xóa bỏ thuế quan và hàng rào phi thuế quan trong buôn bán với nhau, đồng thời thống nhất áp dụng một biểu thuế quan chung đối với các nước ngoài khối. Hình thức liên kết này thuộc mức độ hội nhập kinh tế quốc tế nào dưới đây?",
+    "options": [
+      "Hiệp định thương mại tự do.",
+      "Liên minh thuế quan.",
+      "Thị trường chung.",
+      "Thỏa thuận thương mại ưu đãi."
+    ],
+    "answer": 1,
+    "exp": "Liên minh thuế quan (Customs Union) là mức độ liên kết kinh tế quốc tế trong đó các nước thành viên bãi bỏ thuế quan và các hạn chế phi thuế quan đối với nhau, đồng thời thống nhất áp dụng một mức thuế quan chung đối với các nước ngoài liên minh.",
+    "qNum": 18,
+    "type": "mcq"
+  },
+  {
+    "passage": "Tập đoàn điện tử nước ngoài S đầu tư xây dựng nhà máy tại khu công nghiệp của tỉnh B, trực tiếp tuyển dụng và trả lương cho hàng nghìn lao động địa phương. Giá trị sản xuất do nhà máy tạo ra trên lãnh thổ Việt Nam đóng góp vào tăng trưởng kinh tế của Việt Nam, đồng thời nhà máy nhập khẩu linh kiện từ nước ngoài và xuất khẩu sản phẩm hoàn chỉnh ra thị trường thế giới.",
+    "q": "Giá trị do nhà máy của tập đoàn S tạo ra trên lãnh thổ Việt Nam được tính trực tiếp vào chỉ tiêu nào dưới đây của Việt Nam?",
+    "options": [
+      "Tổng thu nhập quốc dân (GNI).",
+      "Tổng thu nhập quốc dân bình quân đầu người (GNI/người).",
+      "Tổng sản phẩm quốc nội (GDP).",
+      "Chỉ số phát triển con người (HDI)."
+    ],
+    "answer": 2,
+    "exp": "Tổng sản phẩm quốc nội (GDP) được tính theo nguyên tắc lãnh thổ: toàn bộ giá trị hàng hóa và dịch vụ cuối cùng được sản xuất trong phạm vi biên giới quốc gia trong một thời kỳ nhất định, bất kể chủ sở hữu là công dân trong nước hay doanh nghiệp FDI có vốn đầu tư nước ngoài.",
+    "qNum": 19,
+    "type": "mcq"
+  },
+  {
+    "passage": "Tập đoàn điện tử nước ngoài S đầu tư xây dựng nhà máy tại khu công nghiệp của tỉnh B, trực tiếp tuyển dụng và trả lương cho hàng nghìn lao động địa phương. Giá trị sản xuất do nhà máy tạo ra trên lãnh thổ Việt Nam đóng góp vào tăng trưởng kinh tế của Việt Nam, đồng thời nhà máy nhập khẩu linh kiện từ nước ngoài và xuất khẩu sản phẩm hoàn chỉnh ra thị trường thế giới.",
+    "q": "Việc tập đoàn S bỏ vốn xây dựng nhà máy và trực tiếp tổ chức sản xuất tại Việt Nam thuộc hình thức hoạt động kinh tế đối ngoại nào dưới đây?",
+    "options": [
+      "Đầu tư trực tiếp nước ngoài.",
+      "Đầu tư gián tiếp nước ngoài.",
+      "Thương mại quốc tế.",
+      "Dịch vụ thu ngoại tệ."
+    ],
+    "answer": 0,
+    "exp": "Đầu tư trực tiếp nước ngoài (FDI) là việc nhà đầu tư nước ngoài đưa vốn vào nước sở tại để xây dựng nhà máy, cơ sở hạ tầng và trực tiếp tham gia quản lý, điều hành hoạt động sản xuất kinh doanh.",
+    "qNum": 20,
+    "type": "mcq"
+  },
+  {
+    "q": "Việt Nam và Nhật Bản kí kết một hiệp định thương mại tự do chỉ áp dụng trong quan hệ giữa hai nước. Theo phạm vi tham gia, đây là hình thức hội nhập kinh tế quốc tế nào dưới đây?",
+    "options": [
+      "Hội nhập toàn cầu.",
+      "Hội nhập khu vực.",
+      "Hội nhập đa phương.",
+      "Hội nhập song phương."
+    ],
+    "answer": 3,
+    "exp": "Hội nhập kinh tế song phương là hình thức hợp tác kinh tế giữa hai quốc gia (ví dụ: Hiệp định đối tác kinh tế Việt Nam - Nhật Bản VJEPA).",
+    "qNum": 21,
+    "type": "mcq"
+  },
+  {
+    "q": "Năm 2025, nền kinh tế nước X có tổng tiêu dùng cuối cùng của hộ gia đình (C) là 420 tỉ USD, tổng đầu tư (I) là 180 tỉ USD, chi tiêu của Chính phủ (G) là 120 tỉ USD, giá trị xuất khẩu (X) là 210 tỉ USD, giá trị nhập khẩu (M) là 130 tỉ USD. Biết dân số nước X là 50 triệu người. Căn cứ vào thông tin trên, GDP bình quân đầu người của nước X năm 2025 là bao nhiêu?",
+    "options": [
+      "13.000 USD/người.",
+      "16.000 USD/người.",
+      "18.000 USD/người.",
+      "20.000 USD/người."
+    ],
+    "answer": 1,
+    "exp": "Áp dụng công thức chi tiêu tính GDP: GDP = C + I + G + (X - M) = 420 + 180 + 120 + (210 - 130) = 800 tỉ USD. GDP bình quân đầu người = Tổng GDP / Dân số = 800 tỉ USD / 50 triệu người = 800.000.000.000 / 50.000.000 = 16.000 USD/người.",
+    "qNum": 22,
+    "type": "mcq"
+  },
+  {
+    "q": "Năm 2025, nền kinh tế nước X có tổng tiêu dùng của hộ gia đình là 700 tỉ USD, tổng đầu tư là 300 tỉ USD, chi tiêu của Chính phủ là 200 tỉ USD, giá trị xuất khẩu là 260 tỉ USD và giá trị nhập khẩu là 210 tỉ USD. Biết thu nhập ròng từ các yếu tố sản xuất với nước ngoài là 50 tỉ USD. Căn cứ vào thông tin trên, tổng thu nhập quốc dân (GNI) của nước X năm 2025 là bao nhiêu?",
+    "options": [
+      "1.150 tỉ USD.",
+      "1.200 tỉ USD.",
+      "1.250 tỉ USD.",
+      "1.300 tỉ USD."
+    ],
+    "answer": 3,
+    "exp": "Bước 1: Tính GDP = C + I + G + (X - M) = 700 + 300 + 200 + (260 - 210) = 1.250 tỉ USD. Bước 2: Tính GNI = GDP + Thu nhập ròng từ các yếu tố sản xuất từ nước ngoài = 1.250 + 50 = 1.300 tỉ USD.",
+    "qNum": 23,
+    "type": "mcq"
+  },
+  {
+    "q": "Năm 2025, quốc gia Y có tổng sản phẩm quốc nội (GDP) đạt 1.000 tỉ USD, tổng thu nhập quốc dân (GNI) đạt 940 tỉ USD. Biết thu nhập từ các yếu tố sản xuất của người cư trú quốc gia Y nhận được từ nước ngoài là 90 tỉ USD. Căn cứ vào thông tin trên, thu nhập của nhân tố nước ngoài nhận được từ quốc gia Y trong năm 2025 là bao nhiêu?",
+    "options": [
+      "60 tỉ USD.",
+      "90 tỉ USD.",
+      "150 tỉ USD.",
+      "240 tỉ USD."
+    ],
+    "answer": 2,
+    "exp": "Công thức: GNI = GDP + Thu nhập nhận từ nước ngoài - Thu nhập trả cho nước ngoài. Thay số: 940 = 1.000 + 90 - X => X = 1.090 - 940 = 150 tỉ USD. Vậy thu nhập của nhân tố nước ngoài nhận được từ quốc gia Y là 150 tỉ USD.",
+    "qNum": 24,
+    "type": "mcq"
+  },
+  {
+    "passage": "Theo báo cáo của cơ quan bảo hiểm xã hội địa phương, đến cuối năm 2025, tỉ lệ người dân tham gia bảo hiểm y tế đạt 92% dân số. Số người tham gia bảo hiểm xã hội tự nguyện tăng nhanh do nhiều lao động tự do chủ động đăng kí đóng để tích lũy thời gian hưởng lương hưu. Trong năm, cơ quan bảo hiểm xã hội đã chi trả lương hưu, trợ cấp bảo hiểm xã hội cho hàng chục nghìn người; người lao động bị mất việc làm còn được hỗ trợ học nghề và giới thiệu việc làm từ quỹ bảo hiểm thất nghiệp.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Người tham gia bảo hiểm xã hội tự nguyện được hưởng đầy đủ các chế độ ốm đau và thai sản như người tham gia bảo hiểm xã hội bắt buộc.",
+        "correct": false,
+        "exp": "Sai. Người tham gia bảo hiểm xã hội tự nguyện chỉ được hưởng 2 chế độ là hưu trí và tử tuất, không được hưởng các chế độ ốm đau, thai sản như BHXH bắt buộc."
+      },
+      {
+        "label": "b",
+        "text": "Quỹ bảo hiểm y tế được hình thành từ sự đóng góp của người tham gia, hỗ trợ của ngân sách nhà nước và các nguồn hợp pháp khác, hoạt động theo nguyên tắc chia sẻ rủi ro.",
+        "correct": true,
+        "exp": "Đúng. Quỹ BHYT được xây dựng dựa trên sự đóng góp của xã hội và hỗ trợ của Nhà nước, hoạt động theo nguyên tắc chia sẻ rủi ro giữa người khỏe mạnh và người đau ốm."
+      },
+      {
+        "label": "c",
+        "text": "Người lao động tham gia bảo hiểm thất nghiệp, khi bị mất việc làm sẽ được hỗ trợ học nghề và giới thiệu việc làm.",
+        "correct": true,
+        "exp": "Đúng. Theo quy định, người tham gia bảo hiểm thất nghiệp khi đủ điều kiện hưởng sẽ được trợ cấp thất nghiệp, tư vấn, giới thiệu việc làm và hỗ trợ học nghề."
+      },
+      {
+        "label": "d",
+        "text": "Mọi khoản chi trả của bảo hiểm xã hội đều do ngân sách nhà nước cấp phát, người tham gia không phải đóng góp khoản nào.",
+        "correct": false,
+        "exp": "Sai. Các chế độ BHXH được chi trả từ Quỹ BHXH, nguồn quỹ này được hình thành chủ yếu từ sự đóng góp của người lao động và người sử dụng lao động."
+      }
+    ],
+    "qNum": 25,
+    "type": "true_false"
+  },
+  {
+    "passage": "Năm 2025, kinh tế quốc gia A đạt tốc độ tăng trưởng GDP 6,5%. Cơ cấu kinh tế tiếp tục chuyển dịch: tỉ trọng khu vực dịch vụ đạt 45%, công nghiệp – xây dựng đạt 35%, nông nghiệp giảm xuống còn 20%. Thu nhập bình quân đầu người tăng lên; tỉ lệ hộ nghèo đa chiều giảm từ 5,0% xuống còn 4,0%. Tuy nhiên, hệ số bất bình đẳng trong phân phối thu nhập (hệ số Gini) tăng từ 0,42 lên 0,45.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Tốc độ tăng trưởng GDP đạt 6,5% cho thấy quốc gia A đã đạt được phát triển kinh tế toàn diện.",
+        "correct": false,
+        "exp": "Sai. Tăng trưởng GDP 6,5% chỉ phản ánh sự tăng trưởng về lượng, chưa thể khẳng định phát triển toàn diện vì hệ số Gini tăng phản ánh bất bình đẳng gia tăng."
+      },
+      {
+        "label": "b",
+        "text": "Tỉ trọng khu vực nông nghiệp giảm, khu vực dịch vụ tăng phản ánh cơ cấu kinh tế của quốc gia A chuyển dịch theo hướng hiện đại.",
+        "correct": true,
+        "exp": "Đúng. Chuyển dịch cơ cấu ngành kinh tế theo hướng hiện đại là giảm tỉ trọng nông nghiệp, tăng tỉ trọng công nghiệp và dịch vụ."
+      },
+      {
+        "label": "c",
+        "text": "Hệ số Gini tăng từ 0,42 lên 0,45 cho thấy phân phối thu nhập ở quốc gia A trở nên công bằng hơn.",
+        "correct": false,
+        "exp": "Sai. Hệ số Gini đo lường mức độ bất bình đẳng (từ 0 đến 1). Hệ số Gini tăng từ 0,42 lên 0,45 phản ánh khoảng cách giàu nghèo gia tăng, phân phối thu nhập kém công bằng hơn."
+      },
+      {
+        "label": "d",
+        "text": "Tỉ lệ hộ nghèo đa chiều giảm là một biểu hiện của tiến bộ xã hội trong phát triển kinh tế.",
+        "correct": true,
+        "exp": "Đúng. Giảm tỉ lệ nghèo đa chiều thể hiện sự cải thiện về chất lượng sống của nhân dân, là chỉ tiêu cơ bản phản ánh tiến bộ xã hội."
+      }
+    ],
+    "qNum": 26,
+    "type": "true_false"
+  },
+  {
+    "passage": "Năm 2025, tổng kim ngạch xuất khẩu hàng hóa của cả nước đạt 400 tỉ USD. Tỉnh B đạt kim ngạch xuất khẩu 60 tỉ USD, trong đó các sản phẩm điện tử, máy tính là mặt hàng xuất khẩu chủ lực. Cùng với đó, tỉnh B thu hút nhiều dự án đầu tư nước ngoài vào các khu công nghiệp và đón lượng lớn khách du lịch quốc tế, mang lại nguồn thu ngoại tệ đáng kể cho địa phương.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Kim ngạch xuất khẩu của tỉnh B chiếm 15% tổng kim ngạch xuất khẩu hàng hóa của cả nước.",
+        "correct": true,
+        "exp": "Đúng. Tỉ lệ = (60 / 400) * 100% = 15%."
+      },
+      {
+        "label": "b",
+        "text": "Hoạt động đón khách du lịch quốc tế đến tham quan, nghỉ dưỡng tại tỉnh B thuộc hình thức dịch vụ thu ngoại tệ.",
+        "correct": true,
+        "exp": "Đúng. Cung cấp dịch vụ cho khách du lịch quốc tế thu được ngoại tệ tại chỗ, thuộc hình thức dịch vụ thu ngoại tệ."
+      },
+      {
+        "label": "c",
+        "text": "Từ thông tin trên có thể khẳng định tỉnh B là địa phương có tổng kim ngạch thương mại quốc tế (xuất khẩu và nhập khẩu) lớn nhất cả nước.",
+        "correct": false,
+        "exp": "Sai. Đoạn thông tin chỉ nêu kim ngạch xuất khẩu của tỉnh B là 60 tỉ USD, không có số liệu về nhập khẩu và cũng không có số liệu so sánh với các tỉnh/thành khác trên toàn quốc."
+      },
+      {
+        "label": "d",
+        "text": "Việc doanh nghiệp nước ngoài bỏ vốn xây dựng nhà máy tại tỉnh B thuộc hình thức thương mại quốc tế.",
+        "correct": false,
+        "exp": "Sai. Việc bỏ vốn xây dựng nhà máy sản xuất trực tiếp thuộc hình thức Đầu tư trực tiếp nước ngoài (FDI), không phải thương mại quốc tế."
+      }
+    ],
+    "qNum": 27,
+    "type": "true_false"
+  },
+  {
+    "passage": "Năm 2024, công tác an sinh xã hội ở địa phương M đạt nhiều kết quả: mức trợ cấp xã hội thường xuyên cho người cao tuổi không có lương hưu được nâng lên; 98% trẻ em trong độ tuổi được tiêm chủng đầy đủ; tỉ lệ bao phủ bảo hiểm y tế đạt 94% dân số. Cùng năm, chỉ số phát triển con người (HDI) của địa phương đạt 0,75; chỉ số giá tiêu dùng (CPI) tăng 3,5% so với năm trước.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Chỉ số giá tiêu dùng (CPI) tăng 3,5% là chỉ tiêu phản ánh tiến bộ xã hội của nền kinh tế.",
+        "correct": false,
+        "exp": "Sai. Chỉ số giá tiêu dùng (CPI) đo lường sự biến động của giá cả hàng hóa, dịch vụ tiêu dùng theo thời gian (lạm phát), không phải là chỉ tiêu phản ánh tiến bộ xã hội."
+      },
+      {
+        "label": "b",
+        "text": "Việc bảo đảm cho trẻ em được tiêm chủng đầy đủ thuộc chính sách bảo đảm các dịch vụ xã hội cơ bản.",
+        "correct": true,
+        "exp": "Đúng. Bảo đảm quyền tiếp cận dịch vụ y tế tối thiểu và tiêm chủng mở rộng thuộc nhóm chính sách bảo đảm dịch vụ xã hội cơ bản."
+      },
+      {
+        "label": "c",
+        "text": "Trợ cấp xã hội thường xuyên cho người cao tuổi không có lương hưu thuộc chính sách trợ giúp xã hội.",
+        "correct": true,
+        "exp": "Đúng. Trợ cấp xã hội hằng tháng cho người già neo đơn, không có lương hưu thuộc chính sách trợ giúp xã hội thường xuyên."
+      },
+      {
+        "label": "d",
+        "text": "Chỉ số phát triển con người (HDI) tăng thì hệ số bất bình đẳng trong phân phối thu nhập (hệ số Gini) chắc chắn sẽ giảm.",
+        "correct": false,
+        "exp": "Sai. Không có mối quan hệ tất yếu. Một quốc gia có thể tăng chỉ số HDI nhờ tăng thu nhập bình quân và học vấn, nhưng phân hóa giàu nghèo (hệ số Gini) vẫn có thể gia tăng."
+      }
+    ],
+    "qNum": 28,
+    "type": "true_false"
+  }
+];
 const EXAM_BANK_KTTX1 = [
       // PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN (12 CÂU)
       {
@@ -2957,6 +3416,7 @@ const EXAM_BANK_KTTX2 = [
       let candidateSubmissions = allRawSubmissions;
       if (currentActiveLessonId !== 'ALL') {
         candidateSubmissions = allRawSubmissions.filter(s => {
+          if (currentActiveLessonId === 'ktpl') return s.lessonId === 'ktpl';
           if (currentActiveLessonId === 'kttx2') return s.lessonId === 'kttx2';
           if (currentActiveLessonId === 'kttx1') return s.lessonId === 'kttx1';
           return s.lessonId === parseInt(currentActiveLessonId, 10);
@@ -4293,7 +4753,9 @@ const EXAM_BANK_KTTX2 = [
       const dateStr = `${now.getDate()}_${now.getMonth()+1}_${now.getFullYear()}`;
 
       let lessonTitle = 'TẤT CẢ BÀI HỌC';
-      if (currentActiveLessonId === 'kttx2') {
+      if (currentActiveLessonId === 'ktpl') {
+        lessonTitle = 'ĐỀ ÔN TẬP GIỮA HỌC KỲ I - MÔN KTPL';
+      } else if (currentActiveLessonId === 'kttx2') {
         lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2';
       } else if (currentActiveLessonId === 'kttx1') {
         lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 1';
@@ -4359,7 +4821,10 @@ const EXAM_BANK_KTTX2 = [
       let lessonFileLabel = 'TatCaBai';
       let lessonHeaderTitle = 'TẤT CẢ BÀI HỌC';
 
-      if (currentActiveLessonId === 'kttx2') {
+      if (currentActiveLessonId === 'ktpl') {
+        lessonFileLabel = 'OnTap_GiuaKy1_KTPL';
+        lessonHeaderTitle = 'ĐỀ ÔN TẬP GIỮA HỌC KỲ I - MÔN KTPL';
+      } else if (currentActiveLessonId === 'kttx2') {
         lessonFileLabel = 'OnTap_GiuaKy1_De2';
         lessonHeaderTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2';
       } else if (currentActiveLessonId === 'kttx1') {
@@ -4503,7 +4968,10 @@ const EXAM_BANK_KTTX2 = [
       let lessonTitle = 'TẤT CẢ BÀI HỌC';
       let lessonUrl = `${baseUrl}index.html`;
 
-      if (currentActiveLessonId === 'kttx2') {
+      if (currentActiveLessonId === 'ktpl') {
+        lessonTitle = 'ĐỀ ÔN TẬP GIỮA HỌC KỲ I - MÔN KTPL';
+        lessonUrl = `${baseUrl}ktpl.html`;
+      } else if (currentActiveLessonId === 'kttx2') {
         lessonTitle = 'ÔN TẬP GIỮA HỌC KỲ I - ĐỀ SỐ 2';
         lessonUrl = `${baseUrl}kttx2.html`;
       } else if (currentActiveLessonId === 'kttx1') {
