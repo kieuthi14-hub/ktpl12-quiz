@@ -121,14 +121,29 @@
         </div>
       </div>
 
-      <div class="mt-5 flex flex-col items-center gap-2.5 max-w-sm mx-auto">
-        <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition-all active:scale-95 text-base">
-          Bắt đầu làm bài 🚀
-        </button>
+      <div class="mt-5 space-y-3 max-w-sm mx-auto">
+        <!-- Nút Tra Cứu Bài Làm & Xem Câu Sai Của Chính Mình -->
+        <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl text-left shadow-sm">
+          <div class="flex items-center gap-1.5 font-black text-amber-950 text-xs sm:text-sm uppercase mb-1">
+            <span>🔍</span> <span>Xem lại bài làm &amp; câu sai của em</span>
+          </div>
+          <p class="text-[11px] text-amber-900 leading-snug mb-3">
+            Em chọn <b>Lớp</b> và <b>Tên</b> ở trên, rồi bấm nút này để hệ thống mở lại bài làm, chỉ rõ <b>các câu em đã làm sai</b> và <b>lời giải thích chi tiết vì sao sai</b>!
+          </p>
+          <button type="button" onclick="lookupMySubmissionResult()" id="btn-lookup-sub" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-2.5 px-4 rounded-xl text-xs transition shadow flex items-center justify-center gap-1.5 active:scale-98">
+            <span>🔍</span> <span>Xem Lại Câu Sai &amp; Lời Giải Thích Của Em 👉</span>
+          </button>
+        </div>
 
-        <button type="button" onclick="viewAnswerKeyDirectly()" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-950 font-bold py-2.5 px-4 rounded-xl border border-amber-300 text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
-          <span>📖</span> <span>Xem Đáp Án &amp; Lời Giải Chi Tiết Của Đề</span>
-        </button>
+        <!-- Nút Bắt đầu làm bài thi mới -->
+        <div class="flex flex-col sm:flex-row items-center gap-2">
+          <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 text-xs sm:text-sm flex items-center justify-center gap-1.5">
+            <span>🚀</span> <span>Làm bài kiểm tra mới</span>
+          </button>
+          <button type="button" onclick="viewAnswerKeyDirectly()" class="w-full sm:w-auto shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-3 rounded-xl border border-slate-300 text-xs transition flex items-center justify-center gap-1" title="Xem toàn bộ đề và đáp án chuẩn">
+            <span>📖</span> <span>Đáp án gốc</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -948,7 +963,12 @@
         }
       }
 
-      renderReviewList('all');
+      const hasErrors = userAnswersLog.some(l => !l.isCorrect);
+      if (hasErrors) {
+        filterReview('wrong');
+      } else {
+        filterReview('all');
+      }
 
       // TẠO MÃ NỘP BÀI ĐỘC NHẤT
       const cleanClass = (studentInfo.class || '12').replace(/\s+/g, '').toUpperCase();
@@ -1311,10 +1331,247 @@
       const syncStatus = document.getElementById('cloud-sync-status');
       if (syncStatus) syncStatus.classList.add('hidden');
 
-      renderReviewList('all');
+      const hasErrors = userAnswersLog.some(l => !l.isCorrect);
+      if (hasErrors) {
+        filterReview('wrong');
+      } else {
+        filterReview('all');
+      }
       setTimeout(() => {
         document.getElementById('review-container')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
+    }
+
+    function normText(t) {
+      return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').trim();
+    }
+
+    function parseWrongItems(wrongText) {
+      const list = [];
+      if (!wrongText || !wrongText.includes('Sai:')) return list;
+      const raw = wrongText.replace(/^.*Sai:\s*/i, '');
+      const tokens = raw.split(/,\s*(?=C\d+)/);
+      tokens.forEach(tok => {
+        tok = tok.trim();
+        const m = tok.match(/^C(\d+)(?:\(([^)]+)\))?/i);
+        if (m) {
+          const qNum = parseInt(m[1], 10);
+          const subLabels = m[2] ? m[2].split(',').map(s => s.trim().toLowerCase()) : [];
+          list.push({ qNum, subLabels, raw: tok });
+        }
+      });
+      return list;
+    }
+
+    function formatCleanScore(rawScore, correctCount) {
+      if (correctCount && typeof correctCount === 'string') {
+        const m = correctCount.match(/([\d\.]+)\s*\/\s*([\d\.]+)/);
+        if (m && parseFloat(m[2]) > 0) {
+          const cScore = (parseFloat(m[1]) / parseFloat(m[2])) * 10;
+          return cScore.toFixed(1);
+        }
+      }
+      if (rawScore !== null && rawScore !== undefined && rawScore !== '') {
+        const str = String(rawScore).trim();
+        if (!str.includes('T') && !str.includes('Z')) {
+          const num = parseFloat(str);
+          if (!isNaN(num) && num >= 0 && num <= 10) return num.toFixed(1);
+        }
+      }
+      return '0.0';
+    }
+
+    function buildUserAnswersFromLookup(wrongText, bank) {
+      const wrongList = parseWrongItems(wrongText);
+      return bank.map((q, idx) => {
+        const qNum = idx + 1;
+        const w = wrongList.find(x => x.qNum === qNum);
+
+        if (q.type === 'true_false') {
+          const wrongSubs = w ? w.subLabels : [];
+          const itemLogs = q.items.map(it => {
+            const isWrong = wrongSubs.includes(it.label.toLowerCase());
+            return {
+              label: it.label,
+              text: it.text,
+              userChoice: isWrong ? !it.correct : it.correct,
+              correct: it.correct,
+              isCorrect: !isWrong,
+              exp: it.exp
+            };
+          });
+
+          const correctSubCount = itemLogs.filter(i => i.isCorrect).length;
+          return {
+            qNum: qNum,
+            type: 'true_false',
+            passage: q.passage,
+            question: q.q,
+            items: itemLogs,
+            correctSubCount: correctSubCount,
+            isCorrect: (correctSubCount === 4),
+            scoreAwarded: correctSubCount / 4
+          };
+        } else {
+          const isWrong = !!w;
+          const wrongChoice = (q.answer + 1) % (q.options ? q.options.length : 4);
+          return {
+            qNum: qNum,
+            type: 'mcq',
+            question: q.q,
+            options: q.options,
+            selectedIdx: isWrong ? wrongChoice : q.answer,
+            correctIdx: q.answer,
+            isCorrect: !isWrong,
+            exp: q.exp
+          };
+        }
+      });
+    }
+
+    async function lookupMySubmissionResult() {
+      const classSelect = document.getElementById('student-class');
+      let sClass = classSelect ? classSelect.value.trim() : '';
+      if (sClass === 'Khác') {
+        sClass = (document.getElementById('student-class-other')?.value || '').trim();
+      }
+
+      let name = '';
+      const nameSelect = document.getElementById('student-name-select');
+      const nameCustom = document.getElementById('student-name-custom');
+
+      if (isManualNameMode) {
+        name = nameCustom ? nameCustom.value.trim() : '';
+      } else {
+        if (nameSelect && nameSelect.value && nameSelect.value !== '__custom__') {
+          name = nameSelect.value.trim();
+        } else if (nameCustom && nameCustom.value.trim()) {
+          name = nameCustom.value.trim();
+        }
+      }
+
+      if (!sClass || !name || name === '-- Vui lòng chọn lớp ở trên trước --') {
+        alert("Em vui lòng chọn '1. Lớp của em' và '2. Họ và tên' ở phía trên trước để hệ thống tra cứu đúng bài làm của em nhé!");
+        return;
+      }
+
+      studentInfo.name = name;
+      studentInfo.class = sClass;
+
+      const btn = document.getElementById('btn-lookup-sub');
+      const originalBtnText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin">⏳</span> Đang tìm bài làm của em...`;
+      }
+
+      try {
+        let allSubs = [];
+
+        // 1. Kiểm tra cache
+        try {
+          const cachedGAS = JSON.parse(sessionStorage.getItem('ktpl12_gas_submissions_cache') || '[]');
+          if (Array.isArray(cachedGAS) && cachedGAS.length > 0) {
+            allSubs = cachedGAS;
+          }
+        } catch(e) {}
+
+        // 2. Tải trực tiếp Google Sheets nếu chưa có cache
+        if (allSubs.length === 0) {
+          try {
+            const res = await fetch(`${GOOGLE_SCRIPT_URL}?_t=${Date.now()}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.submissions && Array.isArray(data.submissions)) {
+                allSubs = data.submissions;
+                try {
+                  sessionStorage.setItem('ktpl12_gas_submissions_cache', JSON.stringify(allSubs));
+                } catch(e) {}
+              }
+            }
+          } catch(e) {
+            console.warn("Lỗi tải online:", e);
+          }
+        }
+
+        // 3. Hợp nhất bài nộp lưu tại máy cục bộ (localStorage)
+        try {
+          const localSubs = JSON.parse(localStorage.getItem('ktpl12_submissions') || '[]');
+          if (Array.isArray(localSubs)) {
+            allSubs = [...allSubs, ...localSubs];
+          }
+        } catch(e) {}
+
+        const normSearchName = normText(name);
+        const normSearchClass = normText(sClass);
+
+        const matches = allSubs.filter(s => {
+          const sName = normText(s.name);
+          const sCls = normText(s.className);
+          const code = String(s.subCode || '').toUpperCase();
+          const lesson = String(s.lesson || '').toUpperCase();
+
+          const isKttx2 = code.includes('KTTX2') || code.includes('KT2') || lesson.includes('KTTX 2') || lesson.includes('KTTX2') || lesson.includes('KTTX-2') || lesson.includes('ĐỀ 2') || lesson.includes('ĐỀ SỐ 2');
+
+          return isKttx2 && (sName === normSearchName || sName.includes(normSearchName) || normSearchName.includes(sName)) && (sCls === normSearchClass || sCls.includes(normSearchClass) || normSearchClass.includes(sCls));
+        });
+
+        if (matches.length === 0) {
+          alert(`Chưa tìm thấy bài thi KTTX 2 của em "${name}" (Lớp ${sClass}) trên hệ thống sổ điểm.\n\nEm vui lòng kiểm tra lại xem có chọn nhầm Lớp/Tên hoặc nhầm giữa KTTX 1 và KTTX 2 không nhé!`);
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalBtnText;
+          }
+          return;
+        }
+
+        // Lấy bài nộp mới nhất
+        const latestSub = matches[matches.length - 1];
+        const rawBank = questionsBank_KTTX2.map((q, idx) => ({ ...q, qNum: idx + 1 }));
+        userAnswersLog = buildUserAnswersFromLookup(latestSub.correctCount || '', rawBank);
+
+        const cleanScore10 = formatCleanScore(latestSub.score, latestSub.correctCount);
+        score = (parseFloat(cleanScore10) / 10) * rawBank.length;
+
+        // Chuyển sang màn hình kết quả
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+
+        document.getElementById('res-student-info').innerHTML = `Học sinh: <b id="res-name" class="text-indigo-950 font-black">${latestSub.name}</b> • Lớp: <b id="res-class" class="text-indigo-950 font-black">${latestSub.className}</b>`;
+        document.getElementById('res-score').innerText = `${cleanScore10} / 10`;
+        document.getElementById('res-correct').innerText = latestSub.correctCount ? (latestSub.correctCount.split('•')[0].trim()) : `${score.toFixed(1)}/14`;
+        document.getElementById('res-percent').innerText = `${Math.round((parseFloat(cleanScore10)/10)*100)}%`;
+        document.getElementById('res-sub-code').innerText = latestSub.subCode || 'Đã tra cứu';
+        document.getElementById('res-timestamp').innerText = latestSub.timestamp || 'Gần đây';
+
+        const syncStatus = document.getElementById('cloud-sync-status');
+        if (syncStatus) {
+          syncStatus.className = "my-3 p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold text-center";
+          syncStatus.innerHTML = `<span>✅</span> <span>Đã đồng bộ bài làm từ sổ điểm của Cô Kiều (Lần nộp mới nhất)</span>`;
+          syncStatus.classList.remove('hidden');
+        }
+
+        const wrongList = parseWrongItems(latestSub.correctCount || '');
+        if (wrongList.length > 0) {
+          filterReview('wrong');
+        } else {
+          filterReview('all');
+        }
+
+        setTimeout(() => {
+          document.getElementById('review-container')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+
+      } catch(err) {
+        console.error("Lỗi tra cứu bài nộp:", err);
+        alert("Có lỗi khi kết nối máy chủ sổ điểm để tra cứu. Em vui lòng thử lại sau vài giây nhé!");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalBtnText;
+        }
+      }
     }
 
     function downloadCertificate() {
