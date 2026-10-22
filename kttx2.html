@@ -121,9 +121,15 @@
         </div>
       </div>
 
-      <button onclick="startQuiz()" class="mt-5 w-full max-w-sm bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition-all active:scale-95 text-base">
-        Bắt đầu làm bài 🚀
-      </button>
+      <div class="mt-5 flex flex-col items-center gap-2.5 max-w-sm mx-auto">
+        <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition-all active:scale-95 text-base">
+          Bắt đầu làm bài 🚀
+        </button>
+
+        <button type="button" onclick="viewAnswerKeyDirectly()" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-950 font-bold py-2.5 px-4 rounded-xl border border-amber-300 text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
+          <span>📖</span> <span>Xem Đáp Án &amp; Lời Giải Chi Tiết Của Đề</span>
+        </button>
+      </div>
     </div>
 
     <!-- 2. MÀN HÌNH LÀM BÀI -->
@@ -200,14 +206,24 @@
         </button>
       </div>
 
-      <!-- Khóa bảo mật đáp án chi tiết -->
-      <div class="text-left mt-6 pt-5 border-t border-slate-200">
-        <div class="p-5 bg-indigo-50/70 rounded-2xl border border-indigo-200 text-center shadow-sm">
-          <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center mx-auto text-2xl mb-2.5 shadow-inner">🔒</div>
-          <h4 class="font-bold text-slate-800 text-sm md:text-base">Đáp Án &amp; Lời Giải Chi Tiết Đang Được Khóa Bảo Mật</h4>
-          <p class="text-xs text-slate-600 mt-1.5 max-w-md mx-auto leading-relaxed">
-            Hệ thống đã tự động chấm điểm chính xác và lưu bài thi của em vào sổ điểm của cô giáo. Để đảm bảo tính công bằng và nghiêm túc, đáp án chi tiết sẽ được cô giáo chữa bài sau khi tất cả học sinh hoàn thành bài kiểm tra.
-          </p>
+      <!-- Khung xem lại bài làm chi tiết & lời giải thích -->
+      <div id="review-container" class="text-left mt-6 pt-5 border-t border-slate-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <h3 class="font-black text-slate-800 text-base md:text-lg flex items-center gap-2">
+            <span>📚</span> <span>Đáp Án &amp; Lời Giải Chi Tiết Từng Câu</span>
+          </h3>
+          <div class="flex gap-1.5 text-xs self-start sm:self-auto">
+            <button onclick="filterReview('all')" id="btn-rev-all" class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-xs transition">Tất cả (14 câu)</button>
+            <button onclick="filterReview('wrong')" id="btn-rev-wrong" class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Chỉ câu làm sai ❌</button>
+          </div>
+        </div>
+
+        <!-- Bảng đối chiếu nhanh đáp án -->
+        <div id="quick-matrix-container"></div>
+
+        <!-- Danh sách chi tiết từng câu -->
+        <div id="review-list" class="space-y-4">
+          <!-- Render bằng JS -->
         </div>
       </div>
     </div>
@@ -1031,16 +1047,274 @@
       }
     }
 
-    function renderReviewList(filterMode) {
-      // Bảo mật đề thi: Không công bố đáp án và giải thích trên màn hình kết quả của học sinh
+    let currentReviewFilter = 'all';
+    function filterReview(type) {
+      currentReviewFilter = type;
+      const btnAll = document.getElementById('btn-rev-all');
+      const btnWrong = document.getElementById('btn-rev-wrong');
+
+      if (type === 'all') {
+        if (btnAll) btnAll.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-xs transition';
+        if (btnWrong) btnWrong.className = 'px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+      } else {
+        if (btnWrong) btnWrong.className = 'px-3 py-1.5 rounded-xl font-bold bg-rose-600 text-white shadow-xs transition';
+        if (btnAll) btnAll.className = 'px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+      }
+      renderReviewList(type);
     }
 
-    function filterReview(mode) {}
+    function renderQuickAnswerMatrix() {
+      const container = document.getElementById('quick-matrix-container');
+      if (!container) return;
+
+      const mcqLogs = userAnswersLog.filter(l => l.type !== 'true_false').sort((a,b) => (a.qNum || 0) - (b.qNum || 0));
+      const tfLogs = userAnswersLog.filter(l => l.type === 'true_false').sort((a,b) => (a.qNum || 0) - (b.qNum || 0));
+
+      const letters = ['A', 'B', 'C', 'D'];
+
+      // Render Phần I grid (12 câu MCQ)
+      let mcqGridHtml = '<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">';
+      mcqLogs.forEach(log => {
+        const isRight = log.isCorrect;
+        const studentAns = (log.selectedIdx !== undefined && log.selectedIdx !== null) ? letters[log.selectedIdx] : '-';
+        const correctAns = letters[log.correctIdx];
+
+        mcqGridHtml += `
+          <a href="#review-q-${log.qNum}" class="p-2.5 rounded-xl border text-center transition hover:scale-105 ${isRight ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'}">
+            <div class="text-[10px] font-bold text-slate-500 uppercase">Câu ${log.qNum}</div>
+            <div class="text-sm font-black my-0.5 ${isRight ? 'text-emerald-700' : 'text-rose-600'}">${studentAns} ${isRight ? '✅' : '❌'}</div>
+            ${!isRight ? `<div class="text-[10px] text-emerald-700 font-bold">ĐA: ${correctAns}</div>` : `<div class="text-[10px] text-emerald-600 font-semibold">Chính xác</div>`}
+          </a>
+        `;
+      });
+      mcqGridHtml += '</div>';
+
+      // Render Phần II grid (2 câu Đúng/Sai: Câu 13, 14)
+      let tfGridHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">';
+      tfLogs.forEach(log => {
+        const fullRight = (log.correctSubCount === 4);
+        let itemsHtml = '';
+        (log.items || []).forEach(sub => {
+          const subRight = sub.isCorrect;
+          itemsHtml += `
+            <div class="flex items-center justify-between text-[11px] py-1 border-b border-slate-100 last:border-0">
+              <span class="font-bold text-slate-700">Ý ${sub.label}):</span>
+              <span class="font-mono font-bold ${subRight ? 'text-emerald-700' : 'text-rose-600'}">
+                ${sub.userChoice ? 'Đúng' : 'Sai'} ${subRight ? '✅' : `❌ (ĐA: ${sub.correct ? 'Đ' : 'S'})`}
+              </span>
+            </div>
+          `;
+        });
+
+        tfGridHtml += `
+          <a href="#review-q-${log.qNum}" class="p-3 rounded-xl border transition hover:scale-[1.02] ${fullRight ? 'bg-emerald-50 border-emerald-300' : (log.correctSubCount > 0 ? 'bg-amber-50 border-amber-300' : 'bg-rose-50 border-rose-300')}">
+            <div class="flex items-center justify-between mb-1.5 pb-1 border-b ${fullRight ? 'border-emerald-200' : 'border-slate-200'}">
+              <span class="text-xs font-black text-slate-800">Câu ${log.qNum} (Đúng / Sai)</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${fullRight ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-800'}">Đúng ${log.correctSubCount}/4 ý</span>
+            </div>
+            ${itemsHtml}
+          </a>
+        `;
+      });
+      tfGridHtml += '</div>';
+
+      container.innerHTML = `
+        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 mb-6 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-xs font-black uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
+              <span>🎯</span> Bảng Đối Chiếu Nhanh Kết Quả Làm Bài
+            </h4>
+            <span class="text-[11px] text-indigo-700 font-semibold italic">Bấm vào ô để nhảy nhanh đến câu đó</span>
+          </div>
+
+          <div class="text-xs font-bold text-slate-700 mb-1.5">1. Phần I: Trắc nghiệm 4 lựa chọn (Câu 1 - 12)</div>
+          ${mcqGridHtml}
+
+          <div class="text-xs font-bold text-slate-700 mt-4 mb-1.5">2. Phần II: Trắc nghiệm Đúng / Sai (Câu 13 - 14)</div>
+          ${tfGridHtml}
+        </div>
+      `;
+    }
+
+    function renderReviewList(filter = 'all') {
+      renderQuickAnswerMatrix();
+
+      const listEl = document.getElementById('review-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      const sortedLogs = [...userAnswersLog].sort((a, b) => (a.qNum || 0) - (b.qNum || 0));
+
+      sortedLogs.forEach((item) => {
+        if (filter === 'wrong') {
+          if (item.type === 'true_false') {
+            if (item.correctSubCount === 4) return;
+          } else {
+            if (item.isCorrect) return;
+          }
+        }
+
+        const div = document.createElement('div');
+        div.id = `review-q-${item.qNum}`;
+
+        if (item.type === 'true_false') {
+          const isFullCorrect = (item.correctSubCount === 4);
+          div.className = `p-4 md:p-5 rounded-2xl border text-xs scroll-mt-20 ${isFullCorrect ? 'border-emerald-200 bg-emerald-50/30' : (item.correctSubCount > 0 ? 'border-amber-200 bg-amber-50/30' : 'border-rose-200 bg-rose-50/30')} shadow-sm`;
+
+          let itemsHtml = '';
+          (item.items || []).forEach(sub => {
+            const subCorrect = sub.isCorrect;
+            itemsHtml += `
+              <div class="p-3 rounded-xl border ${subCorrect ? 'border-emerald-200 bg-white' : 'border-rose-200 bg-rose-50/70'} mt-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="text-xs md:text-sm font-medium text-slate-800">
+                    <b class="text-indigo-700 font-bold">${sub.label})</b> ${sub.text}
+                  </div>
+                  <span class="shrink-0 font-bold px-2 py-0.5 rounded text-[11px] ${subCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                    ${subCorrect ? 'Đúng ✅' : 'Sai ❌'}
+                  </span>
+                </div>
+                <div class="mt-1.5 text-[11px] text-slate-600 flex items-center gap-2 flex-wrap">
+                  <span>Em chọn: <b class="${subCorrect ? 'text-emerald-700' : 'text-rose-600 font-bold'}">${sub.userChoice ? 'Đúng' : 'Sai'}</b></span>
+                  <span>•</span>
+                  <span>Đáp án chuẩn: <b class="${sub.correct ? 'text-emerald-700' : 'text-blue-700'} font-bold">${sub.correct ? 'ĐÚNG' : 'SAI'}</b></span>
+                </div>
+                <div class="mt-2 text-[11px] text-slate-700 bg-slate-50/90 p-2.5 rounded-xl border border-slate-200 leading-relaxed">
+                  💡 <b>Giải thích chi tiết:</b> ${sub.exp}
+                </div>
+              </div>
+            `;
+          });
+
+          div.innerHTML = `
+            <div class="font-bold text-slate-800 mb-1 flex items-center justify-between">
+              <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md text-[11px] font-black uppercase tracking-wider">Phần II • Câu ${item.qNum} (Đúng / Sai)</span>
+              <span class="${isFullCorrect ? 'text-emerald-700 font-black' : (item.correctSubCount > 0 ? 'text-amber-700 font-bold' : 'text-rose-700 font-bold')} text-xs">
+                Đúng ${item.correctSubCount}/4 ý ${isFullCorrect ? '✅' : '⚠️'}
+              </span>
+            </div>
+            ${item.passage ? `<div class="text-xs text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-200 my-2.5 leading-relaxed text-justify">📖 <b>Đoạn thông tin tư liệu:</b><br>${item.passage}</div>` : ''}
+            <div class="text-slate-800 font-bold mt-1 text-sm">${item.question}</div>
+            <div class="space-y-2 mt-2">${itemsHtml}</div>
+          `;
+
+        } else {
+          // MCQ
+          div.className = `p-4 md:p-5 rounded-2xl border text-xs scroll-mt-20 ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'} shadow-sm`;
+          const letters = ['A', 'B', 'C', 'D'];
+
+          div.innerHTML = `
+            <div class="font-bold text-slate-800 mb-1 flex items-center justify-between">
+              <span class="bg-indigo-100 text-indigo-800 px-2.5 py-1 rounded-md text-[11px] font-black uppercase tracking-wider">Phần I • Câu ${item.qNum}</span>
+              <span class="${item.isCorrect ? 'text-emerald-700 font-black' : 'text-rose-700 font-bold'} text-xs">
+                ${item.isCorrect ? 'Làm đúng ✅' : 'Làm sai ❌'}
+              </span>
+            </div>
+            ${item.passage ? `<div class="text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 my-2.5 leading-relaxed text-justify">📖 <b>Thông tin:</b><br>${item.passage}</div>` : ''}
+            <div class="text-slate-900 font-bold mb-2.5 text-sm md:text-base leading-snug">${item.question}</div>
+            
+            <div class="space-y-1.5 text-xs my-3">
+              ${(item.options || []).map((opt, optIdx) => {
+                const isUserChoice = (optIdx === item.selectedIdx);
+                const isCorrectOpt = (optIdx === item.correctIdx);
+                let optStyle = 'p-2.5 rounded-xl border text-slate-700 bg-white border-slate-200';
+                if (isCorrectOpt) {
+                  optStyle = 'p-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-950 font-bold shadow-xs';
+                } else if (isUserChoice && !item.isCorrect) {
+                  optStyle = 'p-2.5 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-900 font-semibold line-through';
+                }
+                return `
+                  <div class="${optStyle} flex items-start gap-2">
+                    <span class="font-mono font-bold shrink-0">${letters[optIdx]}.</span>
+                    <span class="flex-grow">${opt}</span>
+                    ${isCorrectOpt ? '<span class="shrink-0 bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded font-black">ĐÁP ÁN ĐÚNG</span>' : ''}
+                    ${isUserChoice && !isCorrectOpt ? '<span class="shrink-0 bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">EM ĐÃ CHỌN</span>' : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="mt-3 text-slate-700 bg-white p-3.5 rounded-xl border border-slate-200 leading-relaxed shadow-xs">
+              <div class="font-bold text-indigo-700 flex items-center gap-1 mb-1">
+                <span>💡</span> <span>Lời giải thích / Căn cứ SGK:</span>
+              </div>
+              <div>${item.exp || 'Xem lại kiến thức SGK KTPL 12.'}</div>
+            </div>
+          `;
+        }
+        listEl.appendChild(div);
+      });
+
+      if (!listEl.children || listEl.children.length === 0) {
+        listEl.innerHTML = '<div class="p-6 text-center text-emerald-700 bg-emerald-50 rounded-2xl border border-emerald-200 font-bold">🎉 Tuyệt vời! Em không làm sai câu nào trong phần này!</div>';
+      }
+    }
 
     function retryQuiz() {
       if (confirm("Em có muốn làm lại đề kiểm tra này để nâng cao điểm số không?")) {
         startQuiz();
       }
+    }
+
+    function viewAnswerKeyDirectly() {
+      // Khởi tạo câu hỏi theo thứ tự gốc chuẩn
+      const rawBank = questionsBank_KTTX2.map((q, idx) => ({ ...q, qNum: idx + 1 }));
+
+      userAnswersLog = rawBank.map(item => {
+        if (item.type === 'true_false') {
+          return {
+            qNum: item.qNum,
+            type: 'true_false',
+            passage: item.passage,
+            question: item.q,
+            items: item.items.map(it => ({
+              label: it.label,
+              text: it.text,
+              userChoice: it.correct,
+              correct: it.correct,
+              isCorrect: true,
+              exp: it.exp
+            })),
+            correctSubCount: 4,
+            isCorrect: true,
+            scoreAwarded: 1
+          };
+        } else {
+          return {
+            qNum: item.qNum,
+            question: item.q,
+            options: item.options,
+            selectedIdx: item.answer,
+            correctIdx: item.answer,
+            isCorrect: true,
+            exp: item.exp
+          };
+        }
+      });
+
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const resName = document.getElementById('res-name');
+      if (resName) resName.innerText = "Học sinh xem đáp án & đối chiếu";
+      const resClass = document.getElementById('res-class');
+      if (resClass) resClass.innerText = "Chế độ tham khảo lời giải chi tiết";
+      const resScore = document.getElementById('res-score');
+      if (resScore) resScore.innerText = "14 / 14 câu";
+      const resCorrect = document.getElementById('res-correct');
+      if (resCorrect) resCorrect.innerText = "14/14";
+      const resPercent = document.getElementById('res-percent');
+      if (resPercent) resPercent.innerText = "100%";
+      const resTime = document.getElementById('res-time');
+      if (resTime) resTime.innerText = "Tham khảo";
+      const syncStatus = document.getElementById('cloud-sync-status');
+      if (syncStatus) syncStatus.classList.add('hidden');
+
+      renderReviewList('all');
+      setTimeout(() => {
+        document.getElementById('review-container')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
 
     function downloadCertificate() {
