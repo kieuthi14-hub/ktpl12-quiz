@@ -177,6 +177,11 @@
             <span id="badge-count-b4" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
           </button>
 
+          <button id="btn-quick-b5" onclick="switchLesson(5)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>🚀</span> <span>Bài 5: Lập KH kinh doanh</span>
+            <span id="badge-count-b5" class="bg-purple-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
+          </button>
+
           <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📊</span> <span>Tổng Hợp Tất Cả Bài</span>
           </button>
@@ -1314,7 +1319,426 @@ const EXAM_BANK_KTTX1 = [
       }
     ];
 
-const EXAM_BANK_KTTX2 = [
+const EXAM_BANK_BAI5 = [
+  {
+    "qNum": 1,
+    "q": "Kế hoạch kinh doanh là",
+    "options": [
+      "bản trình bày ý tưởng kinh doanh và cách thức hiện thực hoá ý tưởng đó của người kinh doanh.",
+      "bản cam kết lợi nhuận của doanh nghiệp với Nhà nước.",
+      "hợp đồng mua bán giữa doanh nghiệp và khách hàng.",
+      "bảng báo cáo tài chính hằng năm của doanh nghiệp."
+    ],
+    "answer": 0,
+    "exp": "Theo SGK GDKT&PL 12 (Bài 5 - Lập kế hoạch kinh doanh): Kế hoạch kinh doanh là bản trình bày ý tưởng kinh doanh và cách thức hiện thực hoá ý tưởng đó của người kinh doanh. Đây là công cụ định hướng quan trọng giúp doanh nghiệp vạch rõ đường đi và phân bổ nguồn lực hiệu quả."
+  },
+  {
+    "qNum": 2,
+    "q": "Nhận định nào sau đây đúng về kế hoạch kinh doanh?",
+    "options": [
+      "Kế hoạch kinh doanh chỉ cần thiết đối với doanh nghiệp lớn, không cần thiết đối với hộ kinh doanh nhỏ.",
+      "Kế hoạch kinh doanh là văn bản pháp lí bắt buộc phải đăng kí với cơ quan nhà nước.",
+      "Kế hoạch kinh doanh là bản trình bày ý tưởng kinh doanh và cách thức hiện thực hoá ý tưởng đó của người kinh doanh.",
+      "Kế hoạch kinh doanh chỉ gồm kế hoạch tài chính của doanh nghiệp."
+    ],
+    "answer": 2,
+    "exp": "Kế hoạch kinh doanh cần thiết cho mọi quy mô kinh doanh (từ hộ cá thể đến tập đoàn), không phải văn bản pháp lý bắt buộc phải nộp đăng ký với cơ quan nhà nước, và bao gồm nhiều nội dung toàn diện chứ không chỉ riêng tài chính. Phương án C là định nghĩa chuẩn xác nhất."
+  },
+  {
+    "qNum": 3,
+    "q": "Một trong những lợi ích của việc lập kế hoạch kinh doanh là",
+    "options": [
+      "giúp chủ thể kinh doanh nắm bắt tình hình thực tế và đưa ra định hướng trong tương lai.",
+      "đảm bảo doanh nghiệp không bao giờ gặp rủi ro.",
+      "giúp doanh nghiệp không cần phân tích thị trường.",
+      "đảm bảo sản phẩm luôn bán được với giá cao."
+    ],
+    "answer": 0,
+    "exp": "Lập kế hoạch kinh doanh giúp người kinh doanh nắm bắt tình hình thực tế, đánh giá thị trường và đưa ra các định hướng chiến lược trong tương lai. Hoạt động kinh doanh luôn tiềm ẩn rủi ro nên không thể khẳng định kế hoạch sẽ 'loại bỏ mọi rủi ro' hay 'không cần phân tích thị trường'."
+  },
+  {
+    "qNum": 4,
+    "q": "Lập kế hoạch kinh doanh giúp chủ thể kinh doanh",
+    "options": [
+      "loại bỏ hoàn toàn đối thủ cạnh tranh trên thị trường.",
+      "không cần huy động vốn khi triển khai kinh doanh.",
+      "tránh được mọi rủi ro trong quá trình kinh doanh.",
+      "xác định được mục tiêu, chiến lược, thị trường, khách hàng và đối thủ cạnh tranh."
+    ],
+    "answer": 3,
+    "exp": "Bản kế hoạch kinh doanh giúp chủ thể kinh doanh định hình rõ nét mục tiêu phát triển, chiến lược cạnh tranh, phân khúc thị trường, đối tượng khách hàng mục tiêu và các đối thủ trực tiếp, gián tiếp trên thị trường."
+  },
+  {
+    "qNum": 5,
+    "q": "Vì sao việc lập kế hoạch kinh doanh giúp chủ thể kinh doanh “chủ động” hơn trong kinh doanh?",
+    "options": [
+      "Vì kế hoạch giúp phát hiện thiếu sót và rủi ro có thể xảy ra, từ đó điều chỉnh kịp thời.",
+      "Vì kế hoạch giúp doanh nghiệp được miễn thuế.",
+      "Vì kế hoạch giúp doanh nghiệp vay vốn ngân hàng không cần thế chấp.",
+      "Vì kế hoạch giúp doanh nghiệp độc quyền trên thị trường."
+    ],
+    "answer": 0,
+    "exp": "Việc lập kế hoạch kinh doanh đòi hỏi sự rà soát, dự liệu toàn diện các yếu tố thị trường, chi phí và nguồn lực, nhờ đó người kinh doanh phát hiện sớm các lỗ hổng, thiếu sót và nguy cơ tiềm ẩn để chủ động có phương án dự phòng và điều chỉnh kịp thời."
+  },
+  {
+    "qNum": 6,
+    "q": "Nhận định nào sau đây không đúng về sự cần thiết của việc lập kế hoạch kinh doanh?",
+    "options": [
+      "Kế hoạch kinh doanh giúp chủ thể kinh doanh nắm bắt tình hình thực tế.",
+      "Kế hoạch kinh doanh giúp xác định mục tiêu, chiến lược và phương thức thực hiện.",
+      "Kế hoạch kinh doanh giúp phát hiện thiếu sót và rủi ro để chủ động điều chỉnh.",
+      "Kế hoạch kinh doanh giúp doanh nghiệp chắc chắn thành công và không gặp rủi ro."
+    ],
+    "answer": 3,
+    "exp": "Thị trường luôn biến động khôn lường, kế hoạch kinh doanh giúp giảm thiểu rủi ro và nâng cao xác suất thành công chứ không thể khẳng định đem lại sự 'chắc chắn thành công 100% và không gặp bất kỳ rủi ro nào'."
+  },
+  {
+    "qNum": 7,
+    "q": "Kế hoạch kinh doanh không bao gồm nội dung nào sau đây?",
+    "options": [
+      "Định hướng, ý tưởng kinh doanh.",
+      "Các điều kiện thực hiện hoạt động kinh doanh.",
+      "Nâng cao năng lực cạnh tranh với các chủ thể kinh tế khác.",
+      "Kế hoạch hoạt động; rủi ro tiềm ẩn và biện pháp xử lí."
+    ],
+    "answer": 2,
+    "exp": "Bản kế hoạch kinh doanh gồm 6 nội dung cơ bản: (1) Ý tưởng kinh doanh, (2) Mục tiêu kinh doanh, (3) Phân tích các điều kiện thực hiện, (4) Xác định chiến lược, (5) Kế hoạch tổ chức thực hiện, (6) Đánh giá rủi ro và biện pháp xử lý. 'Nâng cao năng lực cạnh tranh' là mục đích hướng tới chứ không phải là một đầu mục nội dung cơ bản độc lập."
+  },
+  {
+    "qNum": 8,
+    "q": "Nội dung nào sau đây không phải là nội dung cơ bản của kế hoạch kinh doanh?",
+    "options": [
+      "Xác định mục tiêu kinh doanh.",
+      "Xác định chiến lược kinh doanh.",
+      "Xác định kế hoạch tổ chức thực hiện chiến lược.",
+      "Xác định mức lương của người lao động."
+    ],
+    "answer": 3,
+    "exp": "Mức lương cụ thể của từng lao động là quy định chi tiết trong quy chế chi tiêu nội bộ và hợp đồng lao động khi đi vào vận hành, không nằm trong 6 nội dung cơ bản cấu thành bản kế hoạch kinh doanh tổng thể."
+  },
+  {
+    "qNum": 9,
+    "q": "Trong kế hoạch kinh doanh, nội dung “phân tích điều kiện thực hiện ý tưởng kinh doanh” yêu cầu chủ thể kinh doanh phân tích",
+    "options": [
+      "chỉ yếu tố pháp lý của hoạt động kinh doanh.",
+      "chỉ điểm mạnh, điểm yếu của doanh nghiệp.",
+      "sự phù hợp của sản phẩm, dịch vụ; khách hàng; đối thủ cạnh tranh; điểm mạnh, điểm yếu so với đối thủ cạnh tranh; yếu tố pháp lý.",
+      "chỉ nhu cầu của khách hàng trên thị trường."
+    ],
+    "answer": 2,
+    "exp": "Phân tích điều kiện thực hiện ý tưởng kinh doanh đòi hỏi sự đánh giá đồng bộ và toàn diện cả yếu tố bên trong (sản phẩm, dịch vụ, điểm mạnh, điểm yếu) lẫn yếu tố môi trường bên ngoài (nhu cầu khách hàng, đối thủ cạnh tranh và hành lang pháp lý)."
+  },
+  {
+    "qNum": 10,
+    "q": "Nội dung “xác định chiến lược kinh doanh” trong kế hoạch kinh doanh được hiểu là",
+    "options": [
+      "xác định mục tiêu ngắn hạn, trung hạn và dài hạn của doanh nghiệp.",
+      "xác định mức giá bán sản phẩm, dịch vụ trên thị trường.",
+      "xác định số lượng lao động cần tuyển dụng.",
+      "xác định chuỗi các biện pháp, cách thức của chủ thể kinh doanh nhằm đạt hiệu quả tối ưu."
+    ],
+    "answer": 3,
+    "exp": "Chiến lược kinh doanh là chuỗi các biện pháp, cách thức và định hướng mang tính chiến lược của chủ thể kinh doanh nhằm khai thác lợi thế cạnh tranh và đạt hiệu quả tối ưu theo mục tiêu đã định."
+  },
+  {
+    "qNum": 11,
+    "q": "Trong kế hoạch kinh doanh, việc “xác định kế hoạch tổ chức thực hiện chiến lược” có ý nghĩa là",
+    "options": [
+      "đưa chiến lược thành các công việc, kế hoạch cụ thể để tổ chức thực hiện.",
+      "xác định lại ý tưởng kinh doanh ban đầu.",
+      "đánh giá rủi ro tiềm ẩn của hoạt động kinh doanh.",
+      "xác định mục tiêu dài hạn của doanh nghiệp."
+    ],
+    "answer": 0,
+    "exp": "Kế hoạch tổ chức thực hiện chiến lược là bước cụ thể hóa các mục tiêu và chiến lược thành từng công việc, từng bước triển khai cụ thể (nhân sự, cơ sở vật chất, tiếp thị, tài chính) để vận hành trên thực tế."
+  },
+  {
+    "qNum": 12,
+    "q": "Một chủ cửa hàng muốn mở rộng kinh doanh nhưng chưa xác định được thị trường, khách hàng và đối thủ cạnh tranh. Theo các nội dung cơ bản của kế hoạch kinh doanh, chủ cửa hàng cần bổ sung nội dung nào sau đây?",
+    "options": [
+      "Xác định định hướng, ý tưởng kinh doanh.",
+      "Đánh giá rủi ro tiềm ẩn và giải pháp.",
+      "Phân tích điều kiện thực hiện ý tưởng kinh doanh.",
+      "Xác định kế hoạch tổ chức thực hiện chiến lược."
+    ],
+    "answer": 2,
+    "exp": "Việc xác định thị trường mục tiêu, đối tượng khách hàng tiềm năng và các đối thủ cạnh tranh trực tiếp thuộc nội dung 'Phân tích điều kiện thực hiện ý tưởng kinh doanh'."
+  },
+  {
+    "qNum": 13,
+    "q": "Đối với một doanh nghiệp, bước khởi đầu trong quá trình lập kế hoạch kinh doanh là",
+    "options": [
+      "xác định mục tiêu và chiến lược kinh doanh.",
+      "xác định định hướng, ý tưởng kinh doanh.",
+      "xây dựng kế hoạch hoạt động kinh doanh.",
+      "phân tích các điều kiện thực hiện ý tưởng kinh doanh."
+    ],
+    "answer": 1,
+    "exp": "Quy trình lập kế hoạch kinh doanh gồm 5 bước, trong đó bước khởi đầu (Bước 1) là xác định định hướng, ý tưởng kinh doanh. Có ý tưởng kinh doanh rõ ràng mới có cơ sở để thực hiện các bước phân tích và lập kế hoạch tiếp theo."
+  },
+  {
+    "qNum": 14,
+    "q": "Mục tiêu dài hạn trong kế hoạch kinh doanh là mục tiêu",
+    "options": [
+      "từ 1 tháng đến 1 năm.",
+      "từ 2 đến 5 năm.",
+      "từ 5 năm trở lên.",
+      "dưới 1 tháng."
+    ],
+    "answer": 2,
+    "exp": "Theo phân loại mục tiêu kinh doanh trong SGK GDKT&PL 12: Mục tiêu ngắn hạn thường dưới 1 năm; mục tiêu trung hạn từ 1 đến 5 năm; mục tiêu dài hạn là từ 5 năm trở lên."
+  },
+  {
+    "qNum": 15,
+    "q": "Trong 5 bước lập kế hoạch kinh doanh, bước “phân tích các điều kiện thực hiện ý tưởng kinh doanh” là bước",
+    "options": [
+      "bước 1.",
+      "bước 2.",
+      "bước 3.",
+      "bước 4."
+    ],
+    "answer": 1,
+    "exp": "Thứ tự 5 bước lập kế hoạch kinh doanh: Bước 1: Xác định ý tưởng kinh doanh -> Bước 2: Phân tích các điều kiện thực hiện ý tưởng kinh doanh -> Bước 3: Xác định mục tiêu và chiến lược -> Bước 4: Xây dựng kế hoạch hoạt động -> Bước 5: Đánh giá rủi ro và biện pháp xử lý."
+  },
+  {
+    "qNum": 16,
+    "q": "Trong quá trình lập kế hoạch kinh doanh, việc nào sau đây là quan trọng để đảm bảo tính khả thi của kế hoạch?",
+    "options": [
+      "Phân tích điểm mạnh, điểm yếu, cơ hội, rủi ro.",
+      "Chuẩn bị một kế hoạch marketing chi tiết.",
+      "Xác định mục tiêu và chiến lược kinh doanh phù hợp.",
+      "Quyết định mức giá bán sản phẩm, dịch vụ."
+    ],
+    "answer": 0,
+    "exp": "Để bản kế hoạch có tính khả thi cao, việc đánh giá khách quan điểm mạnh, điểm yếu (nội lực) cùng với cơ hội và rủi ro/thách thức (ngoại cảnh) là điều kiện then chốt giúp chủ thể kinh doanh thấy rõ cơ hội thành công và rào cản cần khắc phục."
+  },
+  {
+    "qNum": 17,
+    "q": "Trong việc lập kế hoạch kinh doanh, việc nào sau đây có thể giúp doanh nghiệp đối phó tốt hơn với rủi ro và khó khăn?",
+    "options": [
+      "Phát triển các chiến lược tiếp thị sáng tạo.",
+      "Đánh giá và biện pháp xử lý rủi ro.",
+      "Tăng cường quảng cáo trên mạng xã hội.",
+      "Mở rộng quy mô hoạt động ngay từ đầu."
+    ],
+    "answer": 1,
+    "exp": "Chủ động dự báo các rủi ro tiềm ẩn (về vốn, thị trường, đối thủ, nguồn cung, nhân sự) và xây dựng sẵn các phương án xử lý (Bước 5) sẽ giúp doanh nghiệp không bị bất ngờ và nhanh chóng vượt qua khó khăn khi biến cố xảy ra."
+  },
+  {
+    "qNum": 18,
+    "q": "Ở bước xác định ý tưởng kinh doanh, chủ thể kinh doanh cần trả lời câu hỏi nào sau đây?",
+    "options": [
+      "Kinh doanh mặt hàng gì? Đối tượng khách hàng là ai? Họ có nhu cầu gì? Kinh doanh bằng cách nào? Kinh doanh cho ai?",
+      "Doanh nghiệp sẽ tuyển bao nhiêu lao động?",
+      "Mức lương của người lao động là bao nhiêu?",
+      "Doanh nghiệp sẽ nộp thuế như thế nào?"
+    ],
+    "answer": 0,
+    "exp": "Khi xác định ý tưởng kinh doanh, chủ thể kinh doanh phải trả lời câu hỏi cốt lõi: Sản phẩm/dịch vụ kinh doanh là gì? Khách hàng mục tiêu là ai? Nhu cầu của họ ra sao? Cung cấp bằng cách thức nào và đem lại giá trị cho ai?"
+  },
+  {
+    "qNum": 19,
+    "q": "Một doanh nghiệp đặt mục tiêu: “Trong 3 năm tới, mở thêm 2 chi nhánh mới”. Mục tiêu này thuộc loại mục tiêu nào?",
+    "options": [
+      "Mục tiêu ngắn hạn.",
+      "Mục tiêu trung hạn.",
+      "Mục tiêu dài hạn.",
+      "Mục tiêu chiến lược."
+    ],
+    "answer": 1,
+    "exp": "Khoảng thời gian 3 năm nằm trong khung thời gian từ 1 đến 5 năm, do đó mục tiêu này thuộc nhóm mục tiêu trung hạn."
+  },
+  {
+    "qNum": 20,
+    "q": "Anh K đi xuất khẩu lao động 5 năm ở Nhật Bản về, dùng số tiền dành dụm mua một mảnh đất rồi mở quán ăn mà không lập kế hoạch kinh doanh. Tháng đầu, nhờ bạn bè, người thân ủng hộ nên khách đến quán khá đông; những tháng sau khách giảm dần, có tháng doanh thu không đủ bù chi phí. Sau một năm, quán ăn của anh K phải đóng cửa. Thất bại của anh K chủ yếu do",
+    "options": [
+      "anh K không có vốn để kinh doanh.",
+      "anh K không có kinh nghiệm nấu ăn.",
+      "anh K mở quán ăn ở vị trí không thuận lợi.",
+      "anh K không lập kế hoạch kinh doanh nên không xác định được thị trường, khách hàng và cách thức thực hiện."
+    ],
+    "answer": 3,
+    "exp": "Thất bại của anh K bắt nguồn trực tiếp từ việc kinh doanh theo cảm tính, không lập kế hoạch kinh doanh nên không nghiên cứu thị trường, không xác định đối tượng khách hàng mục tiêu, không có chiến lược giữ chân khách hàng và phương thức vận hành bài bản sau giai đoạn ủng hộ ban đầu."
+  },
+  {
+    "qNum": 21,
+    "q": "Một nhóm sinh viên đại học góp vốn mở quán cà phê, hướng tới đối tượng khách hàng là sinh viên. Khi mở quán, do không tìm được nguồn hàng chất lượng tốt với giá ưu đãi, không có kinh nghiệm quản lí kinh doanh, không có chiến lược tiếp thị bán hàng nên không cạnh tranh được với những quán cà phê xung quanh. Sau 5 tháng, quán cà phê không có khách, không có doanh thu và phải đóng cửa. Nguyên nhân thất bại của nhóm sinh viên là do",
+    "options": [
+      "ý tưởng kinh doanh hướng tới đối tượng sinh viên là không phù hợp.",
+      "sinh viên không có nhu cầu uống cà phê.",
+      "quán cà phê nằm ở khu vực có quá nhiều quán cà phê xung quanh.",
+      "nhóm sinh viên không lập kế hoạch kinh doanh chi tiết, không phân tích điều kiện thực hiện ý tưởng kinh doanh và không có chiến lược tiếp thị."
+    ],
+    "answer": 3,
+    "exp": "Nguyên nhân gốc rễ dẫn đến thất bại là do nhóm sinh viên khởi nghiệp tự phát, không lập kế hoạch kinh doanh chi tiết, không khảo sát điều kiện thực hiện (nguồn hàng, năng lực quản lý) và thiếu chiến lược tiếp thị cạnh tranh với các đối thủ xung quanh."
+  },
+  {
+    "qNum": 22,
+    "q": "Chị H đam mê thiết kế thời trang và mong muốn mở một cửa hàng thời trang do mình làm chủ. Chị quyết tâm thực hiện ước mơ dù chỉ là từng bước: đọc sách, tìm hiểu qua internet, tham gia các khoá đào tạo về thời trang, tìm hiểu thị trường, học hỏi từ những người có kinh nghiệm. Khi có kinh nghiệm, kĩ năng nghề nghiệp, chị H xây dựng kế hoạch kinh doanh cửa hàng thời trang và đến nay đã làm chủ một cửa hàng thời trang lớn, rất đông khách. Thành công của chị H cho thấy",
+    "options": [
+      "đam mê là yếu tố duy nhất quyết định thành công trong kinh doanh.",
+      "để kinh doanh thành công, người kinh doanh cần chuẩn bị kĩ về kiến thức, kĩ năng, nghiên cứu thị trường và lập kế hoạch kinh doanh.",
+      "kinh doanh thời trang không cần nghiên cứu thị trường.",
+      "người kinh doanh không cần lập kế hoạch kinh doanh nếu có đam mê."
+    ],
+    "answer": 1,
+    "exp": "Kinh nghiệm của chị H khẳng định: Đam mê là động lực ban đầu, nhưng để khởi nghiệp thành công vững chắc, người kinh doanh phải đầu tư học tập kiến thức chuyên môn, rèn luyện kỹ năng, khảo sát thị trường thực tế và xây dựng bản kế hoạch kinh doanh bài bản."
+  },
+  {
+    "qNum": 23,
+    "q": "Một hộ kinh doanh muốn mở cửa hàng tạp hoá. Việc làm nào sau đây thể hiện hộ kinh doanh đã vận dụng đúng bước “phân tích các điều kiện thực hiện ý tưởng kinh doanh”?",
+    "options": [
+      "Xác định sẽ bán các mặt hàng thiết yếu hằng ngày.",
+      "Tìm hiểu nhu cầu của người dân trong khu vực, các cửa hàng tạp hoá đối thủ xung quanh, nguồn cung hàng và các quy định pháp luật liên quan.",
+      "Đặt mục tiêu sau 1 năm sẽ mở thêm một chi nhánh.",
+      "Thiết kế biển hiệu và quảng cáo trên mạng xã hội."
+    ],
+    "answer": 1,
+    "exp": "Vận dụng đúng bước 'Phân tích các điều kiện thực hiện ý tưởng kinh doanh' là việc khảo sát nhu cầu của khách hàng dân cư trong khu vực, đánh giá đối thủ cạnh tranh lân cận, tìm nguồn cung ứng hàng hóa uy tín và tìm hiểu quy định pháp luật về đăng ký hộ kinh doanh."
+  },
+  {
+    "qNum": 24,
+    "q": "Một doanh nghiệp lập kế hoạch kinh doanh trong đó đã xác định mục tiêu, chiến lược và kế hoạch tài chính nhưng không đánh giá rủi ro tiềm ẩn và biện pháp xử lí. Kế hoạch kinh doanh này",
+    "options": [
+      "đã đầy đủ vì đã có mục tiêu và chiến lược.",
+      "chưa đầy đủ vì thiếu nội dung đánh giá rủi ro tiềm ẩn và giải pháp — một trong 6 nội dung cơ bản của kế hoạch kinh doanh.",
+      "đã đầy đủ vì rủi ro là điều không thể lường trước.",
+      "chưa đầy đủ vì thiếu nội dung xác định ý tưởng kinh doanh."
+    ],
+    "answer": 1,
+    "exp": "Bản kế hoạch này chưa đầy đủ vì đã bỏ quên nội dung thứ 6 trong 6 nội dung cơ bản: Đánh giá rủi ro tiềm ẩn và đề xuất biện pháp xử lý. Việc thiếu nội dung này sẽ làm doanh nghiệp dễ rơi vào lúng túng, bị động khi thị trường có biến động tiêu cực."
+  },
+  {
+    "qNum": 25,
+    "type": "true_false",
+    "passage": "Một nhóm sinh viên đại học muốn khởi nghiệp bằng cách góp vốn mở quán cà phê, và có chiến lược hướng tới đối tượng khách hàng là sinh viên. Khi mở quán, do không tìm được nguồn hàng chất lượng tốt với giá ưu đãi, không có kinh nghiệm trong việc quản lí kinh doanh, không có chiến lược tiếp thị bán hàng nên không cạnh tranh được với những quán cà phê xung quanh. Sau 5 tháng, quán cà phê không có khách, không có doanh thu và buộc phải đóng cửa.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Ý tưởng kinh doanh của nhóm sinh viên có tính mới, đem lại kết quả khả quan cho hoạt động kinh doanh.",
+        "correct": false,
+        "exp": "Sai. Mô hình quán cà phê phục vụ sinh viên không phải là ý tưởng có tính mới đột phá, và trên thực tế kết quả kinh doanh thất bại nặng nề (quán vắng khách, không có doanh thu và phải đóng cửa sau 5 tháng)."
+      },
+      {
+        "label": "b",
+        "text": "Để bán được hàng, cần thiết phải lập một kế hoạch kinh doanh chi tiết, bao gồm phân tích thị trường, dự đoán tài chính và xây dựng một chiến lược tiếp thị.",
+        "correct": true,
+        "exp": "Đúng. Lập kế hoạch kinh doanh chi tiết với việc phân tích thị trường, chuẩn bị nguồn vốn - dự toán tài chính và chiến lược tiếp thị là điều kiện tiên quyết để cạnh tranh và bán được hàng."
+      },
+      {
+        "label": "c",
+        "text": "Để thực hiện mục tiêu kinh doanh, một trong những điều cần làm là xây dựng các điều kiện thực hiện ý tưởng kinh doanh.",
+        "correct": true,
+        "exp": "Đúng. Xây dựng và chuẩn bị đầy đủ các điều kiện (nguồn nguyên liệu chất lượng giá tốt, địa điểm, năng lực quản trị, tài chính...) là nền tảng để thực hiện mục tiêu kinh doanh."
+      },
+      {
+        "label": "d",
+        "text": "Chiến lược kinh doanh của nhóm sinh viên chưa tính đến cơ hội, rủi ro.",
+        "correct": true,
+        "exp": "Đúng. Nhóm sinh viên đã không lường trước được áp lực cạnh tranh khốc liệt từ các quán cà phê xung quanh, cũng như rủi ro thiếu nguồn cung ứng tốt và hạn chế về kinh nghiệm quản lý."
+      }
+    ]
+  },
+  {
+    "qNum": 26,
+    "type": "true_false",
+    "passage": "Chị H đam mê thiết kế thời trang và mong muốn mở một cửa hàng thời trang do mình làm chủ để thực hiện ước mơ nhưng chị lại sợ thiếu kinh nghiệm trong quản lí và kiến thức về thời trang. Mỗi lần nhìn những thiết kế đầy sáng tạo của mình, niềm đam mê trong chị lại dâng trào và chị quyết định thực hiện ước mơ dù chỉ là từng bước: từ việc đọc sách, tìm hiểu qua internet đến tham gia các ngành học đào tạo về thời trang, tìm hiểu thị trường, học hỏi từ những người có kinh nghiệm hay nghiên cứu các xu hướng thời trang. Sau một thời gian, khi có kinh nghiệm, kĩ năng nghề nghiệp thì chị H đã xây dựng kế hoạch kinh doanh cửa hàng thời trang của mình. Đến nay, chị đã làm chủ một cửa hàng thời trang lớn, rất đông khách vì những thiết kế của chị đã đáp ứng được nhu cầu của khách hàng.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Thành công của chị H là do chị có hiểu biết về thị trường thời trang, xu hướng của người tiêu dùng.",
+        "correct": true,
+        "exp": "Đúng. Chị H đã dành nhiều thời gian tìm hiểu thị trường và nghiên cứu xu hướng người tiêu dùng, nhờ đó những thiết kế của chị đáp ứng đúng nhu cầu và thị hiếu khách hàng."
+      },
+      {
+        "label": "b",
+        "text": "Việc không có kinh nghiệm trong lĩnh vực thời trang không ảnh hưởng đến việc thành công của chị H.",
+        "correct": false,
+        "exp": "Sai. Ban đầu sự thiếu kinh nghiệm là trở ngại lớn khiến chị e ngại; thành công chỉ đến sau khi chị kiên trì học hỏi, tham gia đào tạo và tích lũy đầy đủ kinh nghiệm, kỹ năng nghề nghiệp."
+      },
+      {
+        "label": "c",
+        "text": "Muốn thành công trong lĩnh vực kinh doanh, một trong số các tiêu chí mà người kinh doanh phải thực hiện là nghiên cứu thị trường kĩ lưỡng để hiểu rõ về đối tượng khách hàng, đối thủ cạnh tranh và cơ hội trong ngành.",
+        "correct": true,
+        "exp": "Đúng. Nghiên cứu thị trường kỹ lưỡng là bước quan trọng giúp doanh nghiệp thấu hiểu khách hàng, định vị đối thủ cạnh tranh và nắm bắt các cơ hội sinh lời trong ngành."
+      },
+      {
+        "label": "d",
+        "text": "Chị H không cần thiết phải đầu tư vào một kế hoạch marketing hoặc quảng cáo, cửa hàng sẽ tự thu hút khách hàng.",
+        "correct": false,
+        "exp": "Sai. Trong môi trường cạnh tranh hiện đại, một kế hoạch tiếp thị, xây dựng thương hiệu và truyền thông chuyên nghiệp là rất cần thiết để đưa sản phẩm đến đúng khách hàng mục tiêu và mở rộng thị phần."
+      }
+    ]
+  },
+  {
+    "qNum": 27,
+    "type": "true_false",
+    "passage": "Về các nội dung cơ bản của kế hoạch kinh doanh, xét các nhận định sau:",
+    "q": "Em hãy xác định mỗi nhận định sau đây về nội dung cơ bản của kế hoạch kinh doanh là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Kế hoạch kinh doanh gồm 6 nội dung cơ bản, trong đó có xác định định hướng, ý tưởng kinh doanh và xác định mục tiêu kinh doanh.",
+        "correct": true,
+        "exp": "Đúng. 6 nội dung cơ bản gồm: (1) Ý tưởng kinh doanh, (2) Mục tiêu kinh doanh, (3) Phân tích điều kiện thực hiện, (4) Chiến lược kinh doanh, (5) Kế hoạch tổ chức thực hiện, (6) Đánh giá rủi ro và biện pháp xử lý."
+      },
+      {
+        "label": "b",
+        "text": "Nội dung “phân tích điều kiện thực hiện ý tưởng kinh doanh” chỉ yêu cầu phân tích yếu tố pháp lý của hoạt động kinh doanh.",
+        "correct": false,
+        "exp": "Sai. Phân tích điều kiện thực hiện yêu cầu phân tích toàn diện nhiều yếu tố: sản phẩm/dịch vụ, khách hàng mục tiêu, đối thủ cạnh tranh, điểm mạnh - điểm yếu nội tại và yếu tố pháp lý."
+      },
+      {
+        "label": "c",
+        "text": "Nội dung cuối cùng của kế hoạch kinh doanh là xác định kế hoạch tổ chức thực hiện chiến lược.",
+        "correct": false,
+        "exp": "Sai. Nội dung cuối cùng (nội dung thứ 6) của kế hoạch kinh doanh là Đánh giá rủi ro tiềm ẩn và các biện pháp xử lý."
+      },
+      {
+        "label": "d",
+        "text": "Kế hoạch kinh doanh không cần đánh giá rủi ro tiềm ẩn vì rủi ro là điều không thể dự đoán trước được.",
+        "correct": false,
+        "exp": "Sai. Đánh giá rủi ro tiềm ẩn và xây dựng các biện pháp phòng ngừa là nội dung bắt buộc trong kế hoạch kinh doanh giúp người kinh doanh luôn ở thế chủ động đối phó khó khăn."
+      }
+    ]
+  },
+  {
+    "qNum": 28,
+    "type": "true_false",
+    "passage": "Về các bước lập kế hoạch kinh doanh, xét các nhận định sau:",
+    "q": "Em hãy xác định mỗi nhận định sau đây về quy trình lập kế hoạch kinh doanh là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Bước khởi đầu trong quá trình lập kế hoạch kinh doanh là xác định ý tưởng kinh doanh.",
+        "correct": true,
+        "exp": "Đúng. Quy trình 5 bước bắt đầu bằng Bước 1: Xác định định hướng, ý tưởng kinh doanh."
+      },
+      {
+        "label": "b",
+        "text": "Mục tiêu dài hạn trong kế hoạch kinh doanh là mục tiêu từ 2 đến 5 năm.",
+        "correct": false,
+        "exp": "Sai. Mục tiêu từ 2 đến 5 năm là mục tiêu trung hạn; mục tiêu dài hạn là từ 5 năm trở lên."
+      },
+      {
+        "label": "c",
+        "text": "Ở bước phân tích các điều kiện thực hiện ý tưởng kinh doanh, chủ thể kinh doanh cần phân tích sự phù hợp của sản phẩm, dịch vụ; khách hàng; đối thủ cạnh tranh; điểm mạnh, điểm yếu so với đối thủ cạnh tranh và yếu tố pháp lý.",
+        "correct": true,
+        "exp": "Đúng. Đây là toàn bộ các nội dung cần phân tích ở bước 2 để bảo đảm tính khả thi cho ý tưởng kinh doanh."
+      },
+      {
+        "label": "d",
+        "text": "Chiến lược kinh doanh chỉ bao gồm kế hoạch tài chính và kế hoạch quản lí nhân sự.",
+        "correct": false,
+        "exp": "Sai. Chiến lược kinh doanh là chuỗi các cách thức, giải pháp tổng thể để đạt hiệu quả tối ưu; kế hoạch tài chính và nhân sự thuộc về kế hoạch tổ chức thực hiện chiến lược (kế hoạch hoạt động)."
+      }
+    ]
+  }
+];
+
+    const EXAM_BANK_KTTX2 = [
       // PHẦN I. TRẮC NGHIỆM NHIỀU PHƯƠNG ÁN LỰA CHỌN (12 CÂU)
       {
         q: "Để đánh giá tốc độ tăng trưởng kinh tế của Việt Nam năm 2024 so với năm 2023, người ta thường so sánh",
@@ -2997,6 +3421,7 @@ const EXAM_BANK_KTTX2 = [
       const btnB2 = document.getElementById('btn-quick-b2');
       const btnB3 = document.getElementById('btn-quick-b3');
       const btnB4 = document.getElementById('btn-quick-b4');
+      const btnB5 = document.getElementById('btn-quick-b5');
 
       const activeBtnExam = "px-3 py-1.5 rounded-xl text-xs font-black transition shadow-xs flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300";
       const inactiveBtnExam = "px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800";
@@ -3012,6 +3437,7 @@ const EXAM_BANK_KTTX2 = [
       if (btnB2) btnB2.className = (currentActiveLessonId === 2) ? activeBtnLesson : inactiveBtnLesson;
       if (btnB3) btnB3.className = (currentActiveLessonId === 3) ? activeBtnLesson : inactiveBtnLesson;
       if (btnB4) btnB4.className = (currentActiveLessonId === 4) ? activeBtnLesson : inactiveBtnLesson;
+      if (btnB5) btnB5.className = (currentActiveLessonId === 5) ? activeBtnLesson : inactiveBtnLesson;
 
       const activeB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-sm border border-indigo-300 ring-2 ring-indigo-200";
       const inactiveB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-slate-200 text-slate-700 hover:bg-white hover:text-indigo-900";
@@ -3440,18 +3866,21 @@ const EXAM_BANK_KTTX2 = [
       const b2Count = allRawSubmissions.filter(s => s.lessonId === 2).length;
       const b3Count = allRawSubmissions.filter(s => s.lessonId === 3).length;
       const b4Count = allRawSubmissions.filter(s => s.lessonId === 4).length;
+      const b5Count = allRawSubmissions.filter(s => s.lessonId === 5).length;
       const kttx2Count = allRawSubmissions.filter(s => s.lessonId === 'kttx2').length;
       const kttx1Count = allRawSubmissions.filter(s => s.lessonId === 'kttx1').length;
       const badgeB1 = document.getElementById('badge-count-b1');
       const badgeB2 = document.getElementById('badge-count-b2');
       const badgeB3 = document.getElementById('badge-count-b3');
       const badgeB4 = document.getElementById('badge-count-b4');
+      const badgeB5 = document.getElementById('badge-count-b5');
       const badgeKttx2 = document.getElementById('badge-count-kttx2');
       const badgeKttx1 = document.getElementById('badge-count-kttx1');
       if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
       if (badgeB2) badgeB2.innerText = `${b2Count} bài`;
       if (badgeB3) badgeB3.innerText = `${b3Count} bài`;
       if (badgeB4) badgeB4.innerText = `${b4Count} bài`;
+      if (badgeB5) badgeB5.innerText = `${b5Count} bài`;
       if (badgeKttx2) badgeKttx2.innerText = `${kttx2Count} bài`;
       if (badgeKttx1) badgeKttx1.innerText = `${kttx1Count} bài`;
 
@@ -3992,8 +4421,8 @@ const EXAM_BANK_KTTX2 = [
       if (!modal || !bodyEl) return;
       if (copyBtn) copyBtn.innerText = 'Sao chép câu sai & lời giải';
 
-      let bank = (lessonKey === 'kttx2') ? EXAM_BANK_KTTX2 : (lessonKey === 'ktpl' ? EXAM_BANK_KTPL : EXAM_BANK_KTTX1);
-      let lessonTitle = (lessonKey === 'kttx2') ? 'Kiểm Tra Thường Xuyên 2 (KTTX 2)' : (lessonKey === 'ktpl' ? 'Đề Ôn Tập Giữa HK1 - Môn KTPL' : 'Kiểm Tra Thường Xuyên 1 (KTTX 1)');
+      let bank = (lessonKey === 'kttx2') ? EXAM_BANK_KTTX2 : (lessonKey === 'ktpl' ? EXAM_BANK_KTPL : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? EXAM_BANK_BAI5 : EXAM_BANK_KTTX1);
+      let lessonTitle = (lessonKey === 'kttx2') ? 'Kiểm Tra Thường Xuyên 2 (KTTX 2)' : (lessonKey === 'ktpl' ? 'Đề Ôn Tập Giữa HK1 - Môn KTPL' : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? 'Bài 5: Lập kế hoạch kinh doanh' : 'Kiểm Tra Thường Xuyên 1 (KTTX 1)');
 
       if (nameEl) nameEl.innerText = studentName;
       if (metaEl) metaEl.innerText = 'Lớp: ' + className + ' • ' + lessonTitle + ' • ' + (wrongText || 'Chi tiết');
