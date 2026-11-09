@@ -63,19 +63,20 @@
 
     <!-- 1. MÀN HÌNH BẮT ĐẦU -->
     <div id="start-screen" class="glass-card w-full p-6 md:p-8 rounded-3xl shadow-xl border border-indigo-100 text-center">
-      <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3 shadow-inner">⭐</div>
+      <div class="w-16 h-16 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3 shadow-inner">🚀</div>
       <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-300 text-emerald-700 text-xs rounded-full font-semibold mb-3">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
         <span>Hệ thống nộp bài trực tuyến: ĐÃ SẴN SÀNG 🟢</span>
       </div>
-      <h2 class="text-2xl font-black text-slate-800">BÀI KIỂM TRA THƯỜNG XUYÊN 1<br><span class="text-lg text-indigo-700 font-bold">KTTX 1</span></h2>
+      <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Bài 5: Lập Kế Hoạch Kinh Doanh<br><span class="text-base text-indigo-700 font-bold normal-case">Bài tập Củng cố kiến thức • GDKT&amp;PL 12</span></h2>
       <div class="mt-2 mb-3 flex flex-wrap items-center justify-center gap-2 text-xs">
-        <span class="bg-indigo-100 text-indigo-900 font-black px-3 py-1 rounded-full">Đang làm: KTTX 1</span>
-        <a href="kttx2.html" class="bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 font-bold px-3 py-1 rounded-full transition shadow-xs flex items-center gap-1">
-          <span>👉 Đổi sang KTTX 2</span>
+        <span class="bg-indigo-100 text-indigo-900 font-black px-3 py-1 rounded-full">📚 Bài 5: Lập kế hoạch kinh doanh</span>
+        <span class="bg-emerald-100 text-emerald-900 font-black px-3 py-1 rounded-full border border-emerald-300">💡 Hiện đáp án &amp; Lời giải sau từng câu</span>
+        <a href="bai4.html" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3 py-1 rounded-full transition shadow-xs flex items-center gap-1">
+          <span>👈 Bài 4: An sinh XH</span>
         </a>
       </div>
-      <p class="text-slate-500 text-sm mt-1 mb-6">Môn: Giáo dục Kinh tế và Pháp luật 12 • Thời gian làm bài: <b>15 phút</b>.<br>Cấu trúc: <b>12 câu trắc nghiệm nhiều phương án + 2 câu trắc nghiệm Đúng/Sai</b>. Điểm số tự động lưu về sổ điểm của cô giáo.</p>
+      <p class="text-slate-600 text-xs md:text-sm mt-1 mb-5 max-w-lg mx-auto">Hệ thống trọn bộ <b>28 câu hỏi</b> (24 câu trắc nghiệm nhiều lựa chọn + 4 câu trắc nghiệm Đúng/Sai). <b>Sau mỗi câu khi chọn xong, hệ thống sẽ hiển thị ngay đáp án đúng và lời giải thích chi tiết</b> để em củng cố và nắm vững kiến thức.</p>
       
       <div class="space-y-4 max-w-sm mx-auto text-left">
         <div>
@@ -136,7 +137,7 @@
         <!-- Nút Bắt đầu làm bài thi mới -->
         <div class="flex flex-col sm:flex-row items-center gap-2">
           <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 text-xs sm:text-sm flex items-center justify-center gap-1.5">
-            <span>🚀</span> <span>Làm bài kiểm tra mới</span>
+            <span>🚀</span> <span>Bắt đầu làm bài củng cố (28 câu)</span>
           </button>
           <button type="button" onclick="viewAnswerKeyDirectly()" class="w-full sm:w-auto shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-3 rounded-xl border border-slate-300 text-xs transition flex items-center justify-center gap-1" title="Xem toàn bộ đề và đáp án chuẩn">
             <span>📖</span> <span>Đáp án gốc</span>
@@ -993,14 +994,15 @@
                 <b class="text-indigo-600 font-bold mr-1">${item.label})</b> ${item.text}
               </div>
               <div class="flex items-center gap-2 shrink-0 self-end sm:self-center" id="tf-btn-group-${idx}">
-                <button type="button" onclick="setTfChoice(${idx}, true)" id="btn-tf-${idx}-true" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 font-bold text-xs hover:border-indigo-400 hover:text-indigo-700 transition">
+                <button type="button" onclick="setTfChoice(${idx}, true)" id="btn-tf-${idx}-true" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 font-bold text-xs hover:border-emerald-500 hover:text-emerald-700 transition">
                   Đúng
                 </button>
-                <button type="button" onclick="setTfChoice(${idx}, false)" id="btn-tf-${idx}-false" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 font-bold text-xs hover:border-indigo-400 hover:text-indigo-700 transition">
+                <button type="button" onclick="setTfChoice(${idx}, false)" id="btn-tf-${idx}-false" class="px-4 py-2 rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-700 font-bold text-xs hover:border-rose-500 hover:text-rose-700 transition">
                   Sai
                 </button>
               </div>
             </div>
+            <div id="tf-explanation-${idx}" class="hidden text-xs mt-2.5 pt-2 border-t border-slate-200"></div>
           `;
           listDiv.appendChild(itemCard);
         });
@@ -1009,8 +1011,8 @@
         const submitBtnDiv = document.createElement('div');
         submitBtnDiv.className = "mt-4";
         submitBtnDiv.innerHTML = `
-          <button type="button" id="btn-submit-tf" onclick="submitTfAnswer()" class="w-full py-3.5 px-6 rounded-2xl ${isLastQ ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2">
-            <span>✓</span> <span>${isLastQ ? 'Hoàn thành bài thi &amp; Nộp bài' : 'Xác nhận &amp; Tiếp tục'}</span> <span>➔</span>
+          <button type="button" id="btn-submit-tf" onclick="submitTfAnswer()" class="w-full py-3.5 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm shadow-md transition flex items-center justify-center gap-2">
+            <span>✓</span> <span>Xác nhận &amp; Xem đáp án giải thích</span> <span>➔</span>
           </button>
         `;
 
@@ -1047,12 +1049,12 @@
       const qData = currentQuiz[currentIndex];
       const unchosen = qData.items.findIndex((_, idx) => currentTfChoices[idx] === undefined || currentTfChoices[idx] === null);
       if (unchosen !== -1) {
-        alert("Em vui lòng chọn 'Đúng' hoặc 'Sai' cho cả 4 ý a, b, c, d trước khi bấm tiếp tục nhé!");
+        alert("Em vui lòng chọn 'Đúng' hoặc 'Sai' cho cả 4 ý a, b, c, d trước khi bấm xác nhận nhé!");
         return;
       }
 
       const subBtn = document.getElementById('btn-submit-tf');
-      if (subBtn) subBtn.disabled = true;
+      if (subBtn) subBtn.classList.add('hidden');
 
       let correctSubCount = 0;
       const itemLogs = [];
@@ -1061,6 +1063,33 @@
         const userChoice = currentTfChoices[idx];
         const isCorrect = (userChoice === item.correct);
         if (isCorrect) correctSubCount++;
+
+        const card = document.getElementById(`tf-card-${idx}`);
+        const expEl = document.getElementById(`tf-explanation-${idx}`);
+        const btnGroup = document.getElementById(`tf-btn-group-${idx}`);
+
+        if (btnGroup) {
+          const btns = btnGroup.getElementsByTagName('button');
+          for (let b of btns) b.disabled = true;
+        }
+
+        if (card) {
+          card.className = `p-3.5 rounded-xl border-2 ${isCorrect ? 'border-emerald-400 bg-emerald-50/50' : 'border-rose-400 bg-rose-50/50'} shadow-sm transition`;
+        }
+
+        if (expEl) {
+          expEl.className = `text-xs mt-2.5 pt-2 border-t border-slate-200 ${isCorrect ? 'text-emerald-900' : 'text-rose-900'}`;
+          expEl.innerHTML = `
+            <div class="p-2.5 rounded-xl ${isCorrect ? 'bg-emerald-50/80 border border-emerald-200 text-emerald-900' : 'bg-rose-50/80 border border-rose-200 text-rose-900'} space-y-1">
+              <div class="font-bold flex items-center gap-1.5 ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}">
+                <span>${isCorrect ? '✅' : '❌'}</span>
+                <span>${isCorrect ? 'Em trả lời Đúng!' : `Chưa chính xác! (Đáp án chuẩn: <b class="underline text-emerald-700">${item.correct ? 'ĐÚNG' : 'SAI'}</b>)`}</span>
+              </div>
+              <div class="text-slate-700 font-normal leading-relaxed">💡 ${item.exp}</div>
+            </div>
+          `;
+          expEl.classList.remove('hidden');
+        }
 
         itemLogs.push({
           label: item.label,
@@ -1086,7 +1115,32 @@
         scoreAwarded: qScore
       });
 
-      nextQuestion();
+      const fbBox = document.getElementById('feedback-box');
+      if (fbBox) {
+        fbBox.className = `mt-4 p-4 rounded-2xl border-2 ${correctSubCount === 4 ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-indigo-200 bg-indigo-50 text-indigo-950'} shadow-sm text-xs md:text-sm`;
+        fbBox.innerHTML = `
+          <div class="font-black flex items-center justify-between">
+            <span class="flex items-center gap-1.5">
+              <span>${correctSubCount === 4 ? '🎉' : '📊'}</span>
+              <span>${correctSubCount === 4 ? 'Xuất sắc! Em đã trả lời đúng cả 4 ý.' : `Em đã trả lời đúng <b>${correctSubCount}/4</b> ý.`}</span>
+            </span>
+            <span class="text-[11px] font-semibold text-slate-500">Đọc kĩ lời giải từng ý ở trên</span>
+          </div>
+        `;
+        fbBox.classList.remove('hidden');
+      }
+
+      const nextBtn = document.getElementById('next-btn');
+      if (nextBtn) {
+        nextBtn.classList.remove('hidden');
+        if (currentIndex + 1 === currentQuiz.length) {
+          nextBtn.innerHTML = `<span>Hoàn thành bài &amp; Xem kết quả</span> <span>🏆</span>`;
+          nextBtn.className = "mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm";
+        } else {
+          nextBtn.innerHTML = `<span>Câu tiếp theo</span> <span>➔</span>`;
+          nextBtn.className = "mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm";
+        }
+      }
     }
 
     function selectOption(selectedIdx, btnElement) {
@@ -1096,6 +1150,8 @@
 
       const isCorrect = (selectedIdx === qData.correctIndex);
       if (isCorrect) score++;
+
+      const letters = ['A', 'B', 'C', 'D'];
 
       userAnswersLog.push({
         qNum: qData.qNum,
@@ -1107,15 +1163,58 @@
         exp: qData.exp
       });
 
-      // Đánh dấu phương án học sinh đã chọn (màu xanh tím trang nhã, không tiết lộ Đúng hay Sai)
-      btnElement.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
-      btnElement.classList.add('border-indigo-600', 'bg-indigo-600', 'text-white', 'font-bold', 'shadow-md');
+      const fbBox = document.getElementById('feedback-box');
+
+      if (isCorrect) {
+        btnElement.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-bold', 'shadow-sm', 'ring-2', 'ring-emerald-300');
+
+        if (fbBox) {
+          fbBox.className = "mt-4 p-4 rounded-2xl border-2 border-emerald-300 bg-emerald-50 text-xs md:text-sm shadow-sm space-y-2";
+          fbBox.innerHTML = `
+            <div class="font-black text-emerald-800 flex items-center gap-2 text-sm">
+              <span>🎉</span> <span>Chính xác! Phương án đúng là <b>${letters[qData.correctIndex]}</b>.</span>
+            </div>
+            <div class="text-slate-700 leading-relaxed pt-2 border-t border-emerald-200">
+              <span class="font-bold text-emerald-900">💡 Giải thích chi tiết &amp; Căn cứ SGK:</span> ${qData.exp}
+            </div>
+          `;
+          fbBox.classList.remove('hidden');
+        }
+      } else {
+        btnElement.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
+        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900', 'font-bold', 'shadow-sm');
+
+        // Làm nổi bật đáp án đúng màu xanh lá để học sinh biết ngay câu trả lời chuẩn
+        if (buttons[qData.correctIndex]) {
+          buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
+          buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-black', 'shadow-sm', 'ring-2', 'ring-emerald-300');
+        }
+
+        if (fbBox) {
+          fbBox.className = "mt-4 p-4 rounded-2xl border-2 border-rose-300 bg-rose-50 text-xs md:text-sm shadow-sm space-y-2";
+          fbBox.innerHTML = `
+            <div class="font-black text-rose-800 flex items-center justify-between text-sm">
+              <span class="flex items-center gap-1.5">
+                <span>❌</span> <span>Chưa chính xác! Phương án của em: <b>${letters[selectedIdx]}</b></span>
+              </span>
+              <span class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-lg font-bold">
+                Đáp án đúng: ${letters[qData.correctIndex]}
+              </span>
+            </div>
+            <div class="text-slate-700 leading-relaxed pt-2 border-t border-rose-200">
+              <span class="font-bold text-rose-900">💡 Giải thích chi tiết &amp; Căn cứ SGK:</span> ${qData.exp}
+            </div>
+          `;
+          fbBox.classList.remove('hidden');
+        }
+      }
 
       const nextBtn = document.getElementById('next-btn');
       if (nextBtn) {
         nextBtn.classList.remove('hidden');
         if (currentIndex + 1 === currentQuiz.length) {
-          nextBtn.innerHTML = `<span>Hoàn thành bài thi &amp; Nộp bài</span> <span>➔</span>`;
+          nextBtn.innerHTML = `<span>Hoàn thành bài &amp; Xem kết quả</span> <span>🏆</span>`;
           nextBtn.className = "mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm";
         } else {
           nextBtn.innerHTML = `<span>Câu tiếp theo</span> <span>➔</span>`;
