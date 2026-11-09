@@ -64,9 +64,8 @@
     <!-- 1. MÀN HÌNH BẮT ĐẦU -->
     <div id="start-screen" class="glass-card w-full p-6 md:p-8 rounded-3xl shadow-xl border border-indigo-100 text-center">
       <div class="w-16 h-16 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3 shadow-inner">🚀</div>
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-300 text-emerald-700 text-xs rounded-full font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-        <span>Hệ thống nộp bài trực tuyến: ĐÃ SẴN SÀNG 🟢</span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-100 border-2 border-emerald-400 text-emerald-950 text-xs rounded-full font-black mb-3 shadow-xs animate-bounce">
+        <span>⚡</span> <span>CHẾ ĐỘ CỦNG CỐ: LÀM CÂU NÀO HIỆN NGAY ĐÁP ÁN CÂU ĐÓ!</span>
       </div>
       <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Bài 5: Lập Kế Hoạch Kinh Doanh<br><span class="text-base text-indigo-700 font-bold normal-case">Bài tập Củng cố kiến thức • GDKT&amp;PL 12</span></h2>
       <div class="mt-2 mb-3 flex flex-wrap items-center justify-center gap-2 text-xs">
@@ -1074,18 +1073,25 @@
         }
 
         if (card) {
-          card.className = `p-3.5 rounded-xl border-2 ${isCorrect ? 'border-emerald-400 bg-emerald-50/50' : 'border-rose-400 bg-rose-50/50'} shadow-sm transition`;
+          card.className = `p-3.5 rounded-xl border-2 ${isCorrect ? 'border-emerald-500 bg-emerald-50/70' : 'border-rose-400 bg-rose-50/70'} shadow-sm transition`;
         }
 
         if (expEl) {
-          expEl.className = `text-xs mt-2.5 pt-2 border-t border-slate-200 ${isCorrect ? 'text-emerald-900' : 'text-rose-900'}`;
+          expEl.className = `text-xs mt-2.5 pt-2.5 border-t ${isCorrect ? 'border-emerald-200 text-emerald-950' : 'border-rose-200 text-rose-950'}`;
           expEl.innerHTML = `
-            <div class="p-2.5 rounded-xl ${isCorrect ? 'bg-emerald-50/80 border border-emerald-200 text-emerald-900' : 'bg-rose-50/80 border border-rose-200 text-rose-900'} space-y-1">
-              <div class="font-bold flex items-center gap-1.5 ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}">
-                <span>${isCorrect ? '✅' : '❌'}</span>
-                <span>${isCorrect ? 'Em trả lời Đúng!' : `Chưa chính xác! (Đáp án chuẩn: <b class="underline text-emerald-700">${item.correct ? 'ĐÚNG' : 'SAI'}</b>)`}</span>
+            <div class="p-3 rounded-xl ${isCorrect ? 'bg-emerald-100/80 border border-emerald-300' : 'bg-rose-100/80 border border-rose-300'} space-y-1.5">
+              <div class="font-black flex items-center justify-between ${isCorrect ? 'text-emerald-800' : 'text-rose-800'} text-xs sm:text-sm">
+                <span class="flex items-center gap-1.5">
+                  <span>${isCorrect ? '✅' : '❌'}</span>
+                  <span>${isCorrect ? 'Em trả lời ĐÚNG!' : 'Chưa chính xác!'}</span>
+                </span>
+                <span class="px-2 py-0.5 rounded-lg ${item.correct ? 'bg-emerald-600' : 'bg-rose-600'} text-white font-bold text-[11px]">
+                  Đáp án chuẩn: ${item.correct ? 'ĐÚNG' : 'SAI'}
+                </span>
               </div>
-              <div class="text-slate-700 font-normal leading-relaxed">💡 ${item.exp}</div>
+              <div class="text-slate-800 font-normal leading-relaxed text-xs">
+                <b class="text-slate-900">💡 Giải thích:</b> ${item.exp}
+              </div>
             </div>
           `;
           expEl.classList.remove('hidden');
@@ -1117,14 +1123,14 @@
 
       const fbBox = document.getElementById('feedback-box');
       if (fbBox) {
-        fbBox.className = `mt-4 p-4 rounded-2xl border-2 ${correctSubCount === 4 ? 'border-emerald-300 bg-emerald-50 text-emerald-900' : 'border-indigo-200 bg-indigo-50 text-indigo-950'} shadow-sm text-xs md:text-sm`;
+        fbBox.className = `mt-4 p-4 rounded-2xl border-2 ${correctSubCount === 4 ? 'border-emerald-400 bg-emerald-50 text-emerald-950' : 'border-indigo-300 bg-indigo-50 text-indigo-950'} shadow-md text-xs md:text-sm`;
         fbBox.innerHTML = `
           <div class="font-black flex items-center justify-between">
-            <span class="flex items-center gap-1.5">
+            <span class="flex items-center gap-2 text-sm">
               <span>${correctSubCount === 4 ? '🎉' : '📊'}</span>
               <span>${correctSubCount === 4 ? 'Xuất sắc! Em đã trả lời đúng cả 4 ý.' : `Em đã trả lời đúng <b>${correctSubCount}/4</b> ý.`}</span>
             </span>
-            <span class="text-[11px] font-semibold text-slate-500">Đọc kĩ lời giải từng ý ở trên</span>
+            <span class="text-xs font-bold text-indigo-800">Đọc kỹ đối chiếu từng ý ở trên 👆</span>
           </div>
         `;
         fbBox.classList.remove('hidden');
@@ -1134,13 +1140,21 @@
       if (nextBtn) {
         nextBtn.classList.remove('hidden');
         if (currentIndex + 1 === currentQuiz.length) {
-          nextBtn.innerHTML = `<span>Hoàn thành bài &amp; Xem kết quả</span> <span>🏆</span>`;
+          nextBtn.innerHTML = `<span>Hoàn thành bài &amp; Xem kết quả tổng kết</span> <span>🏆</span>`;
           nextBtn.className = "mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm";
         } else {
-          nextBtn.innerHTML = `<span>Câu tiếp theo</span> <span>➔</span>`;
+          nextBtn.innerHTML = `<span>Xem xong, chuyển sang câu tiếp theo</span> <span>➔</span>`;
           nextBtn.className = "mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm";
         }
       }
+
+      try {
+        if (fbBox) {
+          setTimeout(() => {
+            fbBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 150);
+        }
+      } catch (e) {}
     }
 
     function selectOption(selectedIdx, btnElement) {
@@ -1166,44 +1180,60 @@
       const fbBox = document.getElementById('feedback-box');
 
       if (isCorrect) {
+        // Học sinh chọn Đúng: Đổi màu nút sang xanh lá + huy hiệu Chính xác
         btnElement.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
-        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-bold', 'shadow-sm', 'ring-2', 'ring-emerald-300');
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-950', 'font-bold', 'shadow-md', 'ring-2', 'ring-emerald-400');
+        btnElement.innerHTML += '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-xs shrink-0 shadow-xs">✅ CHÍNH XÁC</span>';
 
         if (fbBox) {
-          fbBox.className = "mt-4 p-4 rounded-2xl border-2 border-emerald-300 bg-emerald-50 text-xs md:text-sm shadow-sm space-y-2";
+          fbBox.className = "mt-4 p-4 md:p-5 rounded-2xl border-2 border-emerald-400 bg-emerald-50 text-xs md:text-sm shadow-md space-y-2.5 transition-all";
           fbBox.innerHTML = `
-            <div class="font-black text-emerald-800 flex items-center gap-2 text-sm">
-              <span>🎉</span> <span>Chính xác! Phương án đúng là <b>${letters[qData.correctIndex]}</b>.</span>
+            <div class="flex items-center justify-between pb-2 border-b border-emerald-200">
+              <span class="font-black text-emerald-800 flex items-center gap-2 text-sm md:text-base">
+                <span>🎉</span> <span>Chúc mừng em! Em đã chọn CHÍNH XÁC.</span>
+              </span>
+              <span class="px-3 py-1 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs">
+                Đáp án: ${letters[qData.correctIndex]}
+              </span>
             </div>
-            <div class="text-slate-700 leading-relaxed pt-2 border-t border-emerald-200">
-              <span class="font-bold text-emerald-900">💡 Giải thích chi tiết &amp; Căn cứ SGK:</span> ${qData.exp}
+            <div class="text-slate-800 leading-relaxed">
+              <div class="font-bold text-emerald-950 mb-1 flex items-center gap-1.5">
+                <span>💡</span> <span>Căn cứ SGK & Lời giải chi tiết:</span>
+              </div>
+              <p class="text-slate-700 font-normal">${qData.exp}</p>
             </div>
           `;
           fbBox.classList.remove('hidden');
         }
       } else {
+        // Học sinh chọn Sai: Đổi màu nút đã chọn sang đỏ + hiện huy hiệu Bạn chọn sai
         btnElement.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
-        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900', 'font-bold', 'shadow-sm');
+        btnElement.classList.add('border-rose-500', 'bg-rose-100', 'text-rose-950', 'font-bold', 'shadow-md');
+        btnElement.innerHTML += '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-rose-600 text-white font-black text-xs shrink-0 shadow-xs">❌ BẠN CHỌN SAI</span>';
 
-        // Làm nổi bật đáp án đúng màu xanh lá để học sinh biết ngay câu trả lời chuẩn
+        // Tự động tô xanh phương án đúng chuẩn để học sinh biết ngay
         if (buttons[qData.correctIndex]) {
           buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
-          buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'font-black', 'shadow-sm', 'ring-2', 'ring-emerald-300');
+          buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-950', 'font-black', 'shadow-md', 'ring-2', 'ring-emerald-400');
+          buttons[qData.correctIndex].innerHTML += '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-xs shrink-0 shadow-xs animate-pulse">✅ ĐÁP ÁN ĐÚNG LÀ ĐÂY</span>';
         }
 
         if (fbBox) {
-          fbBox.className = "mt-4 p-4 rounded-2xl border-2 border-rose-300 bg-rose-50 text-xs md:text-sm shadow-sm space-y-2";
+          fbBox.className = "mt-4 p-4 md:p-5 rounded-2xl border-2 border-rose-400 bg-rose-50 text-xs md:text-sm shadow-md space-y-2.5 transition-all";
           fbBox.innerHTML = `
-            <div class="font-black text-rose-800 flex items-center justify-between text-sm">
-              <span class="flex items-center gap-1.5">
-                <span>❌</span> <span>Chưa chính xác! Phương án của em: <b>${letters[selectedIdx]}</b></span>
+            <div class="flex items-center justify-between pb-2 border-b border-rose-200">
+              <span class="font-black text-rose-800 flex items-center gap-2 text-sm md:text-base">
+                <span>❌</span> <span>Chưa chính xác! Phương án em chọn: <b>${letters[selectedIdx]}</b></span>
               </span>
-              <span class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-lg font-bold">
-                Đáp án đúng: ${letters[qData.correctIndex]}
+              <span class="px-3 py-1 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-xs">
+                Đáp án chuẩn: ${letters[qData.correctIndex]}
               </span>
             </div>
-            <div class="text-slate-700 leading-relaxed pt-2 border-t border-rose-200">
-              <span class="font-bold text-rose-900">💡 Giải thích chi tiết &amp; Căn cứ SGK:</span> ${qData.exp}
+            <div class="text-slate-800 leading-relaxed">
+              <div class="font-bold text-rose-950 mb-1 flex items-center gap-1.5">
+                <span>💡</span> <span>Căn cứ SGK & Lời giải chi tiết:</span>
+              </div>
+              <p class="text-slate-700 font-normal">${qData.exp}</p>
             </div>
           `;
           fbBox.classList.remove('hidden');
@@ -1214,13 +1244,22 @@
       if (nextBtn) {
         nextBtn.classList.remove('hidden');
         if (currentIndex + 1 === currentQuiz.length) {
-          nextBtn.innerHTML = `<span>Hoàn thành bài &amp; Xem kết quả</span> <span>🏆</span>`;
+          nextBtn.innerHTML = `<span>Hoàn thành bài &amp; Xem kết quả tổng kết</span> <span>🏆</span>`;
           nextBtn.className = "mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm";
         } else {
-          nextBtn.innerHTML = `<span>Câu tiếp theo</span> <span>➔</span>`;
+          nextBtn.innerHTML = `<span>Xem xong, chuyển sang câu tiếp theo</span> <span>➔</span>`;
           nextBtn.className = "mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm";
         }
       }
+
+      // Tự động cuộn xuống nhẹ nhàng để học sinh thấy ngay khung giải thích trên điện thoại
+      try {
+        if (fbBox) {
+          setTimeout(() => {
+            fbBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 150);
+        }
+      } catch (e) {}
     }
 
     function nextQuestion() {

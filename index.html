@@ -143,8 +143,8 @@
             <option value="ktpl" class="font-bold text-amber-700 bg-amber-50">⭐ Đề Ôn Tập Giữa Kỳ I - Môn KTPL (28 câu: 24 TN + 4 Đúng/Sai)</option>
             <option value="kttx1">📝 Kiểm tra thường xuyên 1 (KTTX 1) - 14 câu</option>
             <option value="kttx2">📝 Kiểm tra thường xuyên 2 (KTTX 2) - 14 câu</option>
-            <option value="5" class="font-bold text-indigo-700 bg-indigo-50">🚀 Bài 5: Lập kế hoạch kinh doanh (28 câu: 24 TN + 4 Đúng/Sai)</option>
-            <option value="4" selected>📕 Bài 4: An sinh xã hội (Trắc nghiệm &amp; Đúng/Sai)</option>
+            <option value="5" class="font-bold text-indigo-700 bg-indigo-50" selected>🚀 Bài 5: Lập kế hoạch kinh doanh (28 câu: 24 TN + 4 Đúng/Sai)</option>
+            <option value="4">📕 Bài 4: An sinh xã hội (Trắc nghiệm &amp; Đúng/Sai)</option>
             <option value="3">📙 Bài 3: Bảo hiểm (20 câu)</option>
             <option value="2">📗 Bài 2: Hội nhập kinh tế quốc tế (20 câu)</option>
             <option value="1">📘 Bài 1: Tăng trưởng &amp; phát triển kinh tế (20 câu)</option>
@@ -2376,7 +2376,7 @@ const questionsBank_Bai4 = [
       }
     };
 
-    let currentLesson = LESSONS_DATA[4] || LESSONS_DATA[1];
+    let currentLesson = LESSONS_DATA[5] || LESSONS_DATA[4] || LESSONS_DATA[1];
 
     function onLessonChange() {
       const lessonSelect = document.getElementById('selected-lesson');
@@ -2951,6 +2951,7 @@ const questionsBank_Bai4 = [
       const feedbackStatus = document.getElementById('feedback-status');
       const feedbackExplanation = document.getElementById('feedback-explanation');
       const isCorrect = (selectedIdx === qData.correctIndex);
+      const letters = ['A', 'B', 'C', 'D'];
 
       userAnswersLog.push({
         qNum: qData.qNum,
@@ -2965,24 +2966,41 @@ const questionsBank_Bai4 = [
       if (isCorrect) {
         score++;
         btnElement.classList.remove('border-slate-300', 'bg-white');
-        btnElement.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-emerald-700";
-        feedbackStatus.innerHTML = "✓ Chính xác!";
+        btnElement.classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-950', 'font-bold', 'ring-2', 'ring-emerald-400');
+        btnElement.innerHTML += '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-xs shrink-0 shadow-xs">✅ CHÍNH XÁC</span>';
+
+        feedbackBox.className = "mt-5 p-4 rounded-xl border-2 border-emerald-300 bg-emerald-50 text-sm";
+        feedbackStatus.className = "font-black flex items-center justify-between text-emerald-800 mb-1 text-sm md:text-base";
+        feedbackStatus.innerHTML = `<span>🎉 Chính xác! Em đã chọn đúng.</span> <span class="px-2.5 py-0.5 rounded bg-emerald-600 text-white text-xs font-bold">Đáp án: ${letters[qData.correctIndex]}</span>`;
       } else {
         btnElement.classList.remove('border-slate-300', 'bg-white');
-        btnElement.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
-        buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white');
-        buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
-        feedbackBox.className = "mt-5 p-4 rounded-xl border border-rose-200 bg-rose-50 text-sm";
-        feedbackStatus.className = "font-bold flex items-center gap-1.5 mb-1 text-rose-700";
-        feedbackStatus.innerHTML = "✕ Chưa chính xác!";
+        btnElement.classList.add('border-rose-500', 'bg-rose-100', 'text-rose-950', 'font-bold');
+        btnElement.innerHTML += '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-rose-600 text-white font-black text-xs shrink-0 shadow-xs">❌ BẠN CHỌN SAI</span>';
+
+        if (buttons[qData.correctIndex]) {
+          buttons[qData.correctIndex].classList.remove('border-slate-300', 'bg-white');
+          buttons[qData.correctIndex].classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-950', 'font-black', 'ring-2', 'ring-emerald-400');
+          buttons[qData.correctIndex].innerHTML += '<span class="ml-2 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-xs shrink-0 shadow-xs animate-pulse">✅ ĐÁP ÁN ĐÚNG LÀ ĐÂY</span>';
+        }
+
+        feedbackBox.className = "mt-5 p-4 rounded-xl border-2 border-rose-300 bg-rose-50 text-sm";
+        feedbackStatus.className = "font-black flex items-center justify-between text-rose-800 mb-1 text-sm md:text-base";
+        feedbackStatus.innerHTML = `<span>❌ Chưa chính xác! (Em chọn ${letters[selectedIdx]})</span> <span class="px-2.5 py-0.5 rounded bg-emerald-600 text-white text-xs font-bold">Đáp án chuẩn: ${letters[qData.correctIndex]}</span>`;
       }
 
-      feedbackExplanation.innerText = qData.exp;
+      feedbackExplanation.innerHTML = `<div class="font-bold text-indigo-950 mt-1">💡 Lời giải chi tiết:</div>${qData.exp || ''}`;
       feedbackBox.classList.remove('hidden');
-      document.getElementById('next-btn').classList.remove('hidden');
-      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+      const nBtn = document.getElementById('next-btn');
+      if (nBtn) {
+        nBtn.classList.remove('hidden');
+        nBtn.innerHTML = "<span>Xem xong, chuyển sang câu tiếp theo</span> <span>➔</span>";
+      }
+
+      try {
+        setTimeout(() => {
+          feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 150);
+      } catch(e) {}
     }
 
     function nextQuestion() {
