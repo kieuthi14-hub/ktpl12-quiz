@@ -182,6 +182,11 @@
             <span id="badge-count-b5" class="bg-purple-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
           </button>
 
+          <button id="btn-quick-b6" onclick="switchLesson(6)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>🚀</span> <span>Bài 6: Trách nhiệm XH của DN</span>
+            <span id="badge-count-b6" class="bg-teal-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
+          </button>
+
           <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📊</span> <span>Tổng Hợp Tất Cả Bài</span>
           </button>
@@ -1319,7 +1324,426 @@ const EXAM_BANK_KTTX1 = [
       }
     ];
 
-const EXAM_BANK_BAI5 = [
+const EXAM_BANK_BAI6 = [
+  {
+    "qNum": 1,
+    "q": "Trách nhiệm xã hội của doanh nghiệp là toàn bộ trách nhiệm bắt buộc và tự nguyện mà doanh nghiệp thực hiện đối với xã hội bằng những",
+    "options": [
+      "biện pháp và phương hướng cụ thể.",
+      "giải pháp và hành động cụ thể.",
+      "chủ trương và quyết sách cụ thể.",
+      "chính sách và việc làm cụ thể."
+    ],
+    "answer": 3,
+    "exp": "Theo SGK GDKT&PL 12 (Bài 6): Trách nhiệm xã hội của doanh nghiệp là toàn bộ trách nhiệm bắt buộc và tự nguyện mà doanh nghiệp thực hiện đối với xã hội bằng những chính sách và việc làm cụ thể. Các cụm còn lại không đúng khái niệm trong SGK."
+  },
+  {
+    "qNum": 2,
+    "q": "Doanh nghiệp hoạt động hiệu quả, có lợi nhuận, tạo ra việc làm có mức lương tương xứng là thể hiện hình thức trách nhiệm xã hội nào của doanh nghiệp?",
+    "options": [
+      "Nhân văn.",
+      "Đạo đức.",
+      "Pháp lý.",
+      "Kinh tế."
+    ],
+    "answer": 3,
+    "exp": "Trách nhiệm kinh tế: doanh nghiệp hoạt động hiệu quả, có lợi nhuận, tạo việc làm và thu nhập tương xứng cho người lao động, đóng góp vào sự phát triển kinh tế."
+  },
+  {
+    "qNum": 3,
+    "q": "Một trong những hình thức thực hiện trách nhiệm xã hội của doanh nghiệp về mặt đạo đức thể hiện ở việc mọi doanh nghiệp đều phải đối xử",
+    "options": [
+      "công bằng với đối tác kinh doanh.",
+      "công bằng với mọi nhân viên.",
+      "bất công với người lao động.",
+      "phân biệt với người làm thuê."
+    ],
+    "answer": 1,
+    "exp": "Trách nhiệm đạo đức gồm đối xử công bằng, tôn trọng người lao động, không phân biệt đối xử. Phương án C, D là sai trái; đáp án đúng theo đề là đối xử công bằng với mọi nhân viên."
+  },
+  {
+    "qNum": 4,
+    "q": "Việc các chủ thể kinh tế luôn giữ gìn sự trung thực về sản phẩm của mình đã cam kết là thể hiện trách nhiệm nào dưới đây của doanh nghiệp?",
+    "options": [
+      "Trách nhiệm phân phối.",
+      "Trách nhiệm sản xuất.",
+      "Trách nhiệm đạo đức.",
+      "Trách nhiệm tiêu dùng."
+    ],
+    "answer": 2,
+    "exp": "Giữ gìn sự trung thực, giữ đúng cam kết về sản phẩm là chuẩn mực đạo đức kinh doanh, thuộc trách nhiệm đạo đức. Phân phối, sản xuất, tiêu dùng không phải là hình thức trách nhiệm xã hội của doanh nghiệp."
+  },
+  {
+    "qNum": 5,
+    "q": "Nội dung nào dưới đây thể hiện trách nhiệm đạo đức của doanh nghiệp khi tiến hành kinh doanh?",
+    "options": [
+      "Cam kết chất lượng sản phẩm.",
+      "Từ chối thực hiện nghĩa vụ thuế.",
+      "Sản xuất hàng kém chất lượng.",
+      "Sử dụng các thủ đoạn phi pháp."
+    ],
+    "answer": 0,
+    "exp": "Cam kết chất lượng sản phẩm là thể hiện trách nhiệm đạo đức. B, C, D là hành vi vi phạm pháp luật/đạo đức kinh doanh."
+  },
+  {
+    "qNum": 6,
+    "q": "Việc làm nào dưới đây thể hiện trách nhiệm nhân văn của doanh nghiệp?",
+    "options": [
+      "Đóng góp quỹ xóa đói, giảm nghèo.",
+      "Đầu cơ gây rối loạn thị trường.",
+      "Khai thác tàn phá tài nguyên biển.",
+      "Cạnh tranh không lành mạnh."
+    ],
+    "answer": 0,
+    "exp": "Trách nhiệm nhân văn là hành động tự nguyện vì cộng đồng như từ thiện, đóng góp quỹ xóa đói giảm nghèo, hỗ trợ vùng khó khăn. B, C, D là hành vi vi phạm."
+  },
+  {
+    "qNum": 7,
+    "q": "Doanh nghiệp sản xuất các sản phẩm, dịch vụ hữu ích; không gây hại cho xã hội và môi trường, thể hiện hình thức trách nhiệm xã hội nào của doanh nghiệp?",
+    "options": [
+      "Nhân văn.",
+      "Đạo đức.",
+      "Pháp lý.",
+      "Kinh tế."
+    ],
+    "answer": 1,
+    "exp": "Sản xuất sản phẩm hữu ích, không gây hại cho xã hội và môi trường là thể hiện trách nhiệm đạo đức của doanh nghiệp đối với cộng đồng."
+  },
+  {
+    "qNum": 8,
+    "q": "Công dân thực hiện tốt các quy định của pháp luật về bảo vệ quyền lợi hợp pháp của người tiêu dùng khi tiến hành kinh doanh là đã thực hiện trách nhiệm xã hội của doanh nghiệp ở hình thức nào dưới đây?",
+    "options": [
+      "Trách nhiệm nhân văn.",
+      "Trách nhiệm từ thiện.",
+      "Trách nhiệm pháp lý.",
+      "Trách nhiệm kinh doanh."
+    ],
+    "answer": 2,
+    "exp": "Tuân thủ các quy định của pháp luật (bảo vệ người tiêu dùng, thuế, môi trường, lao động...) là trách nhiệm pháp lí. Từ thiện, kinh doanh không phải tên gọi các hình thức trách nhiệm trong SGK."
+  },
+  {
+    "qNum": 9,
+    "q": "Nội dung nào sau đây thể hiện ý nghĩa của việc thực hiện trách nhiệm xã hội của doanh nghiệp?",
+    "options": [
+      "Tăng lợi thế cạnh tranh cho doanh nghiệp.",
+      "Thúc đẩy quá trình phân hoá giàu – nghèo.",
+      "Thúc đẩy hiện tượng đầu cơ tích trữ.",
+      "Giảm uy tín, thương hiệu của doanh nghiệp."
+    ],
+    "answer": 0,
+    "exp": "Thực hiện trách nhiệm xã hội giúp doanh nghiệp nâng cao uy tín, thương hiệu, tăng lợi thế cạnh tranh. B, C, D là tác động tiêu cực, trái với ý nghĩa."
+  },
+  {
+    "qNum": 10,
+    "q": "Nội dung nào dưới đây thể hiện ý nghĩa của việc thực hiện trách nhiệm xã hội của doanh nghiệp đối với xã hội?",
+    "options": [
+      "Nâng cao chất lượng sản phẩm của mình.",
+      "Tạo dựng niềm tin đối với công chúng.",
+      "Chung sức hỗ trợ cộng đồng vượt qua khó khăn.",
+      "Giảm chi phí, tăng năng suất lao động trong sản xuất."
+    ],
+    "answer": 2,
+    "exp": "Đối với xã hội: doanh nghiệp chung sức hỗ trợ cộng đồng vượt qua khó khăn, góp phần phát triển bền vững. A, B, D là ý nghĩa đối với bản thân doanh nghiệp."
+  },
+  {
+    "qNum": 11,
+    "q": "Trách nhiệm xã hội của doanh nghiệp bao gồm",
+    "options": [
+      "chỉ trách nhiệm bắt buộc theo quy định của pháp luật.",
+      "chỉ trách nhiệm tự nguyện của doanh nghiệp.",
+      "cả trách nhiệm bắt buộc và trách nhiệm tự nguyện.",
+      "chỉ trách nhiệm kinh tế của doanh nghiệp."
+    ],
+    "answer": 2,
+    "exp": "Trách nhiệm xã hội của doanh nghiệp gồm toàn bộ trách nhiệm bắt buộc (pháp luật) và trách nhiệm tự nguyện (đạo đức, nhân văn)."
+  },
+  {
+    "qNum": 12,
+    "q": "Các hình thức thực hiện trách nhiệm xã hội của doanh nghiệp gồm",
+    "options": [
+      "trách nhiệm kinh tế, trách nhiệm pháp lí, trách nhiệm đạo đức, trách nhiệm nhân văn.",
+      "trách nhiệm kinh tế, trách nhiệm pháp lí, trách nhiệm từ thiện, trách nhiệm nhân văn.",
+      "trách nhiệm kinh tế, trách nhiệm sản xuất, trách nhiệm đạo đức, trách nhiệm nhân văn.",
+      "trách nhiệm kinh tế, trách nhiệm pháp lí, trách nhiệm đạo đức, trách nhiệm tiêu dùng."
+    ],
+    "answer": 0,
+    "exp": "Bốn hình thức trách nhiệm xã hội của doanh nghiệp: kinh tế, pháp lí, đạo đức, nhân văn."
+  },
+  {
+    "qNum": 13,
+    "q": "Doanh nghiệp lắp đặt hệ thống xử lí nước thải đạt chuẩn quy định trước khi xả ra môi trường là thể hiện hình thức trách nhiệm xã hội nào?",
+    "options": [
+      "Trách nhiệm kinh tế.",
+      "Trách nhiệm pháp lí.",
+      "Trách nhiệm đạo đức.",
+      "Trách nhiệm nhân văn."
+    ],
+    "answer": 1,
+    "exp": "Xử lí nước thải đạt chuẩn \"theo quy định\" là tuân thủ pháp luật về bảo vệ môi trường, thuộc trách nhiệm pháp lí (bắt buộc)."
+  },
+  {
+    "qNum": 14,
+    "q": "Nội dung nào sau đây không phải là trách nhiệm của công dân khi tham gia điều hành doanh nghiệp?",
+    "options": [
+      "Tuân thủ quy định của pháp luật về bảo vệ môi trường, thuế.",
+      "Xây dựng môi trường làm việc thân thiện, an toàn, đảm bảo quyền lợi người lao động.",
+      "Chỉ thực hiện trách nhiệm với cộng đồng khi doanh nghiệp có lợi nhuận cao.",
+      "Duy trì chất lượng sản phẩm, bảo vệ quyền lợi người tiêu dùng."
+    ],
+    "answer": 2,
+    "exp": "Trách nhiệm với cộng đồng phải được thực hiện thường xuyên, không phụ thuộc điều kiện lợi nhuận cao. A, B, D đều là trách nhiệm của công dân khi điều hành doanh nghiệp."
+  },
+  {
+    "qNum": 15,
+    "q": "Công ty X đầu tư dây chuyền sản xuất hiện đại để sản phẩm đạt chất lượng cao, an toàn, được khách hàng tin dùng, nhờ đó doanh thu tăng 20%. Việc làm này của công ty thể hiện hình thức trách nhiệm xã hội nào?",
+    "options": [
+      "Trách nhiệm kinh tế.",
+      "Trách nhiệm pháp lí.",
+      "Trách nhiệm đạo đức.",
+      "Trách nhiệm nhân văn."
+    ],
+    "answer": 0,
+    "exp": "Đầu tư sản xuất hiệu quả, nâng cao chất lượng và tăng doanh thu là thể hiện trách nhiệm kinh tế của doanh nghiệp."
+  },
+  {
+    "qNum": 16,
+    "q": "Công ty Y phát hiện một lô nguyên liệu giá rẻ có chứa chất độc hại. Ban lãnh đạo công ty quyết định từ chối sử dụng lô nguyên liệu đó dù lợi nhuận giảm. Việc làm này thể hiện hình thức trách nhiệm xã hội nào?",
+    "options": [
+      "Trách nhiệm kinh tế.",
+      "Trách nhiệm pháp lí.",
+      "Trách nhiệm nhân văn.",
+      "Trách nhiệm đạo đức."
+    ],
+    "answer": 3,
+    "exp": "Chấp nhận giảm lợi nhuận để bảo đảm an toàn cho người tiêu dùng và xã hội là hành động xuất phát từ chuẩn mực đạo đức, thể hiện trách nhiệm đạo đức."
+  },
+  {
+    "qNum": 17,
+    "q": "Công ty Z tự nguyện thay toàn bộ bao bì nhựa bằng bao bì phân hủy sinh học dù pháp luật chưa bắt buộc, chấp nhận chi phí tăng 15%. Việc làm này thể hiện hình thức trách nhiệm xã hội nào?",
+    "options": [
+      "Trách nhiệm kinh tế.",
+      "Trách nhiệm nhân văn.",
+      "Trách nhiệm pháp lí.",
+      "Trách nhiệm đạo đức."
+    ],
+    "answer": 3,
+    "exp": "Tự nguyện bảo vệ môi trường dù pháp luật chưa bắt buộc, chấp nhận tăng chi phí là thể hiện trách nhiệm đạo đức (không phải pháp lí vì chưa có quy định bắt buộc)."
+  },
+  {
+    "qNum": 18,
+    "q": "Công ty V chuyên sản xuất, kinh doanh các sản phẩm sữa. Công ty thường xuyên cải tiến mẫu mã, đảm bảo chất lượng sản phẩm; kê khai và nộp thuế đầy đủ; tổ chức chương trình sữa học đường và quyên góp giúp người dân vùng thiên tai. Công ty V đã thực hiện những hình thức trách nhiệm xã hội nào?",
+    "options": [
+      "Kinh tế, đạo đức, nhân văn.",
+      "Kinh tế, pháp lí, nhân văn.",
+      "Pháp lí, đạo đức, nhân văn.",
+      "Kinh tế, pháp lí, đạo đức."
+    ],
+    "answer": 1,
+    "exp": "Cải tiến mẫu mã, nâng cao chất lượng sản phẩm → trách nhiệm kinh tế; kê khai và nộp thuế đầy đủ → trách nhiệm pháp lí; sữa học đường, quyên góp giúp vùng thiên tai → trách nhiệm nhân văn."
+  },
+  {
+    "qNum": 19,
+    "q": "Doanh nghiệp T chưa thực hiện đúng trách nhiệm xã hội của doanh nghiệp. Nhận định nào sau đây đúng về doanh nghiệp T?",
+    "options": [
+      "Doanh nghiệp T đã thực hiện đầy đủ trách nhiệm xã hội của doanh nghiệp.",
+      "Doanh nghiệp T chỉ vi phạm trách nhiệm nhân văn.",
+      "Doanh nghiệp T không cần thực hiện trách nhiệm xã hội của doanh nghiệp.",
+      "Doanh nghiệp T vi phạm cả trách nhiệm pháp lí và trách nhiệm đạo đức."
+    ],
+    "answer": 3,
+    "exp": "Theo đáp án của đề, khi chưa thực hiện đúng trách nhiệm xã hội thì doanh nghiệp vi phạm cả trách nhiệm pháp lí và trách nhiệm đạo đức. A, C sai; B sai vì trách nhiệm nhân văn là tự nguyện, không phải lí do duy nhất."
+  },
+  {
+    "qNum": 20,
+    "q": "Công ty TNHH Sao Việt chuyên sản xuất đồ dùng học tập bằng nhựa tái chế. Hệ thống xử lí nước thải của công ty đã cũ, đôi lúc gây mùi khó chịu cho người dân xung quanh; công nhân phản ánh thời gian làm việc tăng do đơn hàng nhiều; trường THCS gần công ty xin hỗ trợ kinh phí xây dựng thư viện mới. Với tư cách giám đốc, quyết định ưu tiên nào sau đây là phù hợp nhất?",
+    "options": [
+      "Dồn toàn bộ ngân sách để xây thư viện cho trường THCS trước, vì trách nhiệm với cộng đồng là quan trọng nhất.",
+      "Chỉ tập trung tăng sản lượng để bù chi phí, tạm thời không giải quyết các vấn đề về môi trường và người lao động.",
+      "Ngừng sản xuất để tránh mọi trách nhiệm.",
+      "Nâng cấp hệ thống xử lí nước thải trước, vì đó là trách nhiệm pháp lí bắt buộc."
+    ],
+    "answer": 3,
+    "exp": "Phải ưu tiên trách nhiệm bắt buộc (pháp lí): xử lí nước thải đạt chuẩn. Hỗ trợ xây thư viện là trách nhiệm nhân văn tự nguyện, thực hiện sau và tùy khả năng."
+  },
+  {
+    "qNum": 21,
+    "q": "Anh M là giám đốc một doanh nghiệp. Để thể hiện trách nhiệm công dân khi điều hành doanh nghiệp, anh M cần làm gì?",
+    "options": [
+      "Chỉ quan tâm đến lợi nhuận của doanh nghiệp, các vấn đề xã hội do Nhà nước lo liệu.",
+      "Tuân thủ pháp luật; đảm bảo quyền lợi người lao động và người tiêu dùng; thực hiện trách nhiệm với cộng đồng.",
+      "Thực hiện trách nhiệm với cộng đồng chỉ khi doanh nghiệp có lợi nhuận cao và dư thừa ngân sách.",
+      "Chuyển toàn bộ trách nhiệm xã hội của doanh nghiệp cho cấp dưới thực hiện."
+    ],
+    "answer": 1,
+    "exp": "Công dân điều hành doanh nghiệp phải tuân thủ pháp luật, bảo đảm quyền lợi người lao động, người tiêu dùng và có trách nhiệm với cộng đồng. Các phương án còn lại né tránh trách nhiệm."
+  },
+  {
+    "qNum": 22,
+    "q": "Doanh nghiệp K cho rằng thực hiện trách nhiệm xã hội làm tăng chi phí, giảm khả năng cạnh tranh nên không cần thực hiện. Nhận định nào sau đây đúng?",
+    "options": [
+      "Đúng, vì thực hiện trách nhiệm xã hội chỉ làm tăng chi phí mà không mang lại lợi ích gì.",
+      "Sai, vì thực hiện trách nhiệm xã hội giúp doanh nghiệp nâng cao uy tín, tăng lợi thế cạnh tranh và lợi nhuận.",
+      "Đúng, vì trách nhiệm xã hội chỉ là hoạt động từ thiện, không liên quan đến kinh doanh.",
+      "Sai, vì doanh nghiệp chỉ cần nộp thuế là đủ."
+    ],
+    "answer": 1,
+    "exp": "Thực hiện trách nhiệm xã hội giúp nâng cao uy tín, thương hiệu, lợi thế cạnh tranh và lợi nhuận lâu dài. Trách nhiệm xã hội không chỉ là từ thiện hay nộp thuế."
+  },
+  {
+    "qNum": 23,
+    "q": "Công ty A chuyên kinh doanh các mặt hàng thực phẩm. Công ty đặc biệt lưu ý kiểm soát chất lượng đầu vào, ưu tiên chọn nhà cung cấp tuân thủ đúng các quy định của Nhà nước về hồ sơ pháp lí, có chứng nhận VietGAP, chuỗi thực phẩm an toàn. Công ty A đã thực hiện những hình thức trách nhiệm xã hội nào?",
+    "options": [
+      "Kinh tế, pháp lí, nhân văn.",
+      "Kinh tế, đạo đức, nhân văn.",
+      "Kinh tế, pháp lí, đạo đức.",
+      "Pháp lí, đạo đức, nhân văn."
+    ],
+    "answer": 2,
+    "exp": "Kiểm soát chất lượng đầu vào → kinh tế; chọn nhà cung cấp tuân thủ quy định, hồ sơ pháp lí → pháp lí; chọn chuỗi thực phẩm an toàn, VietGAP vì người tiêu dùng → đạo đức. Chưa có hoạt động vì cộng đồng nên chưa có trách nhiệm nhân văn."
+  },
+  {
+    "qNum": 24,
+    "q": "Doanh nghiệp thực hiện trách nhiệm xã hội — bảo vệ quyền lợi người lao động, bảo vệ người tiêu dùng, đóng góp cho cộng đồng — chính là góp phần thực hiện",
+    "options": [
+      "quyền con người trong đời sống kinh tế – xã hội.",
+      "quyền sở hữu của doanh nghiệp.",
+      "quyền tự do kinh doanh không giới hạn.",
+      "quyền độc quyền trên thị trường."
+    ],
+    "answer": 0,
+    "exp": "Bảo vệ quyền lợi người lao động, người tiêu dùng và cộng đồng chính là góp phần bảo đảm quyền con người trong đời sống kinh tế – xã hội. Tự do kinh doanh luôn có giới hạn, độc quyền là sai."
+  },
+  {
+    "qNum": 25,
+    "type": "true_false",
+    "passage": "Công ty TNHH Sao Việt chuyên sản xuất đồ dùng học tập bằng nhựa tái chế. Doanh nghiệp đang đối diện ba vấn đề cần đưa ra quyết định: hệ thống xử lí nước thải đã cũ, đôi lúc gây mùi khó chịu cho người dân xung quanh, việc nâng cấp sẽ làm tăng chi phí, lợi nhuận giảm trong ngắn hạn; công nhân phản ánh thời gian làm việc tăng do đơn hàng nhiều, công ty có thể tuyển thêm người nhưng chi phí nhân sự sẽ cao hơn; trường THCS gần công ty xin hỗ trợ kinh phí xây dựng thư viện mới, nhưng ngân sách công ty đang dồn cho nâng cấp máy móc.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Giám đốc công ty nên ưu tiên nâng cấp hệ thống xử lí nước thải trước, vì đó là trách nhiệm pháp lí bắt buộc của doanh nghiệp.",
+        "correct": true,
+        "exp": "Đúng. Xử lí nước thải đạt chuẩn là nghĩa vụ bắt buộc theo pháp luật về bảo vệ môi trường (trách nhiệm pháp lí) nên phải ưu tiên hàng đầu."
+      },
+      {
+        "label": "b",
+        "text": "Công ty có thể trì hoãn việc xử lí nước thải để dồn ngân sách xây thư viện cho trường THCS, vì trách nhiệm nhân văn quan trọng hơn trách nhiệm pháp lí.",
+        "correct": false,
+        "exp": "Sai. Trách nhiệm pháp lí là bắt buộc, không thể trì hoãn để thực hiện trách nhiệm nhân văn là hoạt động tự nguyện."
+      },
+      {
+        "label": "c",
+        "text": "Việc tuyển thêm công nhân để giảm thời gian làm việc quá tải thể hiện trách nhiệm của doanh nghiệp đối với người lao động.",
+        "correct": true,
+        "exp": "Đúng. Bảo đảm thời gian làm việc hợp lí, quyền lợi và sức khỏe người lao động là trách nhiệm của doanh nghiệp đối với người lao động."
+      },
+      {
+        "label": "d",
+        "text": "Hỗ trợ kinh phí xây thư viện cho trường THCS là trách nhiệm bắt buộc mà công ty phải thực hiện ngay.",
+        "correct": false,
+        "exp": "Sai. Hỗ trợ xây thư viện là trách nhiệm nhân văn, mang tính tự nguyện, thực hiện tùy theo khả năng, không bắt buộc."
+      }
+    ]
+  },
+  {
+    "qNum": 26,
+    "type": "true_false",
+    "passage": "Doanh nghiệp V là một doanh nghiệp nhỏ ngành dệt may ở một xã thuần nông. Doanh nghiệp đã cung ứng cho thị trường nhiều sản phẩm có chất lượng, thân thiện với môi trường; thu hút lao động là thanh niên trong xã, đào tạo họ thành những người thợ lành nghề, có việc làm và thu nhập ổn định; hằng năm, doanh nghiệp còn hỗ trợ kinh phí cho học sinh có hoàn cảnh đặc biệt khó khăn trong xã đi học đại học và tham gia nhiều hoạt động cộng đồng trong xã. Công ty A chuyên kinh doanh các mặt hàng thực phẩm, đặc biệt lưu ý kiểm soát chất lượng đầu vào, ưu tiên chọn nhà cung cấp tuân thủ đúng các quy định của Nhà nước về hồ sơ pháp lí, có chứng nhận VietGAP, chuỗi thực phẩm an toàn.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Doanh nghiệp V (dệt may) đã thực hiện trách nhiệm kinh tế, trách nhiệm đạo đức và trách nhiệm nhân văn.",
+        "correct": true,
+        "exp": "Đúng. Tạo việc làm, thu nhập ổn định → kinh tế; sản phẩm chất lượng, thân thiện môi trường → đạo đức; hỗ trợ học sinh khó khăn, hoạt động cộng đồng → nhân văn."
+      },
+      {
+        "label": "b",
+        "text": "Công ty A đã thực hiện trách nhiệm kinh tế, trách nhiệm pháp lí và trách nhiệm đạo đức.",
+        "correct": true,
+        "exp": "Đúng. Kiểm soát chất lượng → kinh tế; tuân thủ quy định, hồ sơ pháp lí → pháp lí; thực phẩm an toàn, VietGAP → đạo đức."
+      },
+      {
+        "label": "c",
+        "text": "Doanh nghiệp V (dệt may) đã thực hiện trách nhiệm pháp lí vì đã cung ứng sản phẩm có chất lượng, thân thiện với môi trường.",
+        "correct": false,
+        "exp": "Sai. Cung ứng sản phẩm chất lượng, thân thiện môi trường là trách nhiệm đạo đức; đoạn thông tin không nêu việc tuân thủ quy định pháp luật cụ thể."
+      },
+      {
+        "label": "d",
+        "text": "Công ty A đã thực hiện trách nhiệm nhân văn vì đã kiểm soát chất lượng đầu vào và chọn nhà cung cấp có chứng nhận VietGAP.",
+        "correct": false,
+        "exp": "Sai. Kiểm soát chất lượng và chọn nhà cung cấp đạt chuẩn là trách nhiệm kinh tế, pháp lí, đạo đức; trách nhiệm nhân văn là hoạt động từ thiện, hỗ trợ cộng đồng."
+      }
+    ]
+  },
+  {
+    "qNum": 27,
+    "type": "true_false",
+    "passage": "Về khái niệm và các hình thức thực hiện trách nhiệm xã hội của doanh nghiệp, xét các nhận định sau:",
+    "q": "Em hãy xác định mỗi nhận định sau đây về trách nhiệm xã hội của doanh nghiệp là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Trách nhiệm xã hội của doanh nghiệp là toàn bộ trách nhiệm bắt buộc và tự nguyện mà doanh nghiệp thực hiện đối với xã hội bằng những chính sách và việc làm cụ thể.",
+        "correct": true,
+        "exp": "Đúng. Đây là khái niệm trong SGK."
+      },
+      {
+        "label": "b",
+        "text": "Trách nhiệm xã hội của doanh nghiệp chỉ bao gồm trách nhiệm bắt buộc theo quy định của pháp luật.",
+        "correct": false,
+        "exp": "Sai. Gồm cả trách nhiệm bắt buộc và trách nhiệm tự nguyện."
+      },
+      {
+        "label": "c",
+        "text": "Trách nhiệm kinh tế, trách nhiệm pháp lí, trách nhiệm đạo đức và trách nhiệm nhân văn là các hình thức thực hiện trách nhiệm xã hội của doanh nghiệp.",
+        "correct": true,
+        "exp": "Đúng. Đây là 4 hình thức thực hiện trách nhiệm xã hội của doanh nghiệp."
+      },
+      {
+        "label": "d",
+        "text": "Trách nhiệm nhân văn là trách nhiệm bắt buộc mà mọi doanh nghiệp đều phải thực hiện.",
+        "correct": false,
+        "exp": "Sai. Trách nhiệm nhân văn mang tính tự nguyện, tùy khả năng; trách nhiệm bắt buộc là trách nhiệm pháp lí."
+      }
+    ]
+  },
+  {
+    "qNum": 28,
+    "type": "true_false",
+    "passage": "Về ý nghĩa của việc thực hiện trách nhiệm xã hội của doanh nghiệp và trách nhiệm của công dân khi điều hành doanh nghiệp, xét các nhận định sau:",
+    "q": "Em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Thực hiện trách nhiệm xã hội giúp doanh nghiệp nâng cao chất lượng, giá trị thương hiệu và uy tín, tăng lợi thế cạnh tranh.",
+        "correct": true,
+        "exp": "Đúng. Đây là ý nghĩa đối với bản thân doanh nghiệp."
+      },
+      {
+        "label": "b",
+        "text": "Khi tham gia điều hành doanh nghiệp, công dân chỉ cần quan tâm đến lợi nhuận, không cần quan tâm đến quyền lợi của người lao động và người tiêu dùng.",
+        "correct": false,
+        "exp": "Sai. Công dân điều hành doanh nghiệp phải bảo đảm quyền lợi người lao động, người tiêu dùng và có trách nhiệm với cộng đồng."
+      },
+      {
+        "label": "c",
+        "text": "Thực hiện trách nhiệm xã hội làm tăng chi phí, giảm khả năng cạnh tranh của doanh nghiệp.",
+        "correct": false,
+        "exp": "Sai. Về lâu dài, thực hiện trách nhiệm xã hội giúp tăng uy tín, lợi thế cạnh tranh và lợi nhuận."
+      },
+      {
+        "label": "d",
+        "text": "Giám đốc một doanh nghiệp tự nguyện thay bao bì nhựa bằng bao bì phân hủy sinh học dù pháp luật chưa bắt buộc là thể hiện trách nhiệm đạo đức của doanh nghiệp trong bảo vệ môi trường.",
+        "correct": true,
+        "exp": "Đúng. Hành động tự nguyện vì môi trường dù chưa bị pháp luật bắt buộc là thể hiện trách nhiệm đạo đức."
+      }
+    ]
+  }
+];
+
+    const EXAM_BANK_BAI5 = [
   {
     "qNum": 1,
     "q": "Kế hoạch kinh doanh là",
@@ -3422,6 +3846,7 @@ const EXAM_BANK_BAI5 = [
       const btnB3 = document.getElementById('btn-quick-b3');
       const btnB4 = document.getElementById('btn-quick-b4');
       const btnB5 = document.getElementById('btn-quick-b5');
+      const btnB6 = document.getElementById('btn-quick-b6');
 
       const activeBtnExam = "px-3 py-1.5 rounded-xl text-xs font-black transition shadow-xs flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300";
       const inactiveBtnExam = "px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800";
@@ -3438,6 +3863,7 @@ const EXAM_BANK_BAI5 = [
       if (btnB3) btnB3.className = (currentActiveLessonId === 3) ? activeBtnLesson : inactiveBtnLesson;
       if (btnB4) btnB4.className = (currentActiveLessonId === 4) ? activeBtnLesson : inactiveBtnLesson;
       if (btnB5) btnB5.className = (currentActiveLessonId === 5) ? activeBtnLesson : inactiveBtnLesson;
+      if (btnB6) btnB6.className = (currentActiveLessonId === 6) ? activeBtnLesson : inactiveBtnLesson;
 
       const activeB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-sm border border-indigo-300 ring-2 ring-indigo-200";
       const inactiveB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-slate-200 text-slate-700 hover:bg-white hover:text-indigo-900";
@@ -3867,6 +4293,7 @@ const EXAM_BANK_BAI5 = [
       const b3Count = allRawSubmissions.filter(s => s.lessonId === 3).length;
       const b4Count = allRawSubmissions.filter(s => s.lessonId === 4).length;
       const b5Count = allRawSubmissions.filter(s => s.lessonId === 5).length;
+      const b6Count = allRawSubmissions.filter(s => s.lessonId === 6).length;
       const kttx2Count = allRawSubmissions.filter(s => s.lessonId === 'kttx2').length;
       const kttx1Count = allRawSubmissions.filter(s => s.lessonId === 'kttx1').length;
       const badgeB1 = document.getElementById('badge-count-b1');
@@ -3874,6 +4301,7 @@ const EXAM_BANK_BAI5 = [
       const badgeB3 = document.getElementById('badge-count-b3');
       const badgeB4 = document.getElementById('badge-count-b4');
       const badgeB5 = document.getElementById('badge-count-b5');
+      const badgeB6 = document.getElementById('badge-count-b6');
       const badgeKttx2 = document.getElementById('badge-count-kttx2');
       const badgeKttx1 = document.getElementById('badge-count-kttx1');
       if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
@@ -3881,6 +4309,7 @@ const EXAM_BANK_BAI5 = [
       if (badgeB3) badgeB3.innerText = `${b3Count} bài`;
       if (badgeB4) badgeB4.innerText = `${b4Count} bài`;
       if (badgeB5) badgeB5.innerText = `${b5Count} bài`;
+      if (badgeB6) badgeB6.innerText = `${b6Count} bài`;
       if (badgeKttx2) badgeKttx2.innerText = `${kttx2Count} bài`;
       if (badgeKttx1) badgeKttx1.innerText = `${kttx1Count} bài`;
 
@@ -4421,8 +4850,8 @@ const EXAM_BANK_BAI5 = [
       if (!modal || !bodyEl) return;
       if (copyBtn) copyBtn.innerText = 'Sao chép câu sai & lời giải';
 
-      let bank = (lessonKey === 'kttx2') ? EXAM_BANK_KTTX2 : (lessonKey === 'ktpl' ? EXAM_BANK_KTPL : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? EXAM_BANK_BAI5 : EXAM_BANK_KTTX1);
-      let lessonTitle = (lessonKey === 'kttx2') ? 'Kiểm Tra Thường Xuyên 2 (KTTX 2)' : (lessonKey === 'ktpl' ? 'Đề Ôn Tập Giữa HK1 - Môn KTPL' : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? 'Bài 5: Lập kế hoạch kinh doanh' : 'Kiểm Tra Thường Xuyên 1 (KTTX 1)');
+      let bank = (lessonKey === 'kttx2') ? EXAM_BANK_KTTX2 : (lessonKey === 'ktpl' ? EXAM_BANK_KTPL : (lessonKey === 6 || lessonKey === '6' || lessonKey === 'B6') ? EXAM_BANK_BAI6 : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? EXAM_BANK_BAI5 : EXAM_BANK_KTTX1);
+      let lessonTitle = (lessonKey === 'kttx2') ? 'Kiểm Tra Thường Xuyên 2 (KTTX 2)' : (lessonKey === 'ktpl' ? 'Đề Ôn Tập Giữa HK1 - Môn KTPL' : (lessonKey === 6 || lessonKey === '6' || lessonKey === 'B6') ? 'Bài 6: Trách nhiệm xã hội của doanh nghiệp' : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? 'Bài 5: Lập kế hoạch kinh doanh' : 'Kiểm Tra Thường Xuyên 1 (KTTX 1)');
 
       if (nameEl) nameEl.innerText = studentName;
       if (metaEl) metaEl.innerText = 'Lớp: ' + className + ' • ' + lessonTitle + ' • ' + (wrongText || 'Chi tiết');
