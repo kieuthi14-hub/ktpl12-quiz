@@ -187,6 +187,11 @@
             <span id="badge-count-b6" class="bg-teal-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
           </button>
 
+          <button id="btn-quick-b7" onclick="switchLesson(7)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
+            <span>🚀</span> <span>Bài 7: Quản lí thu chi GĐ</span>
+            <span id="badge-count-b7" class="bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">...</span>
+          </button>
+
           <button id="btn-quick-all" onclick="switchLesson('ALL')" class="px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5 bg-indigo-800/80 hover:bg-indigo-700 text-white">
             <span>📊</span> <span>Tổng Hợp Tất Cả Bài</span>
           </button>
@@ -1324,7 +1329,426 @@ const EXAM_BANK_KTTX1 = [
       }
     ];
 
-const EXAM_BANK_BAI6 = [
+const EXAM_BANK_BAI7 = [
+  {
+    "qNum": 1,
+    "q": "Quản lí thu, chi trong gia đình là",
+    "options": [
+      "việc quản lí các nguồn thu nhập và các khoản chi tiêu của tất cả các thành viên trong gia đình, kể cả trẻ em và người cao tuổi không đi làm, không có thu nhập.",
+      "việc quản lí các khoản thu nhập và chi tiêu nhằm đáp ứng nhu cầu vật chất, tinh thần cho các thành viên trong gia đình và phù hợp với thu nhập của gia đình.",
+      "việc tiết kiệm tối đa mọi khoản chi tiêu trong gia đình để tích luỹ được nhiều tiền nhất có thể cho tương lai của các thành viên.",
+      "việc chi tiêu theo sở thích để thoả mãn mọi nhu cầu vật chất và tinh thần của các thành viên trong gia đình mà không cần quan tâm đến thu nhập."
+    ],
+    "answer": 1,
+    "exp": "Đáp án đúng: B. Quản lí thu, chi trong gia đình là việc quản lí các khoản thu nhập và chi tiêu nhằm đáp ứng nhu cầu vật chất, tinh thần cho các thành viên và phù hợp với thu nhập của gia đình. Các phương án còn lại hoặc thu hẹp (chỉ tiết kiệm), hoặc sai (chi tiêu bất chấp thu nhập)."
+  },
+  {
+    "qNum": 2,
+    "q": "Khoản nào sau đây KHÔNG phải là nguồn thu nhập của gia đình?",
+    "options": [
+      "Tiền lương, tiền công của các thành viên đi làm.",
+      "Lợi tức từ tiền gửi ngân hàng của gia đình.",
+      "Lợi nhuận từ hoạt động sản xuất kinh doanh của gia đình.",
+      "Tiền học phí mà gia đình đóng cho con đi học."
+    ],
+    "answer": 3,
+    "exp": "Đáp án đúng: D. Tiền học phí gia đình đóng cho con là khoản CHI, không phải khoản thu. Lương, lợi tức tiền gửi, lợi nhuận kinh doanh đều là nguồn thu nhập."
+  },
+  {
+    "qNum": 3,
+    "q": "Quản lí thu nhập trong gia đình là quá trình",
+    "options": [
+      "xác định, theo dõi và tối ưu hoá các nguồn thu nhập nhằm đảm bảo được các mục tiêu tài chính của gia đình.",
+      "cắt giảm tối đa mọi khoản chi tiêu không cần thiết trong gia đình để tăng thu nhập cho các thành viên trong gia đình.",
+      "gửi toàn bộ thu nhập của gia đình vào ngân hàng để hưởng lãi suất cao nhất có thể.",
+      "chỉ ghi chép các khoản thu nhập của gia đình mà không cần theo dõi các khoản chi tiêu."
+    ],
+    "answer": 0,
+    "exp": "Đáp án đúng: A. Quản lí thu nhập là quá trình xác định, theo dõi và tối ưu hoá các nguồn thu nhập để bảo đảm các mục tiêu tài chính của gia đình. Không chỉ ghi chép thu mà bỏ qua chi, cũng không chỉ gửi ngân hàng hay cắt giảm chi."
+  },
+  {
+    "qNum": 4,
+    "q": "Gia đình anh K có thu nhập 20 triệu đồng/tháng. Anh K cho rằng quản lí thu, chi là việc của người làm ra tiền, các thành viên khác như con nhỏ, người già không liên quan. Nhận định này",
+    "options": [
+      "đúng, vì chỉ người làm ra tiền mới cần quản lí thu, chi trong gia đình.",
+      "đúng, vì trẻ em và người cao tuổi không có thu nhập nên không tham gia chi tiêu trong gia đình.",
+      "sai, vì quản lí thu, chi là việc quản lí các khoản thu nhập và chi tiêu nhằm đáp ứng nhu cầu của tất cả các thành viên trong gia đình.",
+      "sai, vì quản lí thu, chi chỉ là việc tiết kiệm tiền, không liên quan gì đến nhu cầu vật chất và tinh thần của các thành viên trong gia đình."
+    ],
+    "answer": 2,
+    "exp": "Đáp án đúng: C. Nhận định của anh K sai: quản lí thu, chi nhằm đáp ứng nhu cầu của TẤT CẢ thành viên trong gia đình (kể cả trẻ em, người già), nên là việc chung của cả gia đình, không chỉ của người làm ra tiền."
+  },
+  {
+    "qNum": 5,
+    "q": "Thói quen chi tiêu nào sau đây là tích cực?",
+    "options": [
+      "Chỉ mua khi thực sự cần thiết.",
+      "Chi tiêu tuỳ hứng theo cảm xúc của bản thân.",
+      "Chi tiêu hết thu nhập, không có quỹ dự phòng.",
+      "Mua sắm theo sở thích, không cần lập danh sách."
+    ],
+    "answer": 0,
+    "exp": "Đáp án đúng: A. \"Chỉ mua khi thực sự cần thiết\" là thói quen chi tiêu tích cực. Chi tiêu tùy hứng, chi hết thu nhập không có quỹ dự phòng, mua sắm không có danh sách đều là thói quen không tích cực."
+  },
+  {
+    "qNum": 6,
+    "q": "Thói quen chi tiêu nào sau đây là KHÔNG tích cực?",
+    "options": [
+      "Tiết kiệm điện, nước trong sinh hoạt hằng ngày.",
+      "Bàn bạc, thống nhất giữa các thành viên trước khi chi tiêu.",
+      "Ghi chép các khoản chi và lập bảng theo dõi chi tiêu hằng tháng.",
+      "Chi tiêu hết thu nhập, không có quỹ dự phòng."
+    ],
+    "answer": 3,
+    "exp": "Đáp án đúng: D. Chi tiêu hết thu nhập, không có quỹ dự phòng là thói quen KHÔNG tích cực vì gia đình dễ lâm vào khó khăn khi có rủi ro. Tiết kiệm điện nước, bàn bạc thống nhất, ghi chép chi tiêu đều là thói quen tích cực."
+  },
+  {
+    "qNum": 7,
+    "q": "Việc “chỉ mua khi thực sự cần thiết” là thói quen chi tiêu tích cực vì",
+    "options": [
+      "giúp gia đình tiết kiệm được nhiều tiền nhất có thể trong mọi trường hợp và nhanh chóng đạt được tự do tài chính hoàn toàn.",
+      "giúp gia đình không cần phải lập kế hoạch thu, chi trong gia đình nữa.",
+      "giúp gia đình kiểm soát được chi tiêu, tránh mua sắm lãng phí và chủ động thực hiện kế hoạch tài chính của gia đình.",
+      "giúp các thành viên trong gia đình không cần bàn bạc với nhau khi mua sắm."
+    ],
+    "answer": 2,
+    "exp": "Đáp án đúng: C. Chỉ mua khi cần thiết giúp gia đình kiểm soát chi tiêu, tránh lãng phí và chủ động thực hiện kế hoạch tài chính. Các phương án còn lại nói quá hoặc sai (không cần lập kế hoạch, không cần bàn bạc)."
+  },
+  {
+    "qNum": 8,
+    "q": "Thói quen chi tiêu không tích cực sẽ ảnh hưởng như thế nào tới đời sống gia đình?",
+    "options": [
+      "Thu nhập không đủ bù đắp chi tiêu, dẫn đến thâm hụt ngân sách, nợ nần và không đạt được các mục tiêu tài chính của gia đình.",
+      "Giúp gia đình chi tiêu thoải mái, không cần lo lắng gì về tiền bạc trong tương lai vì thu nhập luôn tăng theo thời gian và chi tiêu luôn được đảm bảo.",
+      "Giúp các thành viên trong gia đình thoả mãn mọi nhu cầu và sống hạnh phúc hơn.",
+      "Không ảnh hưởng gì, vì thu nhập của gia đình luôn đủ để chi tiêu."
+    ],
+    "answer": 0,
+    "exp": "Đáp án đúng: A. Thói quen chi tiêu không tích cực làm thu nhập không đủ bù chi tiêu, dẫn đến thâm hụt, nợ nần và không đạt được mục tiêu tài chính của gia đình."
+  },
+  {
+    "qNum": 9,
+    "q": "Chị D luôn ghi chép tất cả các khoản chi và lập bảng theo dõi chi tiêu hằng tháng của gia đình để có sự điều chỉnh vào tháng sau nếu cần thiết. Việc làm này có ý nghĩa gì trong quản lí thu, chi gia đình?",
+    "options": [
+      "Chỉ để biết gia đình đã tiêu hết bao nhiêu tiền trong tháng, không có tác dụng gì khác trong quản lí thu, chi của gia đình.",
+      "Làm mất thời gian, vì ghi chép các khoản chi không giúp gia đình tiết kiệm được tiền.",
+      "Chỉ phù hợp với gia đình có thu nhập cao, không phù hợp với gia đình có thu nhập thấp.",
+      "Là thói quen tốt giúp gia đình theo dõi, kiểm soát chi tiêu và điều chỉnh kế hoạch thu, chi cho phù hợp."
+    ],
+    "answer": 3,
+    "exp": "Đáp án đúng: D. Ghi chép các khoản chi, lập bảng theo dõi hằng tháng là thói quen tốt giúp gia đình theo dõi, kiểm soát chi tiêu và điều chỉnh kế hoạch thu, chi cho phù hợp; gia đình thu nhập thấp càng cần làm."
+  },
+  {
+    "qNum": 10,
+    "q": "Hằng tháng, vợ chồng chị Q thường xác định hạn mức mua sắm của hai vợ chồng để không ảnh hưởng đến khoản tiết kiệm chung của gia đình. Việc làm này thể hiện",
+    "options": [
+      "thói quen chi tiêu không tích cực, vì hạn chế nhu cầu mua sắm chính đáng của các thành viên trong gia đình và gây khó chịu.",
+      "việc làm không cần thiết, vì mua sắm không ảnh hưởng đến khoản tiết kiệm chung của gia đình.",
+      "thói quen chi tiêu tích cực, giúp chi tiêu hiệu quả và thực hành tiết kiệm để đạt được các mục tiêu tài chính của gia đình.",
+      "thói quen chỉ phù hợp khi gia đình có thu nhập cao và ổn định trong thời gian dài."
+    ],
+    "answer": 2,
+    "exp": "Đáp án đúng: C. Xác định hạn mức mua sắm để không ảnh hưởng khoản tiết kiệm chung là thói quen chi tiêu tích cực, giúp chi tiêu hiệu quả và thực hành tiết kiệm để đạt mục tiêu tài chính."
+  },
+  {
+    "qNum": 11,
+    "q": "Bước đầu tiên trong việc lập kế hoạch quản lí thu, chi trong gia đình là",
+    "options": [
+      "xác định các nguồn thu nhập trong gia đình.",
+      "thảo luận để xác định mục tiêu tài chính trong gia đình và thời gian thực hiện.",
+      "thống nhất các khoản chi thiết yếu và không thiết yếu trong gia đình giữa các thành viên.",
+      "thực hiện các khoản thu, chi hằng tháng theo kế hoạch đã xây dựng."
+    ],
+    "answer": 1,
+    "exp": "Đáp án đúng: B. Quy trình lập kế hoạch quản lí thu, chi: Bước 1: Thảo luận xác định mục tiêu tài chính và thời gian thực hiện -> Bước 2: Xác định các nguồn thu nhập -> Bước 3: Thống nhất các khoản chi thiết yếu và không thiết yếu -> Bước 4: Xác định tỉ lệ phân chia thu nhập (ví dụ quy tắc 50/30/20) -> Bước 5: Thực hiện thu, chi theo kế hoạch. Bước đầu tiên là thảo luận xác định mục tiêu tài chính."
+  },
+  {
+    "qNum": 12,
+    "q": "Theo quy tắc 50/30/20, tỉ lệ phân chia thu nhập của gia đình là",
+    "options": [
+      "50% cho chi tiêu thiết yếu, 30% cho các mục tiêu tài chính, 20% cho chi tiêu cá nhân.",
+      "50% cho tiết kiệm, 30% cho chi tiêu thiết yếu, 20% cho chi tiêu cá nhân.",
+      "50% cho chi tiêu cá nhân, 30% cho chi tiêu thiết yếu, 20% cho tiết kiệm.",
+      "50% cho các mục tiêu tài chính, 30% cho chi tiêu thiết yếu, 20% cho chi tiêu cá nhân."
+    ],
+    "answer": 0,
+    "exp": "Đáp án đúng: A. Quy tắc 50/30/20: 50% cho chi tiêu thiết yếu, 30% cho các mục tiêu tài chính (tiết kiệm, trả nợ, quỹ dự phòng), 20% cho chi tiêu cá nhân."
+  },
+  {
+    "qNum": 13,
+    "q": "Khi xác định mục tiêu tài chính trong gia đình, cần đảm bảo các tiêu chí nào?",
+    "options": [
+      "Càng cao càng tốt, không cần giới hạn thời gian hoàn thành mục tiêu.",
+      "Chỉ cần cụ thể, không cần đo lường được hay có tính khả thi.",
+      "Chỉ cần có tính khả thi, không cần cụ thể hay giới hạn thời gian hoàn thành.",
+      "Cụ thể, đo lường được, có tính khả thi và giới hạn thời gian hoàn thành."
+    ],
+    "answer": 3,
+    "exp": "Đáp án đúng: D. Mục tiêu tài chính cần đạt các tiêu chí: cụ thể, đo lường được, có tính khả thi và giới hạn thời gian hoàn thành."
+  },
+  {
+    "qNum": 14,
+    "q": "Trong quy tắc 50/30/20, khoản 30% thu nhập được dùng cho",
+    "options": [
+      "các chi tiêu thiết yếu như ăn uống, điện nước, học phí của các con trong gia đình.",
+      "các chi tiêu cá nhân như mua sắm, du lịch, giải trí của các thành viên.",
+      "các mục tiêu tài chính như trả nợ, tiết kiệm, quỹ dự phòng của gia đình.",
+      "các khoản chi không thiết yếu như ăn uống bên ngoài và mua sắm."
+    ],
+    "answer": 2,
+    "exp": "Đáp án đúng: C. Trong quy tắc 50/30/20, 30% thu nhập dành cho các mục tiêu tài chính như trả nợ, tiết kiệm, quỹ dự phòng. 50% là chi tiêu thiết yếu, 20% là chi tiêu cá nhân."
+  },
+  {
+    "qNum": 15,
+    "q": "Gia đình chị B có thu nhập 15 triệu đồng/tháng. Theo quy tắc 50/30/20, gia đình chị B nên dành bao nhiêu tiền cho các chi tiêu thiết yếu?",
+    "options": [
+      "3 triệu đồng.",
+      "7,5 triệu đồng.",
+      "4,5 triệu đồng.",
+      "15 triệu đồng."
+    ],
+    "answer": 1,
+    "exp": "Đáp án đúng: B. Chi tiêu thiết yếu chiếm 50%: 15 triệu × 50% = 7,5 triệu đồng."
+  },
+  {
+    "qNum": 16,
+    "q": "Gia đình chị B có thu nhập 15 triệu đồng/tháng. Theo quy tắc 50/30/20, gia đình chị B nên dành bao nhiêu tiền cho tiết kiệm và các mục tiêu tài chính?",
+    "options": [
+      "4,5 triệu đồng.",
+      "7,5 triệu đồng.",
+      "3 triệu đồng.",
+      "15 triệu đồng."
+    ],
+    "answer": 0,
+    "exp": "Đáp án đúng: A. Tiết kiệm và các mục tiêu tài chính chiếm 30%: 15 triệu × 30% = 4,5 triệu đồng."
+  },
+  {
+    "qNum": 17,
+    "q": "Vợ chồng anh A đầu năm thống nhất dành 60% thu nhập cho chi tiêu thiết yếu, tiết kiệm 20% để mua xe máy. Hai tháng nay anh A bị mất việc, thu nhập giảm sút, nhưng vợ anh vẫn quyết tâm tiết kiệm bằng cách cắt giảm một số chi tiêu thiết yếu. Việc làm này",
+    "options": [
+      "hợp lí, vì phải kiên trì thực hiện mục tiêu tiết kiệm đã đặt ra bằng mọi giá.",
+      "hợp lí, vì chi tiêu thiết yếu không quan trọng bằng việc tiết kiệm để mua xe máy.",
+      "không hợp lí, vì gia đình nên vay tiền để tiếp tục tiết kiệm như mục tiêu đã đặt ra ban đầu của gia đình.",
+      "không hợp lí, vì cắt giảm chi tiêu thiết yếu sẽ ảnh hưởng đến sức khoẻ của các thành viên trong gia đình."
+    ],
+    "answer": 3,
+    "exp": "Đáp án đúng: D. Không hợp lí vì cắt giảm chi tiêu thiết yếu (ăn uống, thuốc men, học phí...) sẽ ảnh hưởng đến sức khoẻ và cuộc sống của các thành viên. Cũng không nên bằng mọi giá giữ mục tiêu tiết kiệm."
+  },
+  {
+    "qNum": 18,
+    "q": "Theo em, vợ chồng anh A nên làm gì để quản lí thu, chi hiệu quả hơn trong hoàn cảnh thu nhập giảm sút?",
+    "options": [
+      "Tiếp tục cắt giảm các khoản chi thiết yếu để duy trì mức tiết kiệm như cũ, dù thu nhập gia đình đã giảm sút nghiêm trọng trong hai tháng qua.",
+      "Vay tiền để bù đắp thu nhập bị giảm và tiếp tục chi tiêu như trước đây.",
+      "Điều chỉnh quy tắc thu, chi: bảo đảm các khoản chi thiết yếu, cắt giảm các khoản chi không thiết yếu để thực hiện các mục tiêu tài chính.",
+      "Ngừng tiết kiệm hoàn toàn và chi tiêu hết thu nhập mỗi tháng của gia đình."
+    ],
+    "answer": 2,
+    "exp": "Đáp án đúng: C. Khi thu nhập giảm, gia đình cần điều chỉnh kế hoạch: bảo đảm chi thiết yếu, cắt giảm chi không thiết yếu để thực hiện mục tiêu. Không nên cắt chi thiết yếu, vay nợ hay ngừng tiết kiệm hoàn toàn."
+  },
+  {
+    "qNum": 19,
+    "q": "Các khoản chi thiết yếu trong gia đình bao gồm",
+    "options": [
+      "tiền giải trí, mua sắm, ăn uống bên ngoài và các chi tiêu cá nhân khác của các thành viên.",
+      "tiền mua nhu yếu phẩm, hoá đơn điện, nước, tiền học phí, thuốc men, chăm sóc sức khoẻ.",
+      "tiền du lịch, mua sắm đồ xa xỉ và các dịch vụ giải trí của gia đình.",
+      "tiền tiết kiệm, đầu tư và quỹ dự phòng của gia đình."
+    ],
+    "answer": 1,
+    "exp": "Đáp án đúng: B. Chi thiết yếu gồm nhu yếu phẩm, hoá đơn điện nước, học phí, thuốc men, chăm sóc sức khoẻ. Giải trí, mua sắm, du lịch là chi không thiết yếu; tiết kiệm, đầu tư thuộc mục tiêu tài chính."
+  },
+  {
+    "qNum": 20,
+    "q": "Các khoản chi không thiết yếu trong gia đình bao gồm",
+    "options": [
+      "tiền mua nhu yếu phẩm, hoá đơn điện, nước, tiền học phí của các con trong gia đình.",
+      "tiền thuốc men, chăm sóc sức khoẻ cho các thành viên trong gia đình.",
+      "tiền nhà, tiền điện, tiền nước hằng tháng của gia đình.",
+      "tiền giải trí, mua sắm, ăn uống bên ngoài và các chi tiêu cá nhân khác."
+    ],
+    "answer": 3,
+    "exp": "Đáp án đúng: D. Chi không thiết yếu gồm giải trí, mua sắm, ăn uống bên ngoài và các chi tiêu cá nhân khác. Nhu yếu phẩm, điện nước, học phí, thuốc men là chi thiết yếu."
+  },
+  {
+    "qNum": 21,
+    "q": "Khi lập kế hoạch quản lí thu, chi, gia đình cần thống nhất tỉ lệ phân chia các khoản chi thiết yếu, không thiết yếu và tiết kiệm. Việc này có ý nghĩa gì?",
+    "options": [
+      "Đảm bảo chi tiêu cân đối, ưu tiên nhu cầu thiết yếu, đồng thời vẫn tiết kiệm được cho các mục tiêu tài chính của gia đình.",
+      "Để các thành viên trong gia đình chi tiêu tuỳ ý, không cần tuân theo tỉ lệ nào đã thống nhất.",
+      "Để gia đình chỉ chi tiêu cho nhu cầu thiết yếu, không chi cho nhu cầu cá nhân của các thành viên trong gia đình dù thu nhập có tăng.",
+      "Để gia đình không cần ghi chép hay theo dõi chi tiêu hằng tháng nữa."
+    ],
+    "answer": 0,
+    "exp": "Đáp án đúng: A. Thống nhất tỉ lệ phân chia các khoản chi giúp chi tiêu cân đối, ưu tiên nhu cầu thiết yếu mà vẫn tiết kiệm cho mục tiêu tài chính. Cần tuân thủ tỉ lệ đã thống nhất và vẫn ghi chép, theo dõi."
+  },
+  {
+    "qNum": 22,
+    "q": "Gia đình em đặt mục tiêu sau 1 năm tích luỹ được 24 triệu đồng cho em vào học đại học. Để đạt mục tiêu này, gia đình cần tiết kiệm mỗi tháng",
+    "options": [
+      "1 triệu đồng.",
+      "3 triệu đồng.",
+      "2 triệu đồng.",
+      "4 triệu đồng."
+    ],
+    "answer": 2,
+    "exp": "Đáp án đúng: C. 24 triệu đồng ÷ 12 tháng = 2 triệu đồng/tháng."
+  },
+  {
+    "qNum": 23,
+    "q": "Gia đình chị M có thu nhập 10 triệu đồng/tháng. Chị M muốn mua một chiếc xe đạp điện giá 12 triệu đồng cho con vào học THPT sau 3 tháng. Để mua được xe đúng hạn, gia đình cần tiết kiệm mỗi tháng",
+    "options": [
+      "2 triệu đồng.",
+      "4 triệu đồng.",
+      "3 triệu đồng.",
+      "5 triệu đồng."
+    ],
+    "answer": 1,
+    "exp": "Đáp án đúng: B. 12 triệu đồng ÷ 3 tháng = 4 triệu đồng/tháng."
+  },
+  {
+    "qNum": 24,
+    "q": "Một gia đình có thu nhập 8 triệu đồng/tháng nhưng chi tiêu hết 9 triệu đồng/tháng và không có quỹ dự phòng. Khi có người thân ốm phải nhập viện, gia đình phải vay tiền với lãi suất cao. Trường hợp này cho thấy gia đình đã",
+    "options": [
+      "quản lí thu, chi hợp lí vì đã chi tiêu để đáp ứng nhu cầu vật chất và tinh thần của các thành viên trong gia đình.",
+      "không quản lí thu, chi hợp lí vì chi tiêu vượt quá thu nhập và không có quỹ dự phòng để ứng phó với rủi ro.",
+      "quản lí thu, chi hợp lí vì đã vay tiền để giải quyết khó khăn trước mắt của gia đình.",
+      "không cần quản lí thu, chi vì thu nhập thấp nên không thể tiết kiệm được tiền."
+    ],
+    "answer": 1,
+    "exp": "Đáp án đúng: B. Chi tiêu (9 triệu) vượt thu nhập (8 triệu) và không có quỹ dự phòng nên khi có rủi ro phải vay lãi cao: đây là quản lí thu, chi không hợp lí. Thu nhập thấp vẫn cần quản lí và có quỹ dự phòng."
+  },
+  {
+    "qNum": 25,
+    "type": "true_false",
+    "passage": "Gia đình chị H có thu nhập 18 triệu đồng/tháng. Đầu tháng, cả gia đình cùng thảo luận và thống nhất mục tiêu: sau 6 tháng tiết kiệm được 18 triệu đồng để mua tủ lạnh mới. Chị H liệt kê các nguồn thu nhập của gia đình, phân loại các khoản chi thiết yếu (ăn uống, điện nước, học phí) và không thiết yếu (giải trí, mua sắm), thống nhất dành 50% thu nhập cho chi thiết yếu, 30% cho tiết kiệm và các mục tiêu tài chính, 20% cho chi tiêu cá nhân. Hằng tháng, chị H ghi chép các khoản thu, chi và điều chỉnh khi cần thiết.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Gia đình chị H đã xác định mục tiêu tài chính và thời gian thực hiện ngay từ bước đầu tiên, nhưng không cần thảo luận với các thành viên trong gia đình.",
+        "correct": false,
+        "exp": "Sai. Bước 1 là “Thảo luận để xác định mục tiêu tài chính trong gia đình và thời gian thực hiện” – thảo luận là nội dung bắt buộc của bước này."
+      },
+      {
+        "label": "b",
+        "text": "Việc chị H phân loại các khoản chi thiết yếu và không thiết yếu thuộc bước 2 trong quy trình lập kế hoạch.",
+        "correct": false,
+        "exp": "Sai. Phân loại các khoản chi thiết yếu và không thiết yếu thuộc Bước 3; Bước 2 là xác định các nguồn thu nhập trong gia đình."
+      },
+      {
+        "label": "c",
+        "text": "Tỉ lệ phân chia 50% – 30% – 20% của gia đình chị H là đúng theo quy tắc 50/30/20.",
+        "correct": true,
+        "exp": "Đúng. 50% cho chi tiêu thiết yếu, 30% cho tiết kiệm và các mục tiêu tài chính, 20% cho chi tiêu cá nhân – đúng quy tắc 50/30/20."
+      },
+      {
+        "label": "d",
+        "text": "Việc chị H ghi chép các khoản thu, chi hằng tháng và điều chỉnh khi cần thiết thuộc bước 5 trong quy trình lập kế hoạch.",
+        "correct": true,
+        "exp": "Đúng. Bước 5 là thực hiện các khoản thu, chi hằng tháng theo kế hoạch thông qua việc ghi chép và điều chỉnh các khoản chi tiêu cho phù hợp."
+      }
+    ]
+  },
+  {
+    "qNum": 26,
+    "type": "true_false",
+    "passage": "Chị D luôn ghi chép tất cả các khoản chi và lập bảng theo dõi chi tiêu hằng tháng của gia đình. Vợ chồng chị B có thu nhập còn thấp nhưng thống nhất duy trì tiết kiệm 20% thu nhập mỗi tháng để bảo đảm quy tắc 50/30/20. Hằng tháng, vợ chồng chị Q thường xác định hạn mức mua sắm của hai vợ chồng để không ảnh hưởng đến khoản tiết kiệm chung của gia đình.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Việc chị D ghi chép và lập bảng theo dõi chi tiêu hằng tháng là thói quen tốt trong quản lí thu, chi gia đình.",
+        "correct": true,
+        "exp": "Đúng. Ghi chép và lập bảng theo dõi giúp gia đình theo dõi, kiểm soát chi tiêu và điều chỉnh kế hoạch cho phù hợp."
+      },
+      {
+        "label": "b",
+        "text": "Vợ chồng chị B tiết kiệm 20% thu nhập mỗi tháng là việc làm không đúng, vì thu nhập còn thấp thì không cần tiết kiệm.",
+        "correct": false,
+        "exp": "Sai. Ngay cả khi thu nhập còn thấp, gia đình vẫn cần tiết kiệm; duy trì tiết kiệm 20% thu nhập là đúng quy tắc 50/30/20."
+      },
+      {
+        "label": "c",
+        "text": "Việc vợ chồng chị Q xác định hạn mức mua sắm là thói quen tốt, giúp chi tiêu hiệu quả và bảo đảm khoản tiết kiệm chung.",
+        "correct": true,
+        "exp": "Đúng. Xác định hạn mức mua sắm giúp chi tiêu hiệu quả và thực hành tiết kiệm để đạt các mục tiêu tài chính."
+      },
+      {
+        "label": "d",
+        "text": "Cả ba việc làm trên đều là những thói quen chi tiêu không tích cực, cần hạn chế.",
+        "correct": false,
+        "exp": "Sai. Cả ba việc làm (ghi chép, tiết kiệm 20%, xác định hạn mức mua sắm) đều là những thói quen chi tiêu tích cực."
+      }
+    ]
+  },
+  {
+    "qNum": 27,
+    "type": "true_false",
+    "passage": "Đầu năm, vợ chồng anh A thống nhất đặt mục tiêu mỗi tháng sẽ dành 60% thu nhập cho các chi tiêu thiết yếu, tiết kiệm 20% thu nhập gia đình để có đủ tiền mua xe máy. Hai tháng nay, anh A bị mất việc, thu nhập gia đình bị giảm sút, kinh tế gia đình eo hẹp mà vợ anh vẫn quyết tâm thực hiện mục tiêu tiết kiệm đã đặt ra bằng cách cắt giảm một số chi tiêu thiết yếu trong gia đình.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Việc vợ chồng anh A thống nhất mục tiêu tiết kiệm 20% thu nhập để mua xe máy là hợp lí.",
+        "correct": true,
+        "exp": "Đúng. Chỉ khi có sự bàn bạc, thống nhất và kiên trì thực hiện thì gia đình mới đạt được các mục tiêu tài chính."
+      },
+      {
+        "label": "b",
+        "text": "Việc vợ anh A cắt giảm các chi tiêu thiết yếu để duy trì mục tiêu tiết kiệm là hợp lí.",
+        "correct": false,
+        "exp": "Sai. Cắt giảm chi tiêu thiết yếu sẽ ảnh hưởng đến sức khoẻ của các thành viên trong gia đình."
+      },
+      {
+        "label": "c",
+        "text": "Khi thu nhập giảm sút, gia đình anh A nên điều chỉnh quy tắc thu, chi: bảo đảm các khoản chi thiết yếu và cắt giảm các khoản chi không thiết yếu.",
+        "correct": true,
+        "exp": "Đúng. Đây là cách điều chỉnh hợp lí: ưu tiên chi thiết yếu, cắt giảm chi không thiết yếu để thực hiện mục tiêu tài chính."
+      },
+      {
+        "label": "d",
+        "text": "Gia đình anh A nên vay tiền để tiếp tục tiết kiệm 20% thu nhập như mục tiêu đã đặt ra.",
+        "correct": false,
+        "exp": "Sai. Vay tiền để tiết kiệm là không hợp lí; khi thu nhập giảm, gia đình cần điều chỉnh kế hoạch thay vì vay nợ."
+      }
+    ]
+  },
+  {
+    "qNum": 28,
+    "type": "true_false",
+    "passage": "Gia đình chị M có thu nhập 12 triệu đồng/tháng. Chị M áp dụng quy tắc 50/30/20: 50% cho chi tiêu thiết yếu, 30% cho các mục tiêu tài chính (tiết kiệm, quỹ dự phòng), 20% cho chi tiêu cá nhân. Gia đình chị M đặt mục tiêu sau 6 tháng tiết kiệm được 12 triệu đồng để sửa lại mái nhà.",
+    "q": "Dựa vào đoạn thông tin trên, em hãy xác định mỗi nhận định sau đây là Đúng hay Sai:",
+    "items": [
+      {
+        "label": "a",
+        "text": "Theo quy tắc 50/30/20, gia đình chị M dành 6 triệu đồng mỗi tháng cho các chi tiêu thiết yếu.",
+        "correct": true,
+        "exp": "Đúng. 12 triệu đồng × 50% = 6 triệu đồng."
+      },
+      {
+        "label": "b",
+        "text": "Theo quy tắc 50/30/20, gia đình chị M dành 2,4 triệu đồng mỗi tháng cho tiết kiệm và các mục tiêu tài chính.",
+        "correct": false,
+        "exp": "Sai. 2,4 triệu đồng là 20% thu nhập – khoản chi tiêu cá nhân; 30% cho tiết kiệm và các mục tiêu tài chính là 3,6 triệu đồng."
+      },
+      {
+        "label": "c",
+        "text": "Với mức tiết kiệm 3,6 triệu đồng/tháng, sau 6 tháng gia đình chị M sẽ tiết kiệm được 21,6 triệu đồng.",
+        "correct": true,
+        "exp": "Đúng. 3,6 triệu đồng × 6 tháng = 21,6 triệu đồng, vượt mục tiêu 12 triệu đồng."
+      },
+      {
+        "label": "d",
+        "text": "Gia đình chị M nên dùng toàn bộ 20% chi tiêu cá nhân (2,4 triệu đồng/tháng) để tăng mức tiết kiệm, vì chi tiêu cá nhân là không cần thiết.",
+        "correct": false,
+        "exp": "Sai. Chi tiêu cá nhân là một phần trong kế hoạch cân đối 50/30/20; gia đình đã vượt mục tiêu 12 triệu đồng nên không cần cắt hết khoản này."
+      }
+    ]
+  }
+];
+
+    const EXAM_BANK_BAI6 = [
   {
     "qNum": 1,
     "q": "Trách nhiệm xã hội của doanh nghiệp là toàn bộ trách nhiệm bắt buộc và tự nguyện mà doanh nghiệp thực hiện đối với xã hội bằng những",
@@ -3847,6 +4271,7 @@ const EXAM_BANK_BAI6 = [
       const btnB4 = document.getElementById('btn-quick-b4');
       const btnB5 = document.getElementById('btn-quick-b5');
       const btnB6 = document.getElementById('btn-quick-b6');
+      const btnB7 = document.getElementById('btn-quick-b7');
 
       const activeBtnExam = "px-3 py-1.5 rounded-xl text-xs font-black transition shadow-xs flex items-center gap-1.5 bg-amber-400 text-slate-950 ring-2 ring-amber-300";
       const inactiveBtnExam = "px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800";
@@ -3864,6 +4289,7 @@ const EXAM_BANK_BAI6 = [
       if (btnB4) btnB4.className = (currentActiveLessonId === 4) ? activeBtnLesson : inactiveBtnLesson;
       if (btnB5) btnB5.className = (currentActiveLessonId === 5) ? activeBtnLesson : inactiveBtnLesson;
       if (btnB6) btnB6.className = (currentActiveLessonId === 6) ? activeBtnLesson : inactiveBtnLesson;
+      if (btnB7) btnB7.className = (currentActiveLessonId === 7) ? activeBtnLesson : inactiveBtnLesson;
 
       const activeB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-sm border border-indigo-300 ring-2 ring-indigo-200";
       const inactiveB1Style = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-slate-200 text-slate-700 hover:bg-white hover:text-indigo-900";
@@ -4294,6 +4720,7 @@ const EXAM_BANK_BAI6 = [
       const b4Count = allRawSubmissions.filter(s => s.lessonId === 4).length;
       const b5Count = allRawSubmissions.filter(s => s.lessonId === 5).length;
       const b6Count = allRawSubmissions.filter(s => s.lessonId === 6).length;
+      const b7Count = allRawSubmissions.filter(s => s.lessonId === 7).length;
       const kttx2Count = allRawSubmissions.filter(s => s.lessonId === 'kttx2').length;
       const kttx1Count = allRawSubmissions.filter(s => s.lessonId === 'kttx1').length;
       const badgeB1 = document.getElementById('badge-count-b1');
@@ -4302,6 +4729,7 @@ const EXAM_BANK_BAI6 = [
       const badgeB4 = document.getElementById('badge-count-b4');
       const badgeB5 = document.getElementById('badge-count-b5');
       const badgeB6 = document.getElementById('badge-count-b6');
+      const badgeB7 = document.getElementById('badge-count-b7');
       const badgeKttx2 = document.getElementById('badge-count-kttx2');
       const badgeKttx1 = document.getElementById('badge-count-kttx1');
       if (badgeB1) badgeB1.innerText = `${b1Count} bài`;
@@ -4310,6 +4738,7 @@ const EXAM_BANK_BAI6 = [
       if (badgeB4) badgeB4.innerText = `${b4Count} bài`;
       if (badgeB5) badgeB5.innerText = `${b5Count} bài`;
       if (badgeB6) badgeB6.innerText = `${b6Count} bài`;
+      if (badgeB7) badgeB7.innerText = `${b7Count} bài`;
       if (badgeKttx2) badgeKttx2.innerText = `${kttx2Count} bài`;
       if (badgeKttx1) badgeKttx1.innerText = `${kttx1Count} bài`;
 
@@ -4850,8 +5279,8 @@ const EXAM_BANK_BAI6 = [
       if (!modal || !bodyEl) return;
       if (copyBtn) copyBtn.innerText = 'Sao chép câu sai & lời giải';
 
-      let bank = (lessonKey === 'kttx2') ? EXAM_BANK_KTTX2 : (lessonKey === 'ktpl' ? EXAM_BANK_KTPL : (lessonKey === 6 || lessonKey === '6' || lessonKey === 'B6') ? EXAM_BANK_BAI6 : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? EXAM_BANK_BAI5 : EXAM_BANK_KTTX1);
-      let lessonTitle = (lessonKey === 'kttx2') ? 'Kiểm Tra Thường Xuyên 2 (KTTX 2)' : (lessonKey === 'ktpl' ? 'Đề Ôn Tập Giữa HK1 - Môn KTPL' : (lessonKey === 6 || lessonKey === '6' || lessonKey === 'B6') ? 'Bài 6: Trách nhiệm xã hội của doanh nghiệp' : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? 'Bài 5: Lập kế hoạch kinh doanh' : 'Kiểm Tra Thường Xuyên 1 (KTTX 1)');
+      let bank = (lessonKey === 'kttx2') ? EXAM_BANK_KTTX2 : (lessonKey === 'ktpl' ? EXAM_BANK_KTPL : (lessonKey === 7 || lessonKey === '7' || lessonKey === 'B7') ? EXAM_BANK_BAI7 : (lessonKey === 6 || lessonKey === '6' || lessonKey === 'B6') ? EXAM_BANK_BAI6 : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? EXAM_BANK_BAI5 : EXAM_BANK_KTTX1);
+      let lessonTitle = (lessonKey === 'kttx2') ? 'Kiểm Tra Thường Xuyên 2 (KTTX 2)' : (lessonKey === 'ktpl' ? 'Đề Ôn Tập Giữa HK1 - Môn KTPL' : (lessonKey === 7 || lessonKey === '7' || lessonKey === 'B7') ? 'Bài 7: Quản lí thu, chi trong gia đình' : (lessonKey === 6 || lessonKey === '6' || lessonKey === 'B6') ? 'Bài 6: Trách nhiệm xã hội của doanh nghiệp' : (lessonKey === 5 || lessonKey === '5' || lessonKey === 'B5') ? 'Bài 5: Lập kế hoạch kinh doanh' : 'Kiểm Tra Thường Xuyên 1 (KTTX 1)');
 
       if (nameEl) nameEl.innerText = studentName;
       if (metaEl) metaEl.innerText = 'Lớp: ' + className + ' • ' + lessonTitle + ' • ' + (wrongText || 'Chi tiết');
