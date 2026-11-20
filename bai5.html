@@ -1288,7 +1288,7 @@
       const timeElapsedStr = formatTime(secondsElapsed);
 
       document.getElementById('res-name').innerText = studentInfo.name;
-      document.getElementById('res-class').innerText = `Lớp: ${studentInfo.class}`;
+      document.getElementById('res-class').innerText = `${studentInfo.class}`;
       document.getElementById('res-score').innerText = `${finalScore10} / 10`;
       document.getElementById('res-correct').innerText = `${Number(score.toFixed(2))}/${currentQuiz.length}`;
       document.getElementById('res-percent').innerText = `${percent}%`;
